@@ -1,0 +1,17 @@
+{
+  "name": "kaggle_gpu",
+  "does": "Run a Python script on Kaggle's free GPU (about 30 hours a week, 16 GB T4 or P100 - twice this PC's 8 GB) and bring back the files it writes: big models, long renders, training, anything too heavy for the machine",
+  "when": ["gpu", "vram", "heavy", "big model", "kaggle", "cloud", "train", "too big", "out of memory"],
+  "args": {
+    "script": {"type": "string", "description": "the .py file in the job's folder to run there (it writes its results to its working folder)"},
+    "out": {"type": "string", "description": "folder for what comes back", "default": "kaggle_out"},
+    "title": {"type": "string", "description": "a short name for the run"},
+    "inputs": {"type": "array", "description": "files the script needs (uploaded beside it; their folder is $LOKI_INPUTS)"},
+    "gpu": {"type": "string", "description": "T4 or P100", "default": "T4"},
+    "minutes": {"type": "integer", "description": "how long to wait for it", "default": 120}
+  },
+  "required": ["script"],
+  "run": "{python} {dir}/run.py {script} --out {out} --gpu {gpu} --minutes {minutes} [--title {title}] [--inputs {inputs}]",
+  "outputs": ["{out}/*"],
+  "timeout_s": 7200
+}
