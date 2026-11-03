@@ -1,0 +1,16 @@
+{
+  "name": "skin_weights",
+  "does": "New skin weights for a rigged model with its skeleton kept (same joints and names, so its controls and clips still drive it): SkinTokens, a learned skinning model (MIT), run on Kaggle's free GPU - for creatures where bone heat or a voxel bind tears where parts touch. Writes the weights (.npz: 4 joints a vertex) and the model re-skinned. Needs Kaggle connected; takes about half an hour",
+  "when": ["skin", "skinning", "weights", "skin weights", "rig", "tear", "stretch", "bind", "creature", "3d"],
+  "args": {
+    "model": {"type": "string", "description": "the rigged model (.fbx or .glb with its skeleton and mesh), e.g. renders/dragon_as.fbx"},
+    "out": {"type": "string", "description": "the weights file to write", "default": "renders/skin_weights.npz"},
+    "model_out": {"type": "string", "description": "the model re-skinned with them (.fbx or .glb)", "default": "renders/skinned.fbx"},
+    "minutes": {"type": "integer", "description": "how long to wait for Kaggle", "default": 90},
+    "max_joints": {"type": "integer", "description": "the most joints it skins (twist helpers sit out above this)", "default": 150}
+  },
+  "required": ["model"],
+  "run": "{python} {dir}/skin_weights.py {model} --out {out} --model-out {model_out} --blender {blender} --minutes {minutes} --max-joints {max_joints}",
+  "outputs": ["{out}", "{model_out}"],
+  "timeout_s": 7200
+}
