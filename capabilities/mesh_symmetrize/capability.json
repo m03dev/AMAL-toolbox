@@ -1,14 +1,45 @@
 {
   "name": "mesh_symmetrize",
-  "does": "Make a 3D model (glb/fbx/obj) symmetrical left to right: finds its own mirror plane, cuts it there, keeps one half (the more complete one, or left/right), mirrors and welds it - never doubles the model. Writes the .glb and <name>_symmetry.json (plane turn, kept side)",
-  "when": ["3d", "model", "mesh", "symmetrical", "symmetric", "mirror", "rig", "rigging", "glb", "fbx"],
+  "does": "Make a 3D model (glb/fbx/obj) symmetrical left to right: finds its own mirror plane, cuts it there, keeps one half (the more complete one, or left/right), mirrors and welds it - never doubles the model. Writes the .glb and <name>_symmetry.json (plane turn, kept side); a model that is posed (under 35% mirrors) is refused - LOKI's rig re-poses it first and passes the plane",
+  "when": [
+    "3d",
+    "model",
+    "mesh",
+    "symmetrical",
+    "symmetric",
+    "mirror",
+    "rig",
+    "rigging",
+    "glb",
+    "fbx"
+  ],
   "args": {
-    "model": {"type": "string", "description": "the model in the job folder, e.g. refs/dragon.glb"},
-    "out": {"type": "string", "description": "the symmetrical .glb to write", "default": "renders/symmetrical.glb"},
-    "keep": {"type": "string", "description": "auto (the more complete half), left or right", "default": "auto"}
+    "model": {
+      "type": "string",
+      "description": "the model in the job folder, e.g. refs/dragon.glb"
+    },
+    "out": {
+      "type": "string",
+      "description": "the symmetrical .glb to write",
+      "default": "renders/symmetrical.glb"
+    },
+    "keep": {
+      "type": "string",
+      "description": "auto (the more complete half), left or right",
+      "default": "auto"
+    },
+    "plane_x": {
+      "type": "string",
+      "description": "a known mirror plane x (from LOKI's re-pose): used as it is, no search and no refusal",
+      "default": "search"
+    }
   },
-  "required": ["model"],
-  "run": "{blender} -b --factory-startup --python-exit-code 1 --python {dir}/symmetrize.py -- {model} {out} {keep}",
-  "outputs": ["{out}"],
+  "required": [
+    "model"
+  ],
+  "run": "{blender} -b --factory-startup --python-exit-code 1 --python {dir}/symmetrize.py -- {model} {out} {keep} {plane_x}",
+  "outputs": [
+    "{out}"
+  ],
   "timeout_s": 600
 }

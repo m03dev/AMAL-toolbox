@@ -25,6 +25,8 @@ if len(argv) < 2:
     sys.exit(2)
 src, out = os.path.abspath(argv[0]), os.path.abspath(argv[1])
 keep = (argv[2] if len(argv) > 2 else "auto").lower()
+if len(argv) > 3 and argv[3] not in ("", "search"):
+    os.environ["LOKI_SYM_PLANE_X"] = argv[3]
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 ext = os.path.splitext(src)[1].lower()
@@ -89,23 +91,28 @@ def match(deg):
     return hit / len(sample), mid
 
 
+# a known mirror plane (a model LOKI re-posed: its middle already runs down x = LOKI_SYM_PLANE_X): used as it is
+known_x = os.environ.get("LOKI_SYM_PLANE_X")
 best = (-1.0, 0.0, 0.0)
 # any heading: a model generated from a side or three-quarter picture can face any way (a dragon facing sideways was
 # mirrored across its length and came out as two dragons side by side, 2026-11-03)
-for deg in range(-90, 91, 3):
+for deg in (range(-90, 91, 3) if known_x is None else []):
     s, mid = match(deg)
     if s > best[0]:
         best = (s, deg, mid)
-for deg in [best[1] + d * 0.5 for d in range(-5, 6)]:
+for deg in ([best[1] + d * 0.5 for d in range(-5, 6)] if known_x is None else []):
     s, mid = match(deg)
     if s > best[0]:
         best = (s, deg, mid)
+if known_x is not None:
+    s0, _ = match(0.0)
+    best = (s0, 0.0, float(known_x))
 before, turn, mid = best
 print(f"mirror plane: turned {turn:.1f} deg about the up axis, {before * 100:.0f}% of the model already mirrors onto itself")
 # a model whose two sides do not match anywhere is posed (a wing up, the head turned, a tail curled across): mirroring
 # half of it makes a different creature or two of it. Nothing is written; the fix is a straight, symmetric pose first.
 MIN_MATCH = float(os.environ.get("LOKI_SYM_MIN", "0.35"))
-if before < MIN_MATCH:
+if before < MIN_MATCH and known_x is None:
     report = {"source": src, "mirrored_before": round(before, 3), "turned_deg": round(turn, 2), "out": None,
               "error": f"only {before * 100:.0f}% of the model mirrors onto itself at its best plane - it is posed, not "
                        "symmetric, so mirroring would make a different model. Make it in a straight, symmetric pose first "
