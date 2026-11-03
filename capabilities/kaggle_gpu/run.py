@@ -82,7 +82,10 @@ def main():
     k = os.path.join(work, "kernel")
     os.makedirs(k)
     body = open(a.script, encoding="utf-8").read()
-    pre = f"import os\nos.environ.setdefault('LOKI_INPUTS', '/kaggle/input/{name}-in')\n" if sources else ""
+    pre = f"import os\nos.environ.setdefault('LOKI_INPUTS', '/kaggle/input/{name}-in')\n" if sources else "import os\n"
+    # Kaggle quietly runs a script on the CPU when the account may not use a GPU (not phone-verified): say so
+    pre += ("import shutil as _sh, subprocess as _sp\n"
+            "print('LOKI_GPU:', (_sp.run(['nvidia-smi', '-L'], capture_output=True, text=True).stdout.strip() or 'none') if _sh.which('nvidia-smi') else 'none', flush=True)\n")
     open(os.path.join(k, "main.py"), "w", encoding="utf-8").write(pre + body)
     json.dump({"id": f"{user}/{name}", "title": name, "code_file": "main.py", "language": "python", "kernel_type": "script",
                "is_private": True, "enable_gpu": True, "enable_internet": True, "machine_shape": "NvidiaTeslaT4" if a.gpu == "T4" else "NvidiaTeslaP100",
@@ -98,6 +101,10 @@ def main():
     os.makedirs(a.out, exist_ok=True)
     print(cli("kernels", "output", f"{user}/{name}", "-p", a.out, check=False))
     print(f"LOKI_KAGGLE {user}/{name}: {status.strip()}")
+    logs = "".join(open(os.path.join(a.out, f), encoding="utf-8", errors="replace").read() for f in os.listdir(a.out) if f.endswith(".log"))
+    if "LOKI_GPU: none" in logs:
+        raise SystemExit("Kaggle ran this on its CPU, not a GPU: the Kaggle account may not use GPUs yet - the owner verifies his "
+                         "phone number at kaggle.com > Settings > Phone verification (that also turns on internet for scripts)")
     if "complete" not in status:
         raise SystemExit(f"the Kaggle run ended as: {status.strip() or 'still running after ' + str(a.minutes) + ' min'} (its log is in {a.out})")
 
