@@ -219,6 +219,14 @@ pub async fn run(c: &Capability, ws: &Path, policy: &Policy, args: &Value, blend
     for (k, v) in c.args.as_object().into_iter().flatten() {
         if !vals.contains_key(k) { if let Some(d) = v.get("default") { vals.insert(k.clone(), d.clone()); } }
     }
+    // a list argument a model wrote as text ("[a, b]" or "a, b") is the list it meant: quoted whole, the fonts list
+    // "[archivo-black, sora]" reached the script as one font name and the run failed (2026-11-03)
+    for (k, v) in c.args.as_object().into_iter().flatten() {
+        if v["type"] != "array" { continue; }
+        if let Some(t) = vals.get(k).and_then(|x| x.as_str()).map(str::to_string) {
+            vals.insert(k.clone(), as_list(&t));
+        }
+    }
     let missing: Vec<&String> = c.required.iter().filter(|r| vals.get(r.as_str()).is_none_or(|v| v.is_null() || v == "")).collect();
     if !missing.is_empty() {
         return Outcome::Err(format!("{} needs {}. Its arguments: {}", c.name, missing.iter().map(|m| m.as_str()).collect::<Vec<_>>().join(", "), arg_line(c)));
@@ -266,6 +274,13 @@ pub async fn run(c: &Capability, ws: &Path, policy: &Policy, args: &Value, blend
     let rel: Vec<String> = files.iter().map(|f| f.strip_prefix(ws).map(|r| r.to_string_lossy().replace('\\', "/")).unwrap_or_else(|_| f.display().to_string())).collect();
     let shown = if rel.len() > 30 { format!("{} (+{} more)", rel[..30].join(", "), rel.len() - 30) } else { rel.join(", ") };
     Outcome::Ok(format!("PASS {} ({}s). Files: {shown}\n{}", c.name, t0.elapsed().as_secs(), tail(&log, 1500)))
+}
+
+/// Text that names a list - JSON, "[a, b]" or "a, b" - as the list.
+fn as_list(t: &str) -> Value {
+    if let Ok(v @ Value::Array(_)) = serde_json::from_str::<Value>(t) { return v; }
+    let inner = t.trim().trim_start_matches('[').trim_end_matches(']');
+    Value::Array(inner.split(',').map(|x| x.trim().trim_matches('"').trim_matches('\'').trim()).filter(|x| !x.is_empty()).map(|x| json!(x)).collect())
 }
 
 fn tail(s: &str, n: usize) -> String {
@@ -330,6 +345,13 @@ pub async fn make(ws: &Path, policy: &Policy, a: &Value, blender: Option<&str>) 
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn a_list_written_as_text_is_the_list() {
+        assert_eq!(super::as_list("[archivo-black, sora]"), serde_json::json!(["archivo-black", "sora"]));
+        assert_eq!(super::as_list("[\"a\",\"b\"]"), serde_json::json!(["a", "b"]));
+        assert_eq!(super::as_list("a, b"), serde_json::json!(["a", "b"]));
+    }
+
     use super::*;
 
     fn m(v: Value) -> serde_json::Map<String, Value> { v.as_object().cloned().unwrap() }
