@@ -105,34 +105,78 @@ print(f"mirror plane: turned {turn:.1f} deg about the up axis, {before * 100:.0f
 obj.matrix_world = Matrix.Translation((-mid, 0, 0)) @ Matrix.Rotation(math.radians(turn), 4, "Z")
 bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 
-bm = bmesh.new()
-bm.from_mesh(me)
-bm.faces.ensure_lookup_table()
+base = bmesh.new()
+base.from_mesh(me)
+base.faces.ensure_lookup_table()
+
+
+def islands(b, min_share=0.01):
+    """Pieces of the mesh with at least min_share of its vertices (a part cut off at the plane floats on its own)."""
+    seen, sizes = set(), []
+    b.verts.ensure_lookup_table()
+    for v in b.verts:
+        if v.index in seen:
+            continue
+        stack, size = [v], 0
+        seen.add(v.index)
+        while stack:
+            x = stack.pop()
+            size += 1
+            for e in x.link_edges:
+                o = e.other_vert(x)
+                if o.index not in seen:
+                    seen.add(o.index)
+                    stack.append(o)
+        sizes.append(size)
+    total = sum(sizes) or 1
+    return sum(1 for z in sizes if z / total >= min_share)
 
 
 def side_area(sign):
-    return sum(f.calc_area() for f in bm.faces if sign * f.calc_center_median().x > 0)
+    return sum(f.calc_area() for f in base.faces if sign * f.calc_center_median().x > 0)
 
 
-if keep not in ("left", "right"):
-    # the more complete side keeps: more surface (a wing folded behind the body has less of it showing)
-    keep = "left" if side_area(1) >= side_area(-1) else "right"
-sign = 1 if keep == "left" else -1   # Blender's +X is the model's left when it faces -Y (glTF front)
-geom = bm.verts[:] + bm.edges[:] + bm.faces[:]
-bmesh.ops.bisect_plane(bm, geom=geom, plane_co=(0, 0, 0), plane_no=(sign, 0, 0), clear_inner=True, clear_outer=False)
-# the cut edge sits exactly on the plane, so the mirror welds it
-for v in bm.verts:
-    if abs(v.co.x) < near * 0.2:
-        v.co.x = 0.0
+def mirrored(side):
+    """The model cut at the plane, the `side` half kept and mirrored onto the other: a new bmesh."""
+    b = base.copy()
+    sign = 1 if side == "left" else -1   # Blender's +X is the model's left when it faces -Y (glTF front)
+    bmesh.ops.bisect_plane(b, geom=b.verts[:] + b.edges[:] + b.faces[:], plane_co=(0, 0, 0), plane_no=(sign, 0, 0),
+                           clear_inner=True, clear_outer=False)
+    for v in b.verts:
+        if abs(v.co.x) < near * 0.2:
+            v.co.x = 0.0   # the cut edge on the plane, so the mirror welds it
+    bmesh.ops.mirror(b, geom=b.verts[:] + b.edges[:] + b.faces[:], axis="X", merge_dist=near * 0.2)
+    bmesh.ops.recalc_face_normals(b, faces=b.faces[:])
+    return b
+
+
+pieces_before = islands(base)
+if keep in ("left", "right"):
+    order = [keep]
+else:
+    # the more complete side first (more surface: a wing folded behind the body has less of it showing)
+    order = ["left", "right"] if side_area(1) >= side_area(-1) else ["right", "left"]
+tried = []
+for side in order + [x for x in ("left", "right") if x not in order]:
+    b = mirrored(side)
+    tried.append((islands(b), side, b))
+    if tried[-1][0] <= pieces_before:
+        break
+# a cut that leaves a part floating on its own (a tail that curls across the middle, cut off at the plane) is not the
+# model any more: the other half is tried, and the fewest floating parts win
+pieces_after, keep, bm = min(tried, key=lambda t: t[0])
+for t in tried:
+    if t[2] is not bm:
+        t[2].free()
+warning = None
+if pieces_after > pieces_before:
+    warning = (f"{pieces_after - pieces_before} part(s) float free after mirroring (both halves tried): a part crossing "
+               "the middle in this pose was cut off - pose it straight, or join it by hand")
+    print("LOKI_WARNING " + warning)
 bm.to_mesh(me)
 bm.free()
-
-mod = obj.modifiers.new("mirror", "MIRROR")
-mod.use_axis[0] = True
-mod.use_clip = True
-mod.use_mirror_merge = True
-mod.merge_threshold = near * 0.2
-bpy.ops.object.modifier_apply(modifier=mod.name)
+base.free()
+me.update()
 
 # stand it back on the floor at the origin
 bb = [obj.matrix_world @ Vector(c) for c in obj.bound_box]
@@ -143,7 +187,8 @@ after_pts = [v.co.copy() for v in obj.data.vertices]
 os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
 bpy.ops.export_scene.gltf(filepath=out, export_format="GLB", use_selection=False)
 report = {"source": src, "kept": keep, "turned_deg": round(turn, 2), "mirrored_before": round(before, 3),
-          "vertices_before": n, "vertices_after": len(after_pts), "out": out}
+          "vertices_before": n, "vertices_after": len(after_pts), "pieces_before": pieces_before, "pieces_after": pieces_after,
+          "halves_tried": [t[1] for t in tried], "warning": warning, "out": out}
 with open(os.path.splitext(out)[0] + "_symmetry.json", "w") as fh:
     json.dump(report, fh, indent=1)
 print("LOKI_INFO " + json.dumps(report))
