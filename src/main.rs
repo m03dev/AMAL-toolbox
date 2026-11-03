@@ -67,15 +67,35 @@ async fn list(Query(q): Query<HashMap<String, String>>) -> Json<Value> {
 
 async fn use_(Json(b): Json<Value>) -> Json<Value> {
     let Some(ws) = b["ws"].as_str().map(PathBuf::from).filter(|p| p.is_dir()) else { return answer(Outcome::Err("'ws' must be the job's folder".into())) };
-    let name = b["name"].as_str().unwrap_or("");
+    let mut name = b["name"].as_str().unwrap_or("").to_string();
     let args = if b["args"].is_object() { b["args"].clone() } else { json!({}) };
+    // a call without a name (a weak model put the arguments straight in): the one capability whose arguments these are
+    // is the one meant; several or none -> say exactly how to call
+    let mut said = String::new();
+    if name.is_empty() {
+        let given: Vec<String> = args.as_object().map(|m| m.keys().cloned().collect()).unwrap_or_default();
+        let fits: Vec<String> = capability::all().into_iter().filter(|c| {
+            let has = c.args.as_object().map(|m| m.keys().cloned().collect::<Vec<_>>()).unwrap_or_default();
+            !given.is_empty() && given.iter().all(|g| has.contains(g)) && c.required.iter().all(|r| given.contains(r))
+        }).map(|c| c.name).collect();
+        if fits.len() != 1 {
+            return answer(Outcome::Err(format!("call it as {{\"name\": \"<capability>\", \"args\": {{...}}}}; {}",
+                if fits.is_empty() { "no capability takes exactly these arguments".to_string() } else { format!("these arguments fit {}", fits.join(", ")) })));
+        }
+        name = fits[0].clone();
+        said = format!("(called as {name}: next time name it - {{\"name\": \"{name}\", \"args\": {{...}}}})\n");
+    }
+    let name = name.as_str();
     if name.contains('.') {
         let t0 = std::time::Instant::now();
         let o = shelf::run(name, &args, &ws).await;
         capability::note(name, matches!(o, Outcome::Ok(_)), t0.elapsed().as_secs());
         return answer(o);
     }
-    answer(capability::use_tool(&ws, &tools::Policy::default(), &json!({"name": name, "args": args}), b["blender"].as_str()).await)
+    answer(match capability::use_tool(&ws, &tools::Policy::default(), &json!({"name": name, "args": args}), b["blender"].as_str()).await {
+        Outcome::Ok(t) => Outcome::Ok(format!("{said}{t}")),
+        o => o,
+    })
 }
 
 async fn make(Json(b): Json<Value>) -> Json<Value> {
