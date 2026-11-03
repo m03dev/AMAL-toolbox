@@ -58,8 +58,13 @@ def main():
     ap.add_argument("--inputs", nargs="*", default=[])
     ap.add_argument("--gpu", default="T4", choices=["T4", "P100"])
     ap.add_argument("--minutes", type=int, default=120)
+    ap.add_argument("--attach", default="", help="a run already started (user/name): wait for it and fetch its files")
     a = ap.parse_args()
     load_keys()
+    if a.attach:
+        need_kaggle()
+        user, _, name = a.attach.partition("/")
+        return wait_and_fetch(a, user, name)
     if not (os.environ.get("KAGGLE_API_TOKEN") or os.environ.get("KAGGLE_KEY") or os.path.isfile(os.path.expanduser("~/.kaggle/kaggle.json"))):
         raise SystemExit("no Kaggle API token: the owner creates one at kaggle.com > Settings > Account > API > Create New Token "
                          "and saves it in LOKI's Settings > Models > Connections (Kaggle)")
@@ -91,6 +96,13 @@ def main():
                "is_private": True, "enable_gpu": True, "enable_internet": True, "machine_shape": "NvidiaTeslaT4" if a.gpu == "T4" else "NvidiaTeslaP100",
                "dataset_sources": sources, "competition_sources": [], "kernel_sources": []}, open(os.path.join(k, "kernel-metadata.json"), "w"))
     print(cli("kernels", "push", "-p", k))
+    # where this run is, so a caller that was restarted waits for it (--attach) instead of starting it again
+    os.makedirs(a.out, exist_ok=True)
+    open(os.path.join(a.out, "kernel.txt"), "w").write(f"{user}/{name}")
+    wait_and_fetch(a, user, name)
+
+
+def wait_and_fetch(a, user, name):
     t0 = time.time()
     status = ""
     while time.time() - t0 < a.minutes * 60:

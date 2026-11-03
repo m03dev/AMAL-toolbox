@@ -8,10 +8,11 @@
     "title": {"type": "string", "description": "a short name for the run"},
     "inputs": {"type": "array", "description": "files the script needs (uploaded beside it; their folder is $LOKI_INPUTS)"},
     "gpu": {"type": "string", "description": "T4 or P100", "default": "T4"},
-    "minutes": {"type": "integer", "description": "how long to wait for it", "default": 120}
+    "minutes": {"type": "integer", "description": "how long to wait for it", "default": 120},
+    "attach": {"type": "string", "description": "a run already started (user/name, from <out>/kernel.txt): wait for it and fetch its files instead of starting it again"}
   },
   "required": ["script"],
-  "run": "{python} {dir}/run.py {script} --out {out} --gpu {gpu} --minutes {minutes} [--title {title}] [--inputs {inputs}]",
+  "run": "{python} {dir}/run.py {script} --out {out} --gpu {gpu} --minutes {minutes} [--title {title}] [--inputs {inputs}] [--attach {attach}]",
   "outputs": ["{out}/*"],
   "timeout_s": 7200
 }
