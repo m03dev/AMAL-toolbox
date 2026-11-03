@@ -1,0 +1,16 @@
+{
+  "name": "concept_sheet",
+  "does": "One board showing several logo concepts side by side, each large and at 64/32/16 px, with its name and one-line idea - what the owner picks from",
+  "when": ["logo", "concepts", "board", "present", "compare"],
+  "args": {
+    "files": {"type": "array", "description": "one .svg per concept"},
+    "names": {"type": "array", "description": "a name per concept"},
+    "notes": {"type": "array", "description": "the idea of each, one sentence"},
+    "title": {"type": "string", "description": "the board's title", "default": "Concepts"},
+    "out": {"type": "string", "description": "the .png", "default": "brand/concepts.png"}
+  },
+  "required": ["files", "names", "notes"],
+  "run": "{python} {root}/capabilities/logo/scripts/concept_sheet.py {files} --names {names} --notes {notes} --title {title} -o {out}",
+  "outputs": ["{out}"],
+  "timeout_s": 300
+}

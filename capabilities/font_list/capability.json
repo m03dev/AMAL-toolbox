@@ -1,0 +1,9 @@
+{
+  "name": "font_list",
+  "does": "The open-licence fonts the logo capabilities know (ids and their character), written to fonts.txt",
+  "when": ["logo", "font", "typeface", "wordmark"],
+  "args": {},
+  "run": "{python} {root}/capabilities/logo/scripts/letters_svg.py --list > fonts.txt",
+  "outputs": ["fonts.txt"],
+  "timeout_s": 60
+}

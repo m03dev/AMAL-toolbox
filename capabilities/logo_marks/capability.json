@@ -1,0 +1,15 @@
+{
+  "name": "logo_marks",
+  "does": "Brand marks from real letters for a name (or acronym): every font x five layouts (word, tile = app icon, badge, stack, cut), plus one contact sheet to look at",
+  "when": ["logo", "brand", "rebrand", "wordmark", "monogram", "lettermark", "badge", "app icon", "acronym"],
+  "args": {
+    "text": {"type": "string", "description": "the name or letters, e.g. NOVA"},
+    "fonts": {"type": "array", "description": "3-4 font ids that fit the brief (font_list shows them)", "default": ["russo-one", "syne", "michroma", "archivo-black"]},
+    "palettes": {"type": "array", "description": "brand colours, hex", "default": ["#111111"]},
+    "layouts": {"type": "array", "description": "any of word tile badge stack cut (default all)"}
+  },
+  "required": ["text"],
+  "run": "{python} {root}/capabilities/logo/scripts/marks_svg.py {text} --out brand/{text}/marks [--fonts {fonts}] [--palettes {palettes}] [--layouts {layouts}]",
+  "outputs": ["brand/{text}/marks/sheet.png", "brand/{text}/marks/*.svg"],
+  "timeout_s": 600
+}

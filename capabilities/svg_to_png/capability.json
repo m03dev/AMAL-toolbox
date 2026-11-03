@@ -1,0 +1,15 @@
+{
+  "name": "svg_to_png",
+  "does": "Render SVG files to PNG pictures (to look at them or deliver them), on a background colour",
+  "when": ["svg", "png", "render", "logo", "icon", "preview"],
+  "args": {
+    "files": {"type": "array", "description": "the .svg paths"},
+    "out_dir": {"type": "string", "description": "folder for the PNGs", "default": "png"},
+    "size": {"type": "integer", "description": "pixels", "default": 512},
+    "bg": {"type": "string", "description": "background colour", "default": "#ffffff"}
+  },
+  "required": ["files"],
+  "run": "{python} {root}/capabilities/logo/scripts/render_png.py {files} --out-dir {out_dir} --size {size} --bg {bg}",
+  "outputs": ["{out_dir}/*.png"],
+  "timeout_s": 300
+}

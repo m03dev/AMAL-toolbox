@@ -1,0 +1,15 @@
+{
+  "name": "logo_kit",
+  "does": "The delivery kit from one chosen master SVG: black, white and brand-colour versions, square, favicon, app icon, and the full web/app icon set (favicon.ico, apple-touch-icon, 192/512 icons, manifest)",
+  "when": ["logo", "kit", "favicon", "app icon", "brand", "deliver", "export"],
+  "args": {
+    "master": {"type": "string", "description": "the chosen mark's .svg"},
+    "out_dir": {"type": "string", "description": "where the kit goes", "default": "brand/kit"},
+    "title": {"type": "string", "description": "the brand name"},
+    "colour": {"type": "string", "description": "brand colour hex for the mono version and the app icon tile"}
+  },
+  "required": ["master"],
+  "run": "{python} {root}/capabilities/logo/scripts/export_variants.py {master} --out-dir {out_dir} --web-icons --png 512 1024 [--title {title}] [--mono {colour}] [--icon-bg {colour}]",
+  "outputs": ["{out_dir}/favicon.ico", "{out_dir}/*.svg", "{out_dir}/*.png"],
+  "timeout_s": 600
+}

@@ -1,0 +1,10 @@
+{
+  "name": "svg_audit",
+  "does": "Audit logo SVGs against design and production rules (structure, colours, tiny details, padding, strokes) - findings in audit.txt",
+  "when": ["logo", "svg", "check", "audit"],
+  "args": {"files": {"type": "array", "description": "the .svg paths"}},
+  "required": ["files"],
+  "run": "{python} {root}/capabilities/logo/scripts/svg_audit.py {files} > audit.txt",
+  "outputs": ["audit.txt"],
+  "timeout_s": 120
+}
