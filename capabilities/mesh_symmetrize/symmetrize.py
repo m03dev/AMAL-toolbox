@@ -109,9 +109,9 @@ if known_x is not None:
     best = (s0, 0.0, float(known_x))
 before, turn, mid = best
 print(f"mirror plane: turned {turn:.1f} deg about the up axis, {before * 100:.0f}% of the model already mirrors onto itself")
-# a model whose two sides do not match anywhere is posed (a wing up, the head turned, a tail curled across): mirroring
+# a model whose two sides match less than 60% is posed (the owner's dragon, head turned and tail curled: 41%) (a wing up, the head turned, a tail curled across): mirroring
 # half of it makes a different creature or two of it. Nothing is written; the fix is a straight, symmetric pose first.
-MIN_MATCH = float(os.environ.get("LOKI_SYM_MIN", "0.35"))
+MIN_MATCH = float(os.environ.get("LOKI_SYM_MIN", "0.6"))
 if before < MIN_MATCH and known_x is None:
     report = {"source": src, "mirrored_before": round(before, 3), "turned_deg": round(turn, 2), "out": None,
               "error": f"only {before * 100:.0f}% of the model mirrors onto itself at its best plane - it is posed, not "
