@@ -90,7 +90,9 @@ def match(deg):
 
 
 best = (-1.0, 0.0, 0.0)
-for deg in range(-30, 31, 3):
+# any heading: a model generated from a side or three-quarter picture can face any way (a dragon facing sideways was
+# mirrored across its length and came out as two dragons side by side, 2026-11-03)
+for deg in range(-90, 91, 3):
     s, mid = match(deg)
     if s > best[0]:
         best = (s, deg, mid)
@@ -100,6 +102,18 @@ for deg in [best[1] + d * 0.5 for d in range(-5, 6)]:
         best = (s, deg, mid)
 before, turn, mid = best
 print(f"mirror plane: turned {turn:.1f} deg about the up axis, {before * 100:.0f}% of the model already mirrors onto itself")
+# a model whose two sides do not match anywhere is posed (a wing up, the head turned, a tail curled across): mirroring
+# half of it makes a different creature or two of it. Nothing is written; the fix is a straight, symmetric pose first.
+MIN_MATCH = float(os.environ.get("LOKI_SYM_MIN", "0.35"))
+if before < MIN_MATCH:
+    report = {"source": src, "mirrored_before": round(before, 3), "turned_deg": round(turn, 2), "out": None,
+              "error": f"only {before * 100:.0f}% of the model mirrors onto itself at its best plane - it is posed, not "
+                       "symmetric, so mirroring would make a different model. Make it in a straight, symmetric pose first "
+                       "(a front-facing T-pose reference picture), then symmetrize"}
+    with open(os.path.splitext(out)[0] + "_symmetry.json", "w") as fh:
+        json.dump(report, fh, indent=1)
+    print("LOKI_ERROR " + report["error"])
+    sys.exit(3)
 
 # turn the model so its mirror plane is X = 0
 obj.matrix_world = Matrix.Translation((-mid, 0, 0)) @ Matrix.Rotation(math.radians(turn), 4, "Z")
