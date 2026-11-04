@@ -163,6 +163,8 @@ def main():
     from src.tokenizer.parse import get_tokenizer
 
     d = np.load(inp)
+    if "joint_names" not in d.files:
+        return auto_rig(d, inp, t0, np, torch, Asset, LazyAsset, RigDataset, Transform, get_model, get_tokenizer)
     names = [str(x) for x in d["joint_names"]]
     J = len(names)
     joints = d["joints"].astype(np.float32)
@@ -254,6 +256,81 @@ def main():
     stem = os.path.basename(inp)[:-len("_skin_in.npz")]
     dst = os.path.join(OUT, f"{stem}_skin_weights.npz")
     np.savez_compressed(dst, joint_names=np.array(names), idx=idx, w=w, mesh_names=d["mesh_names"], mesh_counts=d["mesh_counts"])
+    used = np.bincount(idx[:, 0], minlength=J)
+    print("LOKI_INFO " + json.dumps({"vertices": int(len(V)), "joints": J, "joints_leading_somewhere": int((used > 0).sum()),
+                                     "seconds": round(time.time() - t0), "file": os.path.basename(dst)}), flush=True)
+
+
+def auto_rig(d, inp, t0, np, torch, Asset, LazyAsset, RigDataset, Transform, get_model, get_tokenizer):
+    """A mesh with no skeleton: SkinTokens (TokenRig, UniRig's successor) makes the skeleton AND the skin, the way its
+    demo.py does without --use_skeleton, with its voxel clean-up (--use_postprocess) against weights bleeding between
+    parts that touch. Writes <name>_auto_rig.npz: joints (heads, in the mesh's own space), parents, names, and per vertex
+    the 4 strongest joints and their weights. (Owner 2026-11-04: AdvancedSkeleton "is clearly a big problem" - use this.)"""
+    from src.data.vertex_group import voxel_skin
+    V = d["vertices"].astype(np.float32)
+    F = d["faces"].astype(np.int64)
+    c = V.mean(0)
+    ml = np.eye(4, dtype=np.float32)[None].copy()
+    ml[0, :3, 3] = c
+    # a one-joint placeholder: the transform carries a skeleton along; the model is not given it (tokens removed below)
+    asset = Asset(vertices=V, faces=F, joint_names=["root"], parents=np.array([-1], np.int64), lengths=np.array([0.1], np.float32),
+                  matrix_world=np.eye(4, dtype=np.float32), matrix_local=ml, skin=np.ones((len(V), 1), np.float32))
+    asset.build_normals()
+    print(f"auto rig input: {len(V)} vertices, {len(F)} triangles; set up in {time.time() - t0:.0f} s", flush=True)
+    model = get_model(CKPTS[1])
+    model.eval()
+    tokenizer = get_tokenizer(**model.tokenizer_config)
+    transform = Transform.parse(**model.transform_config["predict_transform"])
+
+    class Given(LazyAsset):
+        def load(self):
+            a = asset.copy()
+            a.cls, a.path = self.cls, self.path
+            return a
+    ds = RigDataset(data=[Given(path=inp, cls="articulation")], transform=transform, tokenizer=tokenizer, process_fn=model._process_fn)
+    item = ds[0]
+    batch = {k: v.to("cuda") if isinstance(v, torch.Tensor) else v for k, v in ds.collate_fn([item]).items()}
+    batch.pop("skeleton_tokens", None)
+    batch.pop("skeleton_mask", None)
+    batch["generate_kwargs"] = dict(max_length=2048, num_return_sequences=1, do_sample=True, **SAMPLING)
+    got = None
+    for attempt in range(TRIES):
+        torch.manual_seed(attempt)
+        t = time.time()
+        try:
+            with torch.no_grad():
+                res = model.predict_step(batch, make_asset=True)["results"][0]
+        except Exception as e:  # noqa: BLE001
+            print(f"try {attempt + 1}: {type(e).__name__}: {e}", flush=True)
+            continue
+        a = res.asset
+        n = 0 if a is None or a.joints is None else len(a.joints)
+        print(f"try {attempt + 1}: {time.time() - t:.0f} s, {n} joints", flush=True)
+        if n >= 3:
+            got = a
+            break
+    if got is None:
+        raise SystemExit(f"LOKI_ERROR SkinTokens made no skeleton in {TRIES} tries")
+    vox = got.voxel(resolution=196)
+    got.skin *= voxel_skin(grid=0, grid_coords=vox.coords, joints=got.joints, vertices=got.vertices, faces=got.faces,
+                           mode="square", voxel_size=vox.voxel_size)
+    got.normalize_skin()
+    # back to the mesh's own space: the transform moved and scaled it; the same vertices in both give the map exactly
+    Vn = np.asarray(got.vertices, np.float64)
+    if len(Vn) != len(V):
+        raise SystemExit(f"LOKI_ERROR SkinTokens' transform changed the mesh ({len(V)} vertices in, {len(Vn)} after)")
+    A, *_ = np.linalg.lstsq(np.c_[Vn, np.ones(len(Vn))], V.astype(np.float64), rcond=None)
+    err = float(np.abs(np.c_[Vn, np.ones(len(Vn))] @ A - V).max() / max(np.ptp(V, 0).max(), 1e-6))
+    if err > 0.01:
+        raise SystemExit(f"LOKI_ERROR the transform is not a move-and-scale (worst miss {err:.3f} of the size)")
+    joints = (np.c_[np.asarray(got.joints, np.float64), np.ones(len(got.joints))] @ A).astype(np.float32)
+    J = len(joints)
+    names = [str(n) for n in (got.joint_names if got.joint_names is not None else [])] or [f"bone_{i}" for i in range(J)]
+    idx, w = top_k(np.asarray(got.skin, np.float32))
+    stem = os.path.basename(inp)[:-len("_skin_in.npz")]
+    dst = os.path.join(OUT, f"{stem}_auto_rig.npz")
+    np.savez_compressed(dst, joint_names=np.array(names), joints=joints, parents=np.asarray(got.parents, np.int64), idx=idx, w=w,
+                        mesh_names=d["mesh_names"], mesh_counts=d["mesh_counts"])
     used = np.bincount(idx[:, 0], minlength=J)
     print("LOKI_INFO " + json.dumps({"vertices": int(len(V)), "joints": J, "joints_leading_somewhere": int((used > 0).sum()),
                                      "seconds": round(time.time() - t0), "file": os.path.basename(dst)}), flush=True)

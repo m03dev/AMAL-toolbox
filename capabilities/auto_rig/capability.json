@@ -1,0 +1,14 @@
+{
+  "name": "auto_rig",
+  "does": "A skeleton AND skin weights for a bare 3D model, made by SkinTokens (TokenRig - the successor of UniRig, MIT) on Kaggle's free GPU, with its voxel clean-up against weights bleeding between parts that touch. Works for any body (creatures, wings, tails), no Maya or AdvancedSkeleton. Writes the rigged model (.glb/.fbx) - LOKI's creature_anim.py then makes each animation in its own file. Needs Kaggle connected; about half an hour",
+  "when": ["rig", "auto rig", "rigging", "skeleton", "skin", "skin weights", "animate", "creature", "3d", "unirig", "tokenrig", "skintokens"],
+  "args": {
+    "model": {"type": "string", "description": "the model to rig (.glb, .fbx or .obj), e.g. renders/dragon.glb"},
+    "out": {"type": "string", "description": "the rigged model to write (.glb or .fbx)", "default": "renders/auto_rig.glb"},
+    "minutes": {"type": "integer", "description": "how long to wait for Kaggle", "default": 90}
+  },
+  "required": ["model"],
+  "run": "{python} {dir}/auto_rig.py {model} --out {out} --blender {blender} --minutes {minutes}",
+  "outputs": ["{out}"],
+  "timeout_s": 7200
+}

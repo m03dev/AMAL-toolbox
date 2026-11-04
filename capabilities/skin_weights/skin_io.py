@@ -188,8 +188,145 @@ def apply(src, weights, dst):
     print(f"LOKI_SKIN_APPLIED {done} mesh(es) -> {dst}")
 
 
+def load_meshes(path):
+    """A bare model (no skeleton needed): its visible meshes, imported the way creature_anim.py imports them."""
+    import bpy
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    ext = os.path.splitext(path)[1].lower()
+    if ext == ".fbx":
+        bpy.ops.import_scene.fbx(filepath=path, automatic_bone_orientation=True)
+    elif ext in (".glb", ".gltf"):
+        bpy.ops.import_scene.gltf(filepath=path)
+    elif ext == ".obj":
+        bpy.ops.wm.obj_import(filepath=path)
+    else:
+        raise SystemExit(f"LOKI_SPEC_ERROR auto_rig takes a .glb, .fbx or .obj, not {ext}")
+    sc = bpy.context.scene
+    for o in [o for o in sc.objects if o.type == "ARMATURE"]:   # an old skeleton goes: a new one is made
+        bpy.data.objects.remove(o, do_unlink=True)
+    meshes = [o for o in sc.objects if o.type == "MESH" and not o.hide_get() and not o.hide_viewport]
+    if not meshes:
+        raise SystemExit("LOKI_SPEC_ERROR the file has no mesh")
+    for o in meshes:
+        for m in [m for m in o.modifiers if m.type == "ARMATURE"]:
+            o.modifiers.remove(m)
+        o.vertex_groups.clear()
+    return meshes
+
+
+def mesh_prep(src, dst):
+    """auto_rig: only the mesh (world space, triangles, each mesh's name and vertex count) - no skeleton."""
+    import numpy as np
+    meshes = load_meshes(src)
+    verts, faces, mnames, counts, off = [], [], [], [], 0
+    for o in meshes:
+        M = o.matrix_world
+        verts.extend(tuple(M @ v.co) for v in o.data.vertices)
+        o.data.calc_loop_triangles()
+        faces.extend(tuple(off + i for i in t.vertices) for t in o.data.loop_triangles)
+        mnames.append(o.name)
+        counts.append(len(o.data.vertices))
+        off += len(o.data.vertices)
+    np.savez_compressed(dst, vertices=np.array(verts, np.float32), faces=np.array(faces, np.int32),
+                        mesh_names=np.array(mnames), mesh_counts=np.array(counts, np.int32))
+    print(f"LOKI_SKIN_PREP {len(verts)} vertices, {len(faces)} triangles in {len(meshes)} mesh(es); no skeleton (auto rig)")
+
+
+def tails_of(heads, parents):
+    """Each joint's tail: towards its children (their average) or, for an end joint, on along its parent's direction."""
+    import numpy as np
+    heads = np.asarray(heads, np.float64)
+    size = float(np.ptp(heads, 0).max()) or 1.0
+    kids = {}
+    for i, p in enumerate(parents):
+        if p >= 0:
+            kids.setdefault(int(p), []).append(i)
+    out = []
+    for i, h in enumerate(heads):
+        if i in kids:
+            t = heads[kids[i]].mean(0)
+        elif parents[i] >= 0:
+            d = h - heads[int(parents[i])]
+            n = np.linalg.norm(d)
+            t = h + (d / n * max(n * 0.5, size * 0.02) if n > 1e-9 else np.array([0, 0, size * 0.03]))
+        else:
+            t = h + np.array([0, 0, size * 0.05])
+        if np.linalg.norm(t - h) < size * 0.005:      # a bone of no length is not a bone in Blender
+            t = h + np.array([0, 0, size * 0.02])
+        out.append(t)
+    return out
+
+
+def build(src, rig, dst):
+    """auto_rig: a skeleton from <rig>.npz (heads, parents, names) and its skin (4 joints a vertex) on the model."""
+    import bpy
+    import numpy as np
+    from mathutils import Vector
+    meshes = load_meshes(src)
+    d = np.load(rig)
+    names = [str(x) for x in d["joint_names"]]
+    heads, parents = d["joints"], [int(p) for p in d["parents"]]
+    tails = tails_of(heads, parents)
+    ad = bpy.data.armatures.new("Armature")
+    arm = bpy.data.objects.new("Armature", ad)
+    bpy.context.scene.collection.objects.link(arm)
+    bpy.context.view_layer.objects.active = arm
+    bpy.ops.object.mode_set(mode="EDIT")
+    eb = []
+    for n, h, t in zip(names, heads, tails):
+        b = ad.edit_bones.new(n)
+        b.head, b.tail = Vector(tuple(map(float, h))), Vector(tuple(map(float, t)))
+        eb.append(b)
+    for i, p in enumerate(parents):
+        if p >= 0:
+            eb[i].parent = eb[p]
+    bpy.ops.object.mode_set(mode="OBJECT")
+    idx, w = d["idx"], d["w"]
+    start, done = 0, 0
+    for mname, n in zip(d["mesh_names"], d["mesh_counts"]):
+        mname, n = str(mname), int(n)
+        rows = slice(start, start + n)
+        start += n
+        o = next((m for m in meshes if m.name == mname), None)
+        if o is None or len(o.data.vertices) != n:
+            print(f"skin: {mname} skipped ({'not in this model' if o is None else 'its vertex count differs'})")
+            continue
+        vg = {}
+        for vi, (ii, ww) in enumerate(zip(idx[rows], w[rows])):
+            for j, x in zip(ii, ww):
+                if x <= 1e-4:
+                    continue
+                bn = names[int(j)]
+                if bn not in vg:
+                    vg[bn] = o.vertex_groups.new(name=bn)
+                vg[bn].add([vi], float(x), "REPLACE")
+        o.modifiers.new("Armature", "ARMATURE").object = arm
+        o.parent = arm
+        done += 1
+    if not done:
+        raise SystemExit("LOKI_SPEC_ERROR none of the rig's meshes is in this model (a different file?)")
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in [arm] + meshes:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = arm
+    os.makedirs(os.path.dirname(os.path.abspath(dst)), exist_ok=True)
+    if dst.lower().endswith(".fbx"):
+        bpy.ops.export_scene.fbx(filepath=dst, use_selection=True, object_types={"ARMATURE", "MESH"}, bake_anim=False,
+                                 add_leaf_bones=False, primary_bone_axis="Y", secondary_bone_axis="X", axis_forward="-Z",
+                                 axis_up="Y", apply_scale_options="FBX_SCALE_ALL", mesh_smooth_type="FACE")
+    else:
+        bpy.ops.export_scene.gltf(filepath=dst, use_selection=True, export_format="GLB", export_animations=False)
+    print(f"LOKI_AUTO_RIG {len(names)} joints on {done} mesh(es) -> {dst}")
+
+
 if __name__ == "__main__":
     a = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+    if len(a) >= 3 and a[0] == "mesh":
+        mesh_prep(a[1], a[2])
+        raise SystemExit(0)
+    if len(a) >= 4 and a[0] == "build":
+        build(a[1], a[2], a[3])
+        raise SystemExit(0)
     if len(a) >= 3 and a[0] == "prep":
         prep(a[1], a[2], int(a[3]) if len(a) > 3 else 150)
     elif len(a) >= 4 and a[0] == "apply":
