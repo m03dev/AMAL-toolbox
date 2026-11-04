@@ -267,6 +267,10 @@ def auto_rig(d, inp, t0, np, torch, Asset, LazyAsset, RigDataset, Transform, get
     parts that touch. Writes <name>_auto_rig.npz: joints (heads, in the mesh's own space), parents, names, and per vertex
     the 4 strongest joints and their weights. (Owner 2026-11-04: AdvancedSkeleton "is clearly a big problem" - use this.)"""
     from src.data.vertex_group import voxel_skin
+    try:
+        import open3d  # noqa: F401
+    except ImportError:
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "open3d"], check=False)
     V = d["vertices"].astype(np.float32)
     F = d["faces"].astype(np.int64)
     c = V.mean(0)
@@ -311,10 +315,16 @@ def auto_rig(d, inp, t0, np, torch, Asset, LazyAsset, RigDataset, Transform, get
             break
     if got is None:
         raise SystemExit(f"LOKI_ERROR SkinTokens made no skeleton in {TRIES} tries")
-    vox = got.voxel(resolution=196)
-    got.skin *= voxel_skin(grid=0, grid_coords=vox.coords, joints=got.joints, vertices=got.vertices, faces=got.faces,
-                           mode="square", voxel_size=vox.voxel_size)
-    got.normalize_skin()
+    # the voxel clean-up (demo.py --use_postprocess) needs open3d, which has no build for Kaggle's Python 3.13: it is
+    # tried, and the rig comes back without it rather than not at all (LOKI's deformation check judges the weights)
+    try:
+        vox = got.voxel(resolution=196)
+        got.skin *= voxel_skin(grid=0, grid_coords=vox.coords, joints=got.joints, vertices=got.vertices, faces=got.faces,
+                               mode="square", voxel_size=vox.voxel_size)
+        got.normalize_skin()
+        print("voxel clean-up: done", flush=True)
+    except Exception as e:  # noqa: BLE001
+        print(f"voxel clean-up skipped ({type(e).__name__}: {e})", flush=True)
     # back to the mesh's own space: the transform moved and scaled it; the same vertices in both give the map exactly
     Vn = np.asarray(got.vertices, np.float64)
     if len(Vn) != len(V):
