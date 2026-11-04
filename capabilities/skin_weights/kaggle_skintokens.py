@@ -189,13 +189,22 @@ def main():
     ds = RigDataset(data=[Given(path=inp, cls="articulation")], transform=transform, tokenizer=tokenizer, process_fn=model._process_fn)
     item = ds[0]
     after = [str(x) for x in item.asset.joint_names]
-    if sorted(after) != sorted(names):
-        raise SystemExit(f"LOKI_ERROR SkinTokens' transform changed the skeleton ({J} joints in, {len(after)} after)")
+    # SkinTokens' transform drops joints it does not skin (end joints, helpers - AdvancedSkeleton adds many: 130 in, 98
+    # kept for his dragon, 2026-11-04). Those carry no weight in a game rig anyway: the kept ones are weighted and the
+    # dropped ones get none. Refused only when it renames joints or keeps too few to deform the body.
+    if not set(after) <= set(names):
+        raise SystemExit(f"LOKI_ERROR SkinTokens' transform renamed joints: {sorted(set(after) - set(names))[:8]}")
+    dropped = [n for n in names if n not in after]
+    if len(after) < 0.6 * J:
+        raise SystemExit(f"LOKI_ERROR SkinTokens kept only {len(after)} of {J} joints - too few to deform the model")
+    if dropped:
+        print(f"SkinTokens skins {len(after)} of {J} joints; no weight on: {', '.join(dropped[:40])}", flush=True)
+    Jk = len(after)
     batch = {k: v.to("cuda") if isinstance(v, torch.Tensor) else v for k, v in ds.collate_fn([item]).items()}
     mask = batch["skeleton_mask"][0] == 1
     skel = batch["skeleton_tokens"][0][mask].cpu().numpy()
     tps = model.tokens_per_skin
-    print(f"skeleton: {len(skel)} tokens; skin: {J * tps} tokens to make", flush=True)
+    print(f"skeleton: {len(skel)} tokens; skin: {Jk * tps} tokens to make", flush=True)
 
     # every vertex of the mesh, as SkinTokens sees it after its transform (normalised position + normal)
     if item.asset.vertices.shape[0] != len(V):
@@ -207,7 +216,7 @@ def main():
         t = time.time()
         with torch.no_grad():
             res = model.generate(vertices=batch["vertices"][0], normals=batch["normals"][0], cls=batch["cls"][0],
-                                 skeleton_tokens=skel, return_decode_dict=True, max_new_tokens=J * tps + 4,
+                                 skeleton_tokens=skel, return_decode_dict=True, max_new_tokens=Jk * tps + 4,
                                  num_return_sequences=1, do_sample=True, **SAMPLING)
         ids = res.output_ids
         eos = torch.where(ids == tokenizer.eos)[0]
@@ -216,16 +225,16 @@ def main():
             continue
         e = int(eos[0])
         made = tokenizer.detokenize(ids=ids[:e + 1].cpu().numpy()).joints.shape[0]
-        sk = ids[e + 1:e + 1 + J * tps]
-        print(f"try {attempt + 1}: {time.time() - t:.0f} s, {made} joints read back, {len(sk)} of {J * tps} skin tokens", flush=True)
-        if made != J or len(sk) != J * tps:
+        sk = ids[e + 1:e + 1 + Jk * tps]
+        print(f"try {attempt + 1}: {time.time() - t:.0f} s, {made} joints read back, {len(sk)} of {Jk * tps} skin tokens", flush=True)
+        if made != Jk or len(sk) != Jk * tps:
             continue
-        out = torch.empty((Q.shape[0], J), dtype=torch.float32, device="cuda")
+        out = torch.empty((Q.shape[0], Jk), dtype=torch.float32, device="cuda")
         cond = res.cond_latents.unsqueeze(0)
         jb, chunk = 4, 16384
         with torch.no_grad(), torch.autocast("cuda", dtype=torch.bfloat16):
-            for s in range(0, J, jb):
-                b = min(J, s + jb) - s
+            for s in range(0, Jk, jb):
+                b = min(Jk, s + jb) - s
                 ind = (sk[s * tps:(s + b) * tps] - tokenizer.vocab_size).unsqueeze(0)
                 z = model.vae.model.FSQ.indices_to_codes(ind).reshape(b, tps, -1)
                 for c in range(0, Q.shape[0], chunk):
@@ -236,8 +245,11 @@ def main():
         break
     if skin is None:
         raise SystemExit(f"LOKI_ERROR SkinTokens did not make a whole skin in {TRIES} tries")
-    # back in the input's joint order (SkinTokens' transform may order them its own way)
-    skin = skin[:, [after.index(n) for n in names]]
+    # back in the input's joint order (SkinTokens' transform may order them its own way); a dropped joint gets no weight
+    full = np.full((skin.shape[0], J), -1e9, dtype=np.float32)
+    for i, n in enumerate(after):
+        full[:, names.index(n)] = skin[:, i]
+    skin = full
     idx, w = top_k(skin)
     stem = os.path.basename(inp)[:-len("_skin_in.npz")]
     dst = os.path.join(OUT, f"{stem}_skin_weights.npz")
