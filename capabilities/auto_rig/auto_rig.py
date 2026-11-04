@@ -46,6 +46,11 @@ def main():
     if not got:
         kernel = os.path.join(out, "kernel.txt")
         recent = os.path.isfile(kernel) and time.time() - os.path.getmtime(kernel) < 3 * 3600
+        # a run that already ended without a result is not waited on again: a fixed script would never get its turn
+        if recent and glob.glob(os.path.join(out, "*.log")):
+            for f in glob.glob(os.path.join(out, "*.log")) + [kernel]:
+                os.remove(f)
+            recent = False
         cmd = [sys.executable, KAGGLE, os.path.join(SKIN, "kaggle_skintokens.py"), "--out", out, "--gpu", "T4", "--minutes", str(a.minutes)]
         cmd += ["--attach", open(kernel).read().strip()] if recent else ["--title", f"auto rig {stem}", "--inputs", inp]
         print("$", " ".join(cmd), flush=True)
