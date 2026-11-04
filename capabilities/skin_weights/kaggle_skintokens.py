@@ -297,53 +297,57 @@ def auto_rig(d, inp, t0, np, torch, Asset, LazyAsset, RigDataset, Transform, get
     batch.pop("skeleton_tokens", None)
     batch.pop("skeleton_mask", None)
     batch["generate_kwargs"] = dict(max_length=2048, num_return_sequences=1, do_sample=True, **SAMPLING)
-    got = None
-    for attempt in range(TRIES):
-        torch.manual_seed(attempt)
+    # SkinTokens samples: each seed gives a different skeleton, and which one deforms best only shows when it moves
+    # (the dragon: 3x worst stretch on one, 6x on the next, 2026-11-04). Several are made here, where the model is
+    # loaded once (about 45 s each), and LOKI animates each and keeps the best.
+    want = int(os.environ.get("LOKI_RIG_SAMPLES", "3"))
+    stem = os.path.basename(inp)[:-len("_skin_in.npz")]
+    made, seed = [], 0
+    while len(made) < want and seed < want * 2:
+        torch.manual_seed(seed)
+        seed += 1
         t = time.time()
         try:
             with torch.no_grad():
                 res = model.predict_step(batch, make_asset=True)["results"][0]
         except Exception as e:  # noqa: BLE001
-            print(f"try {attempt + 1}: {type(e).__name__}: {e}", flush=True)
+            print(f"seed {seed - 1}: {type(e).__name__}: {e}", flush=True)
             continue
-        a = res.asset
-        n = 0 if a is None or a.joints is None else len(a.joints)
-        print(f"try {attempt + 1}: {time.time() - t:.0f} s, {n} joints", flush=True)
-        if n >= 3:
-            got = a
-            break
-    if got is None:
-        raise SystemExit(f"LOKI_ERROR SkinTokens made no skeleton in {TRIES} tries")
-    # the voxel clean-up (demo.py --use_postprocess) needs open3d, which has no build for Kaggle's Python 3.13: it is
-    # tried, and the rig comes back without it rather than not at all (LOKI's deformation check judges the weights)
-    try:
-        vox = got.voxel(resolution=196)
-        got.skin *= voxel_skin(grid=0, grid_coords=vox.coords, joints=got.joints, vertices=got.vertices, faces=got.faces,
-                               mode="square", voxel_size=vox.voxel_size)
-        got.normalize_skin()
-        print("voxel clean-up: done", flush=True)
-    except Exception as e:  # noqa: BLE001
-        print(f"voxel clean-up skipped ({type(e).__name__}: {e})", flush=True)
-    # back to the mesh's own space: the transform moved and scaled it; the same vertices in both give the map exactly
-    Vn = np.asarray(got.vertices, np.float64)
-    if len(Vn) != len(V):
-        raise SystemExit(f"LOKI_ERROR SkinTokens' transform changed the mesh ({len(V)} vertices in, {len(Vn)} after)")
-    A, *_ = np.linalg.lstsq(np.c_[Vn, np.ones(len(Vn))], V.astype(np.float64), rcond=None)
-    err = float(np.abs(np.c_[Vn, np.ones(len(Vn))] @ A - V).max() / max(np.ptp(V, 0).max(), 1e-6))
-    if err > 0.01:
-        raise SystemExit(f"LOKI_ERROR the transform is not a move-and-scale (worst miss {err:.3f} of the size)")
-    joints = (np.c_[np.asarray(got.joints, np.float64), np.ones(len(got.joints))] @ A).astype(np.float32)
-    J = len(joints)
-    names = [str(n) for n in (got.joint_names if got.joint_names is not None else [])] or [f"bone_{i}" for i in range(J)]
-    idx, w = top_k(np.asarray(got.skin, np.float32))
-    stem = os.path.basename(inp)[:-len("_skin_in.npz")]
-    dst = os.path.join(OUT, f"{stem}_auto_rig.npz")
-    np.savez_compressed(dst, joint_names=np.array(names), joints=joints, parents=np.asarray(got.parents, np.int64), idx=idx, w=w,
-                        mesh_names=d["mesh_names"], mesh_counts=d["mesh_counts"])
-    used = np.bincount(idx[:, 0], minlength=J)
-    print("LOKI_INFO " + json.dumps({"vertices": int(len(V)), "joints": J, "joints_leading_somewhere": int((used > 0).sum()),
-                                     "seconds": round(time.time() - t0), "file": os.path.basename(dst)}), flush=True)
+        got = res.asset
+        n = 0 if got is None or got.joints is None else len(got.joints)
+        print(f"seed {seed - 1}: {time.time() - t:.0f} s, {n} joints", flush=True)
+        if n < 3:
+            continue
+        # the voxel clean-up (demo.py --use_postprocess) needs open3d, which has no build for Kaggle's Python 3.13: it
+        # is tried, and the rig comes back without it rather than not at all (LOKI's deformation check judges it)
+        try:
+            vox = got.voxel(resolution=196)
+            got.skin *= voxel_skin(grid=0, grid_coords=vox.coords, joints=got.joints, vertices=got.vertices, faces=got.faces,
+                                   mode="square", voxel_size=vox.voxel_size)
+            got.normalize_skin()
+        except Exception as e:  # noqa: BLE001
+            print(f"voxel clean-up skipped ({type(e).__name__})", flush=True)
+        # back to the mesh's own space: the transform moved and scaled it; the same vertices in both give the map exactly
+        Vn = np.asarray(got.vertices, np.float64)
+        if len(Vn) != len(V):
+            print(f"seed {seed - 1}: the transform changed the mesh ({len(V)} vertices in, {len(Vn)} after)", flush=True)
+            continue
+        A, *_ = np.linalg.lstsq(np.c_[Vn, np.ones(len(Vn))], V.astype(np.float64), rcond=None)
+        err = float(np.abs(np.c_[Vn, np.ones(len(Vn))] @ A - V).max() / max(np.ptp(V, 0).max(), 1e-6))
+        if err > 0.01:
+            print(f"seed {seed - 1}: the transform is not a move-and-scale (worst miss {err:.3f})", flush=True)
+            continue
+        joints = (np.c_[np.asarray(got.joints, np.float64), np.ones(len(got.joints))] @ A).astype(np.float32)
+        J = len(joints)
+        names = [str(x) for x in (got.joint_names if got.joint_names is not None else [])] or [f"bone_{i}" for i in range(J)]
+        idx, w = top_k(np.asarray(got.skin, np.float32))
+        dst = os.path.join(OUT, f"{stem}_auto_rig_{len(made) + 1}.npz")
+        np.savez_compressed(dst, joint_names=np.array(names), joints=joints, parents=np.asarray(got.parents, np.int64), idx=idx, w=w,
+                            mesh_names=d["mesh_names"], mesh_counts=d["mesh_counts"])
+        made.append(os.path.basename(dst))
+    if not made:
+        raise SystemExit(f"LOKI_ERROR SkinTokens made no usable skeleton in {seed} tries")
+    print("LOKI_INFO " + json.dumps({"vertices": int(len(V)), "rigs": made, "seconds": round(time.time() - t0)}), flush=True)
 
 
 if __name__ == "__main__":

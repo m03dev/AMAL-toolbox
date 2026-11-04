@@ -42,7 +42,7 @@ def main():
     inp = os.path.join(work, f"{stem}_skin_in.npz")
     if not os.path.isfile(inp):
         blender(a.blender, "mesh", a.model, inp)
-    got = glob.glob(os.path.join(out, "*_auto_rig.npz"))
+    got = glob.glob(os.path.join(out, "*_auto_rig*.npz"))
     if not got:
         kernel = os.path.join(out, "kernel.txt")
         recent = os.path.isfile(kernel) and time.time() - os.path.getmtime(kernel) < 3 * 3600
@@ -55,16 +55,27 @@ def main():
         cmd += ["--attach", open(kernel).read().strip()] if recent else ["--title", f"auto rig {stem}", "--inputs", inp]
         print("$", " ".join(cmd), flush=True)
         r = subprocess.run(cmd)
-        got = glob.glob(os.path.join(out, "*_auto_rig.npz"))
+        got = glob.glob(os.path.join(out, "*_auto_rig*.npz"))
         if not got:
             logs = "".join(open(f, encoding="utf-8", errors="replace").read() for f in glob.glob(os.path.join(out, "*.log")))
             why = [l.strip() for l in logs.splitlines() if "LOKI_ERROR" in l or "Error" in l][-6:]
             raise SystemExit(f"Kaggle brought no rig back (exit {r.returncode}; its log is in {out})" + ("\n" + "\n".join(why) if why else ""))
-    keep = os.path.splitext(a.out)[0] + "_auto_rig.npz"
+    # every rig Kaggle made (several seeds): the first is --out, the others beside it as <out>_2, <out>_3 ...
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
-    shutil.copy(got[0], keep)
-    blender(a.blender, "build", a.model, keep, a.out)
-    print(f"LOKI_AUTO_RIG_DONE {a.out}")
+    base, ext = os.path.splitext(a.out)
+    built = []
+    for k, npz in enumerate(sorted(got), 1):
+        dst = a.out if k == 1 else f"{base}_{k}{ext}"
+        keep = os.path.splitext(dst)[0] + "_auto_rig.npz"
+        shutil.copy(npz, keep)
+        try:
+            blender(a.blender, "build", a.model, keep, dst)
+            built.append(dst)
+        except SystemExit as e:
+            print(f"rig {k} not built: {str(e)[:300]}", flush=True)
+    if not built:
+        raise SystemExit("none of the rigs could be built in Blender")
+    print("LOKI_AUTO_RIG_DONE " + " ".join(built))
 
 
 if __name__ == "__main__":
