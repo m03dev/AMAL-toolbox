@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A logo picture -> clean SVG (vtracer, MIT: github.com/visioncortex/vtracer). LOKI's addition (AGPL-3.0).
+"""A logo picture -> clean SVG (vtracer, MIT: github.com/visioncortex/vtracer). MODO's addition (AGPL-3.0).
 
 A picture model draws good logo ideas but only as pixels; this traces one into vector shapes so it can be tested at
 16 px, recoloured and exported like any SVG mark.

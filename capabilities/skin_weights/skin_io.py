@@ -3,7 +3,7 @@
     blender -b --factory-startup --python skin_io.py -- prep  <rigged .fbx/.glb> <input.npz> [max_joints]
     blender -b --factory-startup --python skin_io.py -- apply <rigged .fbx/.glb> <weights.npz> <out .fbx/.glb>
 
-prep: the skin (the visible meshes the skeleton deforms - the same ones LOKI's creature_anim.py checks) in world space at
+prep: the skin (the visible meshes the skeleton deforms - the same ones MODO's creature_anim.py checks) in world space at
 rest, as triangles, and the skeleton's deforming joints (heads, parents, names) in depth-first order with the root first
 (SkinTokens' tokenizer reads a skeleton that way: a joint whose parent is not the joint before it starts a branch).
 Twist / roll helpers sit out when there are more joints than `max_joints` (the limb bone they ride on takes their share,
@@ -88,16 +88,16 @@ def load(path):
     elif ext in (".glb", ".gltf"):
         bpy.ops.import_scene.gltf(filepath=path)
     else:
-        raise SystemExit(f"LOKI_SPEC_ERROR skin_weights takes a rigged .fbx or .glb, not {ext}")
+        raise SystemExit(f"MODO_SPEC_ERROR skin_weights takes a rigged .fbx or .glb, not {ext}")
     sc = bpy.context.scene
     arm = next((o for o in sc.objects if o.type == "ARMATURE"), None)
     if arm is None:
-        raise SystemExit("LOKI_SPEC_ERROR the file has no skeleton (rig it first)")
+        raise SystemExit("MODO_SPEC_ERROR the file has no skeleton (rig it first)")
     meshes = [o for o in sc.objects if o.type == "MESH" and not o.hide_get() and not o.hide_viewport]
     skinned = [o for o in meshes if any(m.type == "ARMATURE" for m in o.modifiers)]
     meshes = skinned or meshes or [o for o in sc.objects if o.type == "MESH" and any(m.type == "ARMATURE" for m in o.modifiers)]
     if not meshes:
-        raise SystemExit("LOKI_SPEC_ERROR the file has no mesh to skin")
+        raise SystemExit("MODO_SPEC_ERROR the file has no mesh to skin")
     return arm, meshes
 
 
@@ -131,7 +131,7 @@ def prep(src, dst, max_joints):
     if heads[0] is None:     # the joint above several roots: where they are, on average
         heads[0] = sum(real[1:], real[0]) / len(real)
     tails = [W @ bones[i].tail_local if i >= 0 else heads[k] for k, i in enumerate(order)]
-    jn = ["loki_skin_root" if i < 0 else names[i] for i in order]
+    jn = ["modo_skin_root" if i < 0 else names[i] for i in order]
     np.savez_compressed(dst, vertices=np.array(verts, np.float32), faces=np.array(faces, np.int32),
                         mesh_names=np.array(mnames), mesh_counts=np.array(counts, np.int32),
                         joint_names=np.array(jn), parents=np.array(new_parents, np.int32),
@@ -139,7 +139,7 @@ def prep(src, dst, max_joints):
                         lengths=np.array([(t - h).length for t, h in zip(tails, heads)], np.float32),
                         synthetic=np.array(synthetic))
     dropped = len([b for b in bones if b.use_deform]) - (len(order) - sum(synthetic))
-    print(f"LOKI_SKIN_PREP {len(verts)} vertices, {len(faces)} triangles in {len(meshes)} mesh(es); {len(order)} joints"
+    print(f"MODO_SKIN_PREP {len(verts)} vertices, {len(faces)} triangles in {len(meshes)} mesh(es); {len(order)} joints"
           + (f" ({dropped} helper / unweighted joints sit out)" if dropped else "") + (" + one root above several" if any(synthetic) else ""))
 
 
@@ -172,7 +172,7 @@ def apply(src, weights, dst):
             o.modifiers.new("Armature", "ARMATURE").object = arm
         done += 1
     if not done:
-        raise SystemExit("LOKI_SPEC_ERROR none of the weights' meshes is in this model (a different file?)")
+        raise SystemExit("MODO_SPEC_ERROR none of the weights' meshes is in this model (a different file?)")
     bpy.ops.object.select_all(action="DESELECT")
     for o in [arm] + meshes:
         o.select_set(True)
@@ -185,7 +185,7 @@ def apply(src, weights, dst):
                                  axis_up="Y", apply_scale_options="FBX_SCALE_ALL", mesh_smooth_type="FACE")
     else:
         bpy.ops.export_scene.gltf(filepath=dst, use_selection=True, export_format="GLB", export_animations=False)
-    print(f"LOKI_SKIN_APPLIED {done} mesh(es) -> {dst}")
+    print(f"MODO_SKIN_APPLIED {done} mesh(es) -> {dst}")
 
 
 def load_meshes(path):
@@ -200,13 +200,13 @@ def load_meshes(path):
     elif ext == ".obj":
         bpy.ops.wm.obj_import(filepath=path)
     else:
-        raise SystemExit(f"LOKI_SPEC_ERROR auto_rig takes a .glb, .fbx or .obj, not {ext}")
+        raise SystemExit(f"MODO_SPEC_ERROR auto_rig takes a .glb, .fbx or .obj, not {ext}")
     sc = bpy.context.scene
     for o in [o for o in sc.objects if o.type == "ARMATURE"]:   # an old skeleton goes: a new one is made
         bpy.data.objects.remove(o, do_unlink=True)
     meshes = [o for o in sc.objects if o.type == "MESH" and not o.hide_get() and not o.hide_viewport]
     if not meshes:
-        raise SystemExit("LOKI_SPEC_ERROR the file has no mesh")
+        raise SystemExit("MODO_SPEC_ERROR the file has no mesh")
     for o in meshes:
         for m in [m for m in o.modifiers if m.type == "ARMATURE"]:
             o.modifiers.remove(m)
@@ -229,7 +229,7 @@ def mesh_prep(src, dst):
         off += len(o.data.vertices)
     np.savez_compressed(dst, vertices=np.array(verts, np.float32), faces=np.array(faces, np.int32),
                         mesh_names=np.array(mnames), mesh_counts=np.array(counts, np.int32))
-    print(f"LOKI_SKIN_PREP {len(verts)} vertices, {len(faces)} triangles in {len(meshes)} mesh(es); no skeleton (auto rig)")
+    print(f"MODO_SKIN_PREP {len(verts)} vertices, {len(faces)} triangles in {len(meshes)} mesh(es); no skeleton (auto rig)")
 
 
 def tails_of(heads, parents):
@@ -304,7 +304,7 @@ def build(src, rig, dst):
         o.parent = arm
         done += 1
     if not done:
-        raise SystemExit("LOKI_SPEC_ERROR none of the rig's meshes is in this model (a different file?)")
+        raise SystemExit("MODO_SPEC_ERROR none of the rig's meshes is in this model (a different file?)")
     bpy.ops.object.select_all(action="DESELECT")
     for o in [arm] + meshes:
         o.select_set(True)
@@ -316,7 +316,7 @@ def build(src, rig, dst):
                                  axis_up="Y", apply_scale_options="FBX_SCALE_ALL", mesh_smooth_type="FACE")
     else:
         bpy.ops.export_scene.gltf(filepath=dst, use_selection=True, export_format="GLB", export_animations=False)
-    print(f"LOKI_AUTO_RIG {len(names)} joints on {done} mesh(es) -> {dst}")
+    print(f"MODO_AUTO_RIG {len(names)} joints on {done} mesh(es) -> {dst}")
 
 
 if __name__ == "__main__":

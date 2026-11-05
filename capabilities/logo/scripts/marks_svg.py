@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Logo marks from real letters, laid out the proven ways - no hand-drawn paths.
 
-LOKI's addition to the logo-design skill (AGPL-3.0, like LOKI). Free models cannot edit long SVG path data (a job read
+MODO's addition to the logo-design skill (AGPL-3.0, like MODO). Free models cannot edit long SVG path data (a job read
 the same letter files ten times and never made a mark). This builds the marks itself: every font x every layout, in
 each palette, plus one contact sheet to look at and show the owner.
 

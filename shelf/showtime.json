@@ -1,6 +1,6 @@
 [
  {"id": "showtime", "name": "showtime (local video studio for agents)", "area": "video",
-  "what": "Motion graphics, trailers, voice-over, music, sound design, captions, footage edits and platform exports - made locally by LOKI's agents, no cloud and no keys.",
+  "what": "Motion graphics, trailers, voice-over, music, sound design, captions, footage edits and platform exports - made locally by MODO's agents, no cloud and no keys.",
   "repo": "https://github.com/FavioVazquez/showtime", "license": "MIT", "weights": null, "hardware": "cpu",
   "platforms": ["darwin", "win32", "linux"],
   "install": {"kind": "npm", "npm": ["@faviovazquez/showtime-mcp@0.4.6"], "exe": "showtime",
@@ -14,6 +14,6 @@
       "timeout": 7200},
     "qa": {"what": "Verify a finished video (frames, audio, captions, sizes).", "cmd": ["{exe}", "qa", "{job}"],
       "args": {"job": {"type": "text"}}, "timeout": 1800}},
-  "notes": "Needs Node.js 20+ and Python 3.8+ (or uv). setup downloads about 0.5-0.75 GB into ~/.showtime. LOKI's OpenCode agent gets showtime's MCP server (new_project, render, check, snap, qa, voice, music, sfx, mix, exports) once it is installed - the full director workflow.",
+  "notes": "Needs Node.js 20+ and Python 3.8+ (or uv). setup downloads about 0.5-0.75 GB into ~/.showtime. MODO's OpenCode agent gets showtime's MCP server (new_project, render, check, snap, qa, voice, music, sfx, mix, exports) once it is installed - the full director workflow.",
   "verified_from": "packages/npm/package.json (bin showtime, showtime-mcp; 0.4.6), skills/showtime/lib/st/cli_core.py (doctor, setup), cli_job.py (qa), SKILL.md (render <project> --job <job>) at 2efdb11"}
 ]

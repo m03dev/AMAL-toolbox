@@ -1,5 +1,5 @@
-LOKI - a personal AI agent that runs on your own computers
-Copyright (C) 2026 m03dev and LOKI contributors
+MODO - a personal AI agent that runs on your own computers
+Copyright (C) 2026 m03dev and MODO contributors
 
 This program is free software: you can redistribute it and/or modify it under the terms of
 the GNU Affero General Public License as published by the Free Software Foundation, either
@@ -9,9 +9,9 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
 the GNU Affero General Public License below for more details.
 
-Parts of LOKI come from other projects under their own licences (MIT, BSD, Apache-2.0,
+Parts of MODO come from other projects under their own licences (MIT, BSD, Apache-2.0,
 GPL-3.0, AGPL-3.0 and others); each is listed in docs/THIRD_PARTY.md with its licence text kept
-next to the code. Model weights LOKI can download (e.g. TimesFM-3) are never in this repository
+next to the code. Model weights MODO can download (e.g. TimesFM-3) are never in this repository
 and keep their own terms.
 
 --------------------------------------------------------------------------------------------

@@ -11,5 +11,5 @@ source), the Anthropic-specific ones (`brand-guidelines`, `claude-api`, `academy
 `discernment-nudge`) and the large asset-heavy ones (`canvas-design`, `theme-factory`,
 `algorithmic-art`, `slack-gif-creator`, `web-artifacts-builder`).
 
-LOKI reads skills as text and never runs the scripts that come with them (engine/skill_scan.py);
+MODO reads skills as text and never runs the scripts that come with them (engine/skill_scan.py);
 the catalog lists these under the source "anthropic".

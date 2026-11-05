@@ -1,7 +1,7 @@
-//! The capability library: tested code LOKI calls instead of improvising.
+//! The capability library: tested code MODO calls instead of improvising.
 //!
 //! A free model writing its own shell commands from a page of instructions gets each job a little wrong in a new way
-//! (owner 2026-11-03: "make it less floaty ... something separate that holds the code ... LOKI can ask that"). So the
+//! (owner 2026-11-03: "make it less floaty ... something separate that holds the code ... MODO can ask that"). So the
 //! work lives here as code: each capability is a folder with `capability.json` (what it does, what it takes, the
 //! command, the files it must make, an optional check) and its scripts. The model only picks one and fills the blanks
 //! (`use`); the driver runs it and checks the files itself. A job that needs something new writes it
@@ -138,7 +138,7 @@ fn plain(v: &Value) -> Option<String> {
 }
 
 fn python() -> String {
-    std::env::var("LOKI_PYTHON").unwrap_or_else(|_| if cfg!(windows) { "python".into() } else { "python3".into() })
+    std::env::var("MODO_PYTHON").unwrap_or_else(|_| if cfg!(windows) { "python".into() } else { "python3".into() })
 }
 
 /// Fill `{...}` in a template. `quoted`: arguments become shell words; otherwise plain text (paths of outputs).
@@ -309,7 +309,7 @@ pub async fn use_tool(ws: &Path, policy: &Policy, a: &Value, blender: Option<&st
 
 /// The `make_capability` tool: write a new capability, test it in this job's folder, keep it only if the test passes.
 pub async fn make(ws: &Path, policy: &Policy, a: &Value, blender: Option<&str>) -> Outcome {
-    let Some(home) = home_dir() else { return Outcome::Err("LOKI_HOME is not set".into()) };
+    let Some(home) = home_dir() else { return Outcome::Err("MODO_HOME is not set".into()) };
     let Some(name) = a["name"].as_str().filter(|n| valid_name(n)) else {
         return Outcome::Err("'name' must be lower_case_with_underscores (max 48)".into());
     };
@@ -327,7 +327,7 @@ pub async fn make(ws: &Path, policy: &Policy, a: &Value, blender: Option<&str>) 
     let spec = json!({
         "name": name, "does": a["does"], "when": a["when"], "args": a["args"], "required": a["required"],
         "run": a["run"], "outputs": a["outputs"], "check": a["check"], "timeout_s": a["timeout_s"],
-        "made_by": "a LOKI job", "made": now_s(),
+        "made_by": "a MODO job", "made": now_s(),
     });
     let _ = std::fs::write(trial.join("capability.json"), serde_json::to_string_pretty(&spec).unwrap_or_default());
     let Some(c) = Capability::from(&trial, &spec, true) else { return Outcome::Err("it needs 'name' and 'run'".into()) };
@@ -376,7 +376,7 @@ mod tests {
 
     #[tokio::test]
     async fn a_capability_passes_only_when_it_makes_its_files() {
-        let ws = std::env::temp_dir().join(format!("loki-cap-{}", std::process::id()));
+        let ws = std::env::temp_dir().join(format!("modo-cap-{}", std::process::id()));
         let _ = std::fs::create_dir_all(&ws);
         let ok = Capability::from(&ws, &json!({"name": "say", "run": "echo hi > {out}", "args": {"out": {"type": "string"}}, "required": ["out"], "outputs": ["{out}"]}), false).unwrap();
         match run(&ok, &ws, &Policy::default(), &json!({"out": "said.txt"}), None).await {

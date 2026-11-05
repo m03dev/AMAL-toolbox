@@ -1,6 +1,6 @@
 {
   "name": "mesh_symmetrize",
-  "does": "Make a 3D model (glb/fbx/obj) symmetrical left to right: finds its own mirror plane, cuts it there, keeps one half (the more complete one, or left/right), mirrors and welds it - never doubles the model. Writes the .glb and <name>_symmetry.json (plane turn, kept side); a model that is posed (under 35% mirrors) is refused - LOKI's rig re-poses it first and passes the plane",
+  "does": "Make a 3D model (glb/fbx/obj) symmetrical left to right: finds its own mirror plane, cuts it there, keeps one half (the more complete one, or left/right), mirrors and welds it - never doubles the model. Writes the .glb and <name>_symmetry.json (plane turn, kept side); a model that is posed (under 35% mirrors) is refused - MODO's rig re-poses it first and passes the plane",
   "when": [
     "3d",
     "model",
@@ -30,7 +30,7 @@
     },
     "plane_x": {
       "type": "string",
-      "description": "a known mirror plane x (from LOKI's re-pose): used as it is, no search and no refusal",
+      "description": "a known mirror plane x (from MODO's re-pose): used as it is, no search and no refusal",
       "default": "search"
     }
   },

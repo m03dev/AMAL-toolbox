@@ -6,7 +6,7 @@
     "script": {"type": "string", "description": "the .py file in the job's folder to run there (it writes its results to its working folder)"},
     "out": {"type": "string", "description": "folder for what comes back", "default": "kaggle_out"},
     "title": {"type": "string", "description": "a short name for the run"},
-    "inputs": {"type": "array", "description": "files the script needs (uploaded beside it; their folder is $LOKI_INPUTS)"},
+    "inputs": {"type": "array", "description": "files the script needs (uploaded beside it; their folder is $MODO_INPUTS)"},
     "gpu": {"type": "string", "description": "T4 or P100", "default": "T4"},
     "minutes": {"type": "integer", "description": "how long to wait for it", "default": 120},
     "attach": {"type": "string", "description": "a run already started (user/name, from <out>/kernel.txt): wait for it and fetch its files instead of starting it again"}

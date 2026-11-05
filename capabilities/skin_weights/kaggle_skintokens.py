@@ -1,6 +1,6 @@
 """SkinTokens (github.com/VAST-AI-Research/SkinTokens, MIT) on Kaggle's free T4: skin weights for a skeleton that exists.
 
-kaggle_gpu sends this as the Kaggle script with <name>_skin_in.npz beside it ($LOKI_INPUTS; skin_io.py prep wrote it:
+kaggle_gpu sends this as the Kaggle script with <name>_skin_in.npz beside it ($MODO_INPUTS; skin_io.py prep wrote it:
 the skin's vertices and triangles, the joints' names, heads and parents). It writes <name>_skin_weights.npz to
 /kaggle/working: per vertex the 4 strongest joints (indices into joint_names) and their weights, summing to 1.
 
@@ -98,21 +98,21 @@ def torch_ok():
 
 def setup():
     if not torch_ok():
-        if os.environ.get("LOKI_TORCH_REPLACED"):
-            raise SystemExit("LOKI_ERROR PyTorch cannot run on this GPU even after reinstalling it")
+        if os.environ.get("MODO_TORCH_REPLACED"):
+            raise SystemExit("MODO_ERROR PyTorch cannot run on this GPU even after reinstalling it")
         # a PyTorch built without this card (sm_75): the one SkinTokens names, built for CUDA 12.8 (runs on newer drivers)
         sh(sys.executable, "-m", "pip", "install", "-q", "torch==2.7.0", "--index-url", "https://download.pytorch.org/whl/cu128")
-        os.environ["LOKI_TORCH_REPLACED"] = "1"
+        os.environ["MODO_TORCH_REPLACED"] = "1"
         os.execv(sys.executable, [sys.executable] + sys.argv)
     import torch
-    cons = os.path.join(WORK, "loki_constraints.txt")
+    cons = os.path.join(WORK, "modo_constraints.txt")
     open(cons, "w").write(f"torch=={torch.__version__.split('+')[0]}\n")    # the dependencies never swap Kaggle's torch
     sh(sys.executable, "-m", "pip", "install", "-q", "-c", cons, *DEPS)
     repo = os.path.join(WORK, "SkinTokens")
     if not os.path.isdir(os.path.join(repo, "src")):
         sh("git", "clone", "-q", REPO_URL, repo)
         sh("git", "checkout", "-q", COMMIT, cwd=repo)
-    shims = os.path.join(WORK, "loki_shims")
+    shims = os.path.join(WORK, "modo_shims")
     os.makedirs(shims, exist_ok=True)
     open(os.path.join(shims, "flash_attn_interface.py"), "w").write(SHIM)
     os.environ.setdefault("HF_HOME", os.path.join(WORK, "hf"))
@@ -126,18 +126,18 @@ def setup():
 
 
 def find_input():
-    inp = os.environ.get("LOKI_INPUTS", ".")
+    inp = os.environ.get("MODO_INPUTS", ".")
     got = glob.glob(os.path.join(inp, "*_skin_in.npz"))
     if not got:   # where Kaggle mounted the upload (its folder layout has changed over time)
         got = [os.path.join(d, f) for d, _, fs in os.walk("/kaggle/input") for f in fs if f.endswith("_skin_in.npz")]
     if not got:
-        raise SystemExit("LOKI_ERROR no *_skin_in.npz among the inputs")
+        raise SystemExit("MODO_ERROR no *_skin_in.npz among the inputs")
     return got[0]
 
 
 def main():
     if not shutil.which("nvidia-smi"):
-        print("LOKI_GPU: none - stopping", flush=True)
+        print("MODO_GPU: none - stopping", flush=True)
         sys.exit(0)
     t0 = time.time()
     inp = find_input()
@@ -195,10 +195,10 @@ def main():
     # kept for his dragon, 2026-11-04). Those carry no weight in a game rig anyway: the kept ones are weighted and the
     # dropped ones get none. Refused only when it renames joints or keeps too few to deform the body.
     if not set(after) <= set(names):
-        raise SystemExit(f"LOKI_ERROR SkinTokens' transform renamed joints: {sorted(set(after) - set(names))[:8]}")
+        raise SystemExit(f"MODO_ERROR SkinTokens' transform renamed joints: {sorted(set(after) - set(names))[:8]}")
     dropped = [n for n in names if n not in after]
     if len(after) < 0.6 * J:
-        raise SystemExit(f"LOKI_ERROR SkinTokens kept only {len(after)} of {J} joints - too few to deform the model")
+        raise SystemExit(f"MODO_ERROR SkinTokens kept only {len(after)} of {J} joints - too few to deform the model")
     if dropped:
         print(f"SkinTokens skins {len(after)} of {J} joints; no weight on: {', '.join(dropped[:40])}", flush=True)
     Jk = len(after)
@@ -210,7 +210,7 @@ def main():
 
     # every vertex of the mesh, as SkinTokens sees it after its transform (normalised position + normal)
     if item.asset.vertices.shape[0] != len(V):
-        raise SystemExit(f"LOKI_ERROR SkinTokens' transform changed the mesh ({len(V)} vertices in, {item.asset.vertices.shape[0]} after)")
+        raise SystemExit(f"MODO_ERROR SkinTokens' transform changed the mesh ({len(V)} vertices in, {item.asset.vertices.shape[0]} after)")
     Q = torch.from_numpy(np.concatenate([item.asset.vertices, item.asset.vertex_normals], 1).astype(np.float32)).cuda()
     skin = None
     for attempt in range(TRIES):
@@ -246,7 +246,7 @@ def main():
         skin = out.cpu().numpy()
         break
     if skin is None:
-        raise SystemExit(f"LOKI_ERROR SkinTokens did not make a whole skin in {TRIES} tries")
+        raise SystemExit(f"MODO_ERROR SkinTokens did not make a whole skin in {TRIES} tries")
     # back in the input's joint order (SkinTokens' transform may order them its own way); a dropped joint gets no weight
     full = np.full((skin.shape[0], J), -1e9, dtype=np.float32)
     for i, n in enumerate(after):
@@ -257,7 +257,7 @@ def main():
     dst = os.path.join(OUT, f"{stem}_skin_weights.npz")
     np.savez_compressed(dst, joint_names=np.array(names), idx=idx, w=w, mesh_names=d["mesh_names"], mesh_counts=d["mesh_counts"])
     used = np.bincount(idx[:, 0], minlength=J)
-    print("LOKI_INFO " + json.dumps({"vertices": int(len(V)), "joints": J, "joints_leading_somewhere": int((used > 0).sum()),
+    print("MODO_INFO " + json.dumps({"vertices": int(len(V)), "joints": J, "joints_leading_somewhere": int((used > 0).sum()),
                                      "seconds": round(time.time() - t0), "file": os.path.basename(dst)}), flush=True)
 
 
@@ -299,8 +299,8 @@ def auto_rig(d, inp, t0, np, torch, Asset, LazyAsset, RigDataset, Transform, get
     batch["generate_kwargs"] = dict(max_length=2048, num_return_sequences=1, do_sample=True, **SAMPLING)
     # SkinTokens samples: each seed gives a different skeleton, and which one deforms best only shows when it moves
     # (the dragon: 3x worst stretch on one, 6x on the next, 2026-11-04). Several are made here, where the model is
-    # loaded once (about 45 s each), and LOKI animates each and keeps the best.
-    want = int(os.environ.get("LOKI_RIG_SAMPLES", "3"))
+    # loaded once (about 45 s each), and MODO animates each and keeps the best.
+    want = int(os.environ.get("MODO_RIG_SAMPLES", "3"))
     stem = os.path.basename(inp)[:-len("_skin_in.npz")]
     made, seed = [], 0
     while len(made) < want and seed < want * 2:
@@ -319,7 +319,7 @@ def auto_rig(d, inp, t0, np, torch, Asset, LazyAsset, RigDataset, Transform, get
         if n < 3:
             continue
         # the voxel clean-up (demo.py --use_postprocess) needs open3d, which has no build for Kaggle's Python 3.13: it
-        # is tried, and the rig comes back without it rather than not at all (LOKI's deformation check judges it)
+        # is tried, and the rig comes back without it rather than not at all (MODO's deformation check judges it)
         try:
             vox = got.voxel(resolution=196)
             got.skin *= voxel_skin(grid=0, grid_coords=vox.coords, joints=got.joints, vertices=got.vertices, faces=got.faces,
@@ -346,8 +346,8 @@ def auto_rig(d, inp, t0, np, torch, Asset, LazyAsset, RigDataset, Transform, get
                             mesh_names=d["mesh_names"], mesh_counts=d["mesh_counts"])
         made.append(os.path.basename(dst))
     if not made:
-        raise SystemExit(f"LOKI_ERROR SkinTokens made no usable skeleton in {seed} tries")
-    print("LOKI_INFO " + json.dumps({"vertices": int(len(V)), "rigs": made, "seconds": round(time.time() - t0)}), flush=True)
+        raise SystemExit(f"MODO_ERROR SkinTokens made no usable skeleton in {seed} tries")
+    print("MODO_INFO " + json.dumps({"vertices": int(len(V)), "rigs": made, "seconds": round(time.time() - t0)}), flush=True)
 
 
 if __name__ == "__main__":

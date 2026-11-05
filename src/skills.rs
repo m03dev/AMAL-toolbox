@@ -1,4 +1,4 @@
-//! The skill library: LOKI 16's skills and agents (and any added here), found by what a job is about.
+//! The skill library: MODO 16's skills and agents (and any added here), found by what a job is about.
 
 use crate::place;
 use serde_json::{json, Value};

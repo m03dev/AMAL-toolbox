@@ -1,5 +1,5 @@
 //! Running commands for a capability: one shell word per argument, the job's folder as the only place it writes.
-//! (From LOKI's driver, where these were written against real failures on the Mac and the PC.)
+//! (From MODO's driver, where these were written against real failures on the Mac and the PC.)
 
 use std::path::{Component, Path, PathBuf};
 use std::time::Duration;
@@ -108,12 +108,12 @@ pub async fn shell(ws: &Path, cmd: &str, timeout: Duration) -> Outcome {
             let err = String::from_utf8_lossy(&o.stderr);
             if !err.trim().is_empty() { text.push_str("\n[stderr]\n"); text.push_str(&err); }
             // the lines that say what happened lead, so trimming a long log (Blender's add-on chatter) never hides them
-            // LOKI's own report lines always; then the last few error lines (a program's repeated tracebacks must not
+            // MODO's own report lines always; then the last few error lines (a program's repeated tracebacks must not
             // push the report out - StableGen's draw errors did)
-            let own: Vec<&str> = text.lines().map(str::trim).filter(|l| l.starts_with("LOKI_")).collect();
+            let own: Vec<&str> = text.lines().map(str::trim).filter(|l| l.starts_with("MODO_")).collect();
             // error lines: "Error: ...", a Python exception's last line ("ValueError: ...") and the frame it was raised in
             let lines: Vec<&str> = text.lines().map(str::trim).collect();
-            let mut errs: Vec<&str> = lines.iter().enumerate().filter(|(_, l)| !l.starts_with("LOKI_") && (l.starts_with("Error:")
+            let mut errs: Vec<&str> = lines.iter().enumerate().filter(|(_, l)| !l.starts_with("MODO_") && (l.starts_with("Error:")
                 || l.contains("could not be opened") || l.contains("Error: ") || is_exception(l))).map(|(_, l)| *l).collect();
             if let Some(f) = lines.iter().rev().find(|l| l.starts_with("File \"")) { errs.insert(errs.len().saturating_sub(1), f); }
             let mut key: Vec<&str> = own.iter().rev().take(8).rev().cloned().collect();

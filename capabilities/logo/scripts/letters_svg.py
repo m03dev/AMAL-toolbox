@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Letters as real outlines: text -> SVG paths from a proper typeface, one <path> per letter.
 
-LOKI's addition to the logo-design skill (AGPL-3.0, like LOKI). A model drawing letter shapes by hand in SVG code makes
+MODO's addition to the logo-design skill (AGPL-3.0, like MODO). A model drawing letter shapes by hand in SVG code makes
 letters nobody can read (owner 2026-11-01: SYN marks that "didn't look anything like the letters"). Every lettermark,
 monogram and wordmark starts here instead: the letters come from a well-drawn open font, then you design with them -
 overlap them, share a stroke, cut one, put them in a badge - keeping each letter readable.
@@ -39,8 +39,8 @@ FONTS = {
 
 
 def font_dir():
-    home = os.environ.get("LOKI_HOME")
-    base = os.path.join(os.path.dirname(home), "fonts") if home else os.path.join(os.path.expanduser("~"), ".cache", "loki-fonts")
+    home = os.environ.get("MODO_HOME")
+    base = os.path.join(os.path.dirname(home), "fonts") if home else os.path.join(os.path.expanduser("~"), ".cache", "modo-fonts")
     os.makedirs(base, exist_ok=True)
     return base
 

@@ -26,7 +26,7 @@ if len(argv) < 2:
 src, out = os.path.abspath(argv[0]), os.path.abspath(argv[1])
 keep = (argv[2] if len(argv) > 2 else "auto").lower()
 if len(argv) > 3 and argv[3] not in ("", "search"):
-    os.environ["LOKI_SYM_PLANE_X"] = argv[3]
+    os.environ["MODO_SYM_PLANE_X"] = argv[3]
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 ext = os.path.splitext(src)[1].lower()
@@ -37,12 +37,12 @@ elif ext == ".fbx":
 elif ext == ".obj":
     bpy.ops.wm.obj_import(filepath=src)
 else:
-    print(f"LOKI_ERROR cannot read {ext} files (glb, gltf, fbx, obj)")
+    print(f"MODO_ERROR cannot read {ext} files (glb, gltf, fbx, obj)")
     sys.exit(2)
 
 meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
 if not meshes:
-    print("LOKI_ERROR no mesh in " + src)
+    print("MODO_ERROR no mesh in " + src)
     sys.exit(2)
 # rigs and their modifiers would undo the cut: the mesh alone, as it stands
 for o in meshes:
@@ -91,8 +91,8 @@ def match(deg):
     return hit / len(sample), mid
 
 
-# a known mirror plane (a model LOKI re-posed: its middle already runs down x = LOKI_SYM_PLANE_X): used as it is
-known_x = os.environ.get("LOKI_SYM_PLANE_X")
+# a known mirror plane (a model MODO re-posed: its middle already runs down x = MODO_SYM_PLANE_X): used as it is
+known_x = os.environ.get("MODO_SYM_PLANE_X")
 best = (-1.0, 0.0, 0.0)
 # any heading: a model generated from a side or three-quarter picture can face any way (a dragon facing sideways was
 # mirrored across its length and came out as two dragons side by side, 2026-11-03)
@@ -111,7 +111,7 @@ before, turn, mid = best
 print(f"mirror plane: turned {turn:.1f} deg about the up axis, {before * 100:.0f}% of the model already mirrors onto itself")
 # a model whose two sides match less than 60% is posed (the owner's dragon, head turned and tail curled: 41%) (a wing up, the head turned, a tail curled across): mirroring
 # half of it makes a different creature or two of it. Nothing is written; the fix is a straight, symmetric pose first.
-MIN_MATCH = float(os.environ.get("LOKI_SYM_MIN", "0.6"))
+MIN_MATCH = float(os.environ.get("MODO_SYM_MIN", "0.6"))
 if before < MIN_MATCH and known_x is None:
     report = {"source": src, "mirrored_before": round(before, 3), "turned_deg": round(turn, 2), "out": None,
               "error": f"only {before * 100:.0f}% of the model mirrors onto itself at its best plane - it is posed, not "
@@ -119,7 +119,7 @@ if before < MIN_MATCH and known_x is None:
                        "(a front-facing T-pose reference picture), then symmetrize"}
     with open(os.path.splitext(out)[0] + "_symmetry.json", "w") as fh:
         json.dump(report, fh, indent=1)
-    print("LOKI_ERROR " + report["error"])
+    print("MODO_ERROR " + report["error"])
     sys.exit(3)
 
 # turn the model so its mirror plane is X = 0
@@ -193,7 +193,7 @@ warning = None
 if pieces_after > pieces_before:
     warning = (f"{pieces_after - pieces_before} part(s) float free after mirroring (both halves tried): a part crossing "
                "the middle in this pose was cut off - pose it straight, or join it by hand")
-    print("LOKI_WARNING " + warning)
+    print("MODO_WARNING " + warning)
 bm.to_mesh(me)
 bm.free()
 base.free()
@@ -212,4 +212,4 @@ report = {"source": src, "kept": keep, "turned_deg": round(turn, 2), "mirrored_b
           "halves_tried": [t[1] for t in tried], "warning": warning, "out": out}
 with open(os.path.splitext(out)[0] + "_symmetry.json", "w") as fh:
     json.dump(report, fh, indent=1)
-print("LOKI_INFO " + json.dumps(report))
+print("MODO_INFO " + json.dumps(report))
