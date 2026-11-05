@@ -107,6 +107,12 @@ async fn find_skills(Query(q): Query<HashMap<String, String>>) -> Json<Value> {
     Json(skills::find(q.get("q").map(String::as_str).unwrap_or(""), q.get("n").and_then(|x| x.parse().ok()).unwrap_or(8)))
 }
 
+/// {"ws": job folder}: every command still running for that job ends, with what it started (the job was stopped).
+async fn stop(Json(b): Json<Value>) -> Json<Value> {
+    let ws = PathBuf::from(b["ws"].as_str().unwrap_or(""));
+    Json(json!({"ok": true, "stopped": tools::stop_for(&ws)}))
+}
+
 async fn health() -> Json<Value> {
     Json(json!({"ok": true, "capabilities": capability::all().len(), "tools": shelf::recipes().len(),
         "actions": shelf::entries().len(), "skills": skills::all().len(), "root": place::root().display().to_string()}))
@@ -124,7 +130,8 @@ async fn main() {
         .route("/list", get(list))
         .route("/use", post(use_))
         .route("/make", post(make))
-        .route("/skills", get(find_skills));
+        .route("/skills", get(find_skills))
+        .route("/stop", post(stop));
     let l = match tokio::net::TcpListener::bind(("127.0.0.1", port)).await {
         Ok(l) => l,
         Err(e) => { eprintln!("toolbox: port {port} is taken ({e}) - another toolbox runs"); return; }

@@ -97,12 +97,56 @@ fn is_exception(l: &str) -> bool {
     !name.is_empty() && !name.contains(' ') && (name.ends_with("Error") || name.ends_with("Exception")) && name.chars().next().is_some_and(|c| c.is_ascii_uppercase())
 }
 
+/// The commands running for each job folder: process ids, so a stopped job's work ends with it (POST /stop).
+static RUNNING: std::sync::Mutex<Vec<(std::path::PathBuf, u32)>> = std::sync::Mutex::new(Vec::new());
+
+/// Ends a process and everything it started. Killing only the shell left its program running: on Windows `cmd /C python
+/// run.py` lost cmd and kept python, which went on waiting for a Kaggle run of a job that had been stopped and cleared
+/// and wrote its files into the deleted job's folder (2026-11-05).
+pub fn kill_tree(pid: u32) {
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        let _ = std::process::Command::new("taskkill").args(["/T", "/F", "/PID", &pid.to_string()]).creation_flags(0x0800_0000).output();
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = std::process::Command::new("kill").args(["-s", "KILL", "--", &format!("-{pid}")]).output();
+    }
+}
+
+/// Every command still running for this job folder is ended, with what it started; returns how many.
+pub fn stop_for(ws: &Path) -> usize {
+    let pids: Vec<u32> = RUNNING.lock().map(|r| r.iter().filter(|(w, _)| w == ws).map(|(_, p)| *p).collect()).unwrap_or_default();
+    for p in &pids { kill_tree(*p); }
+    pids.len()
+}
+
+/// Kills the tree when the command's future is dropped (the caller went away) or times out, and forgets it either way.
+struct Running(u32, bool);
+impl Drop for Running {
+    fn drop(&mut self) {
+        if !self.1 { kill_tree(self.0); }
+        if let Ok(mut r) = RUNNING.lock() { r.retain(|(_, p)| *p != self.0); }
+    }
+}
+
 pub async fn shell(ws: &Path, cmd: &str, timeout: Duration) -> Outcome {
     let mut c = shell_command(cmd);
-    c.current_dir(ws).kill_on_drop(true);
-    match tokio::time::timeout(timeout, c.output()).await {
+    c.current_dir(ws).kill_on_drop(true).stdout(std::process::Stdio::piped()).stderr(std::process::Stdio::piped()).stdin(std::process::Stdio::null());
+    #[cfg(unix)]
+    c.process_group(0);   // its own group, so the whole tree can be ended at once
+    let child = match c.spawn() { Ok(ch) => ch, Err(e) => return Outcome::Err(format!("cannot start `{cmd}`: {e}")) };
+    let mut guard = child.id().map(|pid| {
+        if let Ok(mut r) = RUNNING.lock() { r.push((ws.to_path_buf(), pid)); }
+        Running(pid, false)
+    });
+    let got = tokio::time::timeout(timeout, child.wait_with_output()).await;
+    if let (Ok(_), Some(g)) = (&got, guard.as_mut()) { g.1 = true; }   // it ended by itself: nothing to kill
+    drop(guard);
+    match got {
         Err(_) => Outcome::Err(format!("`{cmd}` timed out after {}s", timeout.as_secs())),
-        Ok(Err(e)) => Outcome::Err(format!("cannot start `{cmd}`: {e}")),
+        Ok(Err(e)) => Outcome::Err(format!("`{cmd}` failed: {e}")),
         Ok(Ok(o)) => {
             let mut text = String::from_utf8_lossy(&o.stdout).to_string();
             let err = String::from_utf8_lossy(&o.stderr);
@@ -126,5 +170,29 @@ pub async fn shell(ws: &Path, cmd: &str, timeout: Duration) -> Outcome {
             if o.status.success() && !script_failed { Outcome::Ok(format!("exit 0\n{text}")) }
             else { Outcome::Err(format!("exit {:?}\n{text}", if script_failed { Some(1) } else { o.status.code() })) }
         }
+    }
+}
+
+#[cfg(all(test, unix))]
+mod tree_tests {
+    use super::*;
+    #[tokio::test]
+    async fn a_command_that_runs_out_of_time_ends_with_everything_it_started() {
+        let ws = std::env::temp_dir().join(format!("tb-tree-{}", std::process::id()));
+        let _ = std::fs::create_dir_all(&ws);
+        // the shell starts a program of its own: when time runs out both end, so the late file is never written
+        let o = shell(&ws, "(sleep 2; touch late.txt) & wait", Duration::from_millis(500)).await;
+        assert!(matches!(o, Outcome::Err(ref t) if t.contains("timed out")));
+        tokio::time::sleep(Duration::from_secs(3)).await;
+        assert!(!ws.join("late.txt").exists(), "the shell's own program kept running");
+        // and stop_for ends a job's running command from outside
+        let w2 = ws.clone();
+        let run = tokio::spawn(async move { shell(&w2, "(sleep 2; touch late2.txt) & wait", Duration::from_secs(20)).await });
+        tokio::time::sleep(Duration::from_millis(300)).await;
+        assert_eq!(stop_for(&ws), 1);
+        let _ = run.await;
+        tokio::time::sleep(Duration::from_secs(3)).await;
+        assert!(!ws.join("late2.txt").exists());
+        let _ = std::fs::remove_dir_all(&ws);
     }
 }
