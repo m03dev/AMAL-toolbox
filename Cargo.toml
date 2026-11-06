@@ -3,9 +3,9 @@ name = "toolbox"
 version = "0.1.0"
 edition = "2021"
 license = "AGPL-3.0-only"
-description = "Tested code MODO asks for: capabilities, MODO 16's tool shelf, skills - run, checked, remembered"
+description = "Tested code AMAL asks for: capabilities, the Python app's (0.16) tool shelf, skills - run, checked, remembered"
 
-# its own workspace: MODO keeps it inside its checkout (harness_data/toolbox), whose Cargo workspace is not this one
+# its own workspace: AMAL keeps it inside its checkout (harness_data/toolbox), whose Cargo workspace is not this one
 [workspace]
 
 [dependencies]

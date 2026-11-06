@@ -1,11 +1,11 @@
-//! The Tool Shelf: MODO 16's open-source tools (owner 2026-11-03: bring back "all its tools"), in Rust.
+//! The Tool Shelf: the Python app's (0.16) open-source tools (owner 2026-11-03: bring back "all its tools"), in Rust.
 //!
-//! One recipe per tool in `<toolbox>/shelf/*.json` (the schema is MODO 16's docs/TOOLSHELF.md: every
+//! One recipe per tool in `<toolbox>/shelf/*.json` (the schema is the Python app's (0.16) docs/TOOLSHELF.md: every
 //! install step and command line was checked against the tool's own repo). Each recipe's actions are capabilities
 //! named `<tool>.<action>` (rembg.remove_bg, gltfpack.optimize, faster-whisper.captions ...). The first `use` installs
 //! the tool into its own folder `<data>/tools/<id>/` (its own Python venv when it needs pip, so one tool's torch
 //! never breaks another's; its clone in src/, release programs in bin/, npm packages in node_modules/, models in
-//! models/) - MODO has full permission (owner 2026-10-31), so no one is asked. Commands are argument lists, never a
+//! models/) - AMAL has full permission (owner 2026-10-31), so no one is asked. Commands are argument lists, never a
 //! shell string; files must be inside the job's folder; an action that publishes (posting) waits for the owner.
 
 use crate::place;
@@ -79,7 +79,7 @@ fn venv_python(d: &Path) -> PathBuf {
 }
 
 fn system_python() -> String {
-    std::env::var("MODO_PYTHON").unwrap_or_else(|_| if cfg!(windows) { "python".into() } else { "python3".into() })
+    std::env::var("AMAL_PYTHON").unwrap_or_else(|_| if cfg!(windows) { "python".into() } else { "python3".into() })
 }
 
 fn exe_for(r: &Value) -> String {
@@ -123,7 +123,7 @@ fn placeholders(r: &Value, d: &Path) -> Vec<(String, String)> {
         ("src".into(), d.join("src").display().to_string()),
         ("tool".into(), d.display().to_string()),
         ("models".into(), d.join("models").display().to_string()),
-        ("modo_python".into(), system_python()),
+        ("amal_python".into(), system_python()),
         ("runners".into(), place::root().join("shelf").join("runners").display().to_string()),
         ("bin".into(), if cfg!(windows) { "Scripts".into() } else { "bin".into() }),
     ]
@@ -164,7 +164,7 @@ fn tail(s: &str, n: usize) -> String {
 
 async fn download(url: &str, dest: &Path) -> Result<(), String> {
     if let Some(p) = dest.parent() { let _ = std::fs::create_dir_all(p); }
-    let http = reqwest::Client::builder().user_agent("MODO").timeout(Duration::from_secs(3600)).build().map_err(|e| e.to_string())?;
+    let http = reqwest::Client::builder().user_agent("AMAL").timeout(Duration::from_secs(3600)).build().map_err(|e| e.to_string())?;
     let r = http.get(url).send().await.map_err(|e| format!("{url}: {e}"))?;
     if !r.status().is_success() { return Err(format!("{url}: http {}", r.status())); }
     let bytes = r.bytes().await.map_err(|e| format!("{url}: {e}"))?;
@@ -196,7 +196,7 @@ pub async fn install(id: &str) -> Result<String, String> {
             r["name"].as_str().unwrap_or(id), inst["manual"].as_str().unwrap_or(""), r["repo"].as_str().unwrap_or("")));
     }
     if !runs_here(&r) { return Err(format!("{id} does not run on this machine")); }
-    let d = tool_dir(id).ok_or("MODO_HOME is not set")?;
+    let d = tool_dir(id).ok_or("AMAL_HOME is not set")?;
     std::fs::create_dir_all(&d).map_err(|e| e.to_string())?;
     let mut log = vec![];
     let sha = |s: &str| s.len() >= 7 && s.len() <= 40 && s.chars().all(|c| c.is_ascii_hexdigit());
@@ -302,7 +302,7 @@ pub async fn run(name: &str, args: &Value, ws: &Path) -> Outcome {
     if !installed(id) {
         match install(id).await { Ok(t) => note = format!("{t}\n"), Err(e) => return Outcome::Err(format!("could not install {id}: {e}")) }
     }
-    let Some(d) = tool_dir(id) else { return Outcome::Err("MODO_HOME is not set".into()) };
+    let Some(d) = tool_dir(id) else { return Outcome::Err("AMAL_HOME is not set".into()) };
     let (cmd, outputs, secs) = match build(&r, &act, args, ws, &d) { Ok(x) => x, Err(e) => return Outcome::Err(e) };
     let started = std::time::SystemTime::now() - Duration::from_secs(2);
     match exec(&cmd, Some(ws), secs).await {
@@ -413,10 +413,10 @@ mod tests {
     }
 
     #[test]
-    fn every_tool_from_modo_16_is_on_the_shelf_and_every_action_builds() {
+    fn every_tool_from_the_python_app_is_on_the_shelf_and_every_action_builds() {
         let rs = all_recipes();
         assert!(rs.len() >= 54, "{} tools", rs.len());
-        let ws = std::env::temp_dir().join(format!("modo-shelf-{}", std::process::id()));
+        let ws = std::env::temp_dir().join(format!("amal-shelf-{}", std::process::id()));
         let _ = std::fs::create_dir_all(&ws);
         let mut actions = 0;
         for r in &rs {

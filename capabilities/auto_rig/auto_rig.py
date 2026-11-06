@@ -19,7 +19,7 @@ KAGGLE = os.path.join(os.path.dirname(HERE), "kaggle_gpu", "run.py")
 def blender(exe, *args):
     cmd = [exe, "-b", "--factory-startup", "--python-exit-code", "1", "--python", os.path.join(SKIN, "skin_io.py"), "--", *args]
     p = subprocess.run(cmd, capture_output=True, text=True)
-    lines = [l for l in (p.stdout + p.stderr).splitlines() if l.startswith(("MODO_", "skin:", "Error", "Traceback")) or "Error:" in l]
+    lines = [l for l in (p.stdout + p.stderr).splitlines() if l.startswith(("AMAL_", "skin:", "Error", "Traceback")) or "Error:" in l]
     print("\n".join(lines), flush=True)
     if p.returncode != 0:
         raise SystemExit(f"Blender ({args[0]}) failed:\n" + (p.stdout + p.stderr)[-2500:])
@@ -35,7 +35,7 @@ def main():
     if not os.path.isfile(a.model):
         raise SystemExit(f"no model at {a.model}")
     h = hashlib.sha1(open(a.model, "rb").read() + b"auto").hexdigest()[:12]
-    work = os.path.join(".modo", "auto_rig", h)
+    work = os.path.join(".amal", "auto_rig", h)
     out = os.path.join(work, "out")
     os.makedirs(out, exist_ok=True)
     stem = "".join(c if c.isalnum() or c in "_-" else "_" for c in os.path.splitext(os.path.basename(a.model))[0])
@@ -58,7 +58,7 @@ def main():
         got = glob.glob(os.path.join(out, "*_auto_rig*.npz"))
         if not got:
             logs = "".join(open(f, encoding="utf-8", errors="replace").read() for f in glob.glob(os.path.join(out, "*.log")))
-            why = [l.strip() for l in logs.splitlines() if "MODO_ERROR" in l or "Error" in l][-6:]
+            why = [l.strip() for l in logs.splitlines() if "AMAL_ERROR" in l or "Error" in l][-6:]
             raise SystemExit(f"Kaggle brought no rig back (exit {r.returncode}; its log is in {out})" + ("\n" + "\n".join(why) if why else ""))
     # every rig Kaggle made (several seeds): the first is --out, the others beside it as <out>_2, <out>_3 ...
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
@@ -75,7 +75,7 @@ def main():
             print(f"rig {k} not built: {str(e)[:300]}", flush=True)
     if not built:
         raise SystemExit("none of the rigs could be built in Blender")
-    print("MODO_AUTO_RIG_DONE " + " ".join(built))
+    print("AMAL_AUTO_RIG_DONE " + " ".join(built))
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
   "id": "openpencil",
   "name": "OpenPencil (design files)",
   "area": "design",
-  "what": "An open Figma-compatible design editor. MODO's design tool and Forge > Design drive its command line headlessly: import HTML/CSS as layers, draw JSX, the Figma Plugin API, export PNG / SVG / JSX / Tailwind / HTML / PPTX, lint for contrast and spacing.",
+  "what": "An open Figma-compatible design editor. AMAL's design tool and Forge > Design drive its command line headlessly: import HTML/CSS as layers, draw JSX, the Figma Plugin API, export PNG / SVG / JSX / Tailwind / HTML / PPTX, lint for contrast and spacing.",
   "repo": "https://github.com/open-pencil/open-pencil",
   "license": "MIT",
   "weights": null,
@@ -30,7 +30,7 @@
   "id": "mobile-mcp",
   "name": "mobile-mcp (phone and emulator testing)",
   "area": "testing",
-  "what": "Lets MODO's agents test apps on iOS simulators, Android emulators and real phones: list devices, install and launch the app, read the screen's elements, tap, type, swipe, take screenshots of the phone, read its logs.",
+  "what": "Lets AMAL's agents test apps on iOS simulators, Android emulators and real phones: list devices, install and launch the app, read the screen's elements, tap, type, swipe, take screenshots of the phone, read its logs.",
   "repo": "https://github.com/mobile-next/mobile-mcp",
   "license": "Apache-2.0",
   "weights": null,
@@ -44,7 +44,7 @@
              "args": {"port": {"type": "int", "what": "port, e.g. 3100"}},
              "timeout": 86400}
   },
-  "notes": "Mac: Xcode with a booted simulator (xcrun simctl boot \"iPhone 16\"); move Xcode's DerivedData to the external drive. PC: Android platform-tools (adb on PATH, ANDROID_HOME) and an emulator or a phone with USB debugging. Telemetry off: MOBILEMCP_DISABLE_TELEMETRY=1. MODO's own phone app is dev.m03.modo (modo:// links need MOBILEMCP_ALLOW_UNSAFE_URLS=1).",
+  "notes": "Mac: Xcode with a booted simulator (xcrun simctl boot \"iPhone 16\"); move Xcode's DerivedData to the external drive. PC: Android platform-tools (adb on PATH, ANDROID_HOME) and an emulator or a phone with USB debugging. Telemetry off: MOBILEMCP_DISABLE_TELEMETRY=1. AMAL's own phone app is dev.m03.amal (amal:// links need MOBILEMCP_ALLOW_UNSAFE_URLS=1).",
   "verified_from": "npm @mobilenext/mobile-mcp 1.0.14 run 2026-10-28 over stdio: 33 tools listed, mobile_list_available_devices answered"
  }
 ]

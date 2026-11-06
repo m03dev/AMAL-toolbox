@@ -107,7 +107,7 @@
     "timeout": 1800
    }
   },
-  "notes": "The one-liners call imageio_ffmpeg.get_ffmpeg_exe() (bundled binary: macOS arm64 ffmpeg 7.1, Windows x64 7.1, Linux 7.0.2 johnvansickle static). The burn wrapper escapes the subtitle path for ffmpeg's two-level filter syntax (backslash->/, then ':' and quotes, then filtergraph chars), so Windows drive letters and apostrophes work. The bundled FFmpeg builds are GPL even though the wrapper is BSD; MODO only runs them as a subprocess. Burn-in needs libass in the bundled build: confirmed on the Linux path; on macOS/Windows run `ffmpeg -filters` (check) and look for 'subtitles' if burn fails.",
+  "notes": "The one-liners call imageio_ffmpeg.get_ffmpeg_exe() (bundled binary: macOS arm64 ffmpeg 7.1, Windows x64 7.1, Linux 7.0.2 johnvansickle static). The burn wrapper escapes the subtitle path for ffmpeg's two-level filter syntax (backslash->/, then ':' and quotes, then filtergraph chars), so Windows drive letters and apostrophes work. The bundled FFmpeg builds are GPL even though the wrapper is BSD; AMAL only runs them as a subprocess. Burn-in needs libass in the bundled build: confirmed on the Linux path; on macOS/Windows run `ffmpeg -filters` (check) and look for 'subtitles' if burn fails.",
   "verified_from": "imageio_ffmpeg/_definitions.py (v0.6.0 FNAME_PER_PLATFORM) + _utils.get_ffmpeg_exe @ae47d80; PyPI listing shows imageio-ffmpeg 0.6.0. Burn, to-wav16k and run snippets executed here on Linux against a path containing an apostrophe and a colon (captions visible in the output frame). WAV parameters from whisper.cpp README 'ffmpeg -i input.mp3 -ar 16000 -ac 1 -c:a pcm_s16le'."
  },
  {
@@ -566,7 +566,7 @@
     "timeout": 1800
    }
   },
-  "notes": "Auto-Editor is now a single Nim binary with FFmpeg built in (no pip, no system ffmpeg). Release files are bare executables, not archives: MODO must chmod +x on macOS/Linux and may need to clear the macOS quarantine flag. Only an arm64 macOS build is published (fine for the Mac mini). Other --export targets exist (premiere .xml, final-cut-pro .fcpxml, shotcut .mlt, kdenlive .kdenlive).",
+  "notes": "Auto-Editor is now a single Nim binary with FFmpeg built in (no pip, no system ffmpeg). Release files are bare executables, not archives: AMAL must chmod +x on macOS/Linux and may need to clear the macOS quarantine flag. Only an arm64 macOS build is published (fine for the Mac mini). Other --export targets exist (premiere .xml, final-cut-pro .fcpxml, shotcut .mlt, kdenlive .kdenlive).",
   "verified_from": "README.md 'Cutting'/'Exporting to Editors'; src/cli.nim OptDef table (--edit, -m/--margin, -o/--output, -ex/--export, --no-open); src/conductor.nim export names/extensions; .github/workflows/build.yml binary_name per platform. Asset URLs for tag 31.7.2 returned HTTP 206. Linux binary run here: --help ok; 6 s clip with a 2 s silent gap became 4.44 s; --export resolve wrote .fcpxml."
  },
  {
@@ -1748,7 +1748,7 @@
     "cmd": [
      "{python}",
      "-c",
-     "import os,sys,praw;from praw.models import PostMedia;e=os.environ;r=praw.Reddit(client_id=e['REDDIT_CLIENT_ID'],client_secret=e['REDDIT_CLIENT_SECRET'],username=e['REDDIT_USERNAME'],password=e['REDDIT_PASSWORD'],user_agent=e.get('REDDIT_USER_AGENT') or 'MODO-tool-shelf/1.0 (by u/'+e['REDDIT_USERNAME']+')');sr=r.subreddit(sys.argv[1]);s=sr.submit(sys.argv[2],selftext=sys.argv[3]);print(s.shortlink)",
+     "import os,sys,praw;from praw.models import PostMedia;e=os.environ;r=praw.Reddit(client_id=e['REDDIT_CLIENT_ID'],client_secret=e['REDDIT_CLIENT_SECRET'],username=e['REDDIT_USERNAME'],password=e['REDDIT_PASSWORD'],user_agent=e.get('REDDIT_USER_AGENT') or 'AMAL-tool-shelf/1.0 (by u/'+e['REDDIT_USERNAME']+')');sr=r.subreddit(sys.argv[1]);s=sr.submit(sys.argv[2],selftext=sys.argv[3]);print(s.shortlink)",
      "{subreddit}",
      "{title}",
      "{body}"
@@ -1783,7 +1783,7 @@
     "cmd": [
      "{python}",
      "-c",
-     "import os,sys,praw;from praw.models import PostMedia;e=os.environ;r=praw.Reddit(client_id=e['REDDIT_CLIENT_ID'],client_secret=e['REDDIT_CLIENT_SECRET'],username=e['REDDIT_USERNAME'],password=e['REDDIT_PASSWORD'],user_agent=e.get('REDDIT_USER_AGENT') or 'MODO-tool-shelf/1.0 (by u/'+e['REDDIT_USERNAME']+')');sr=r.subreddit(sys.argv[1]);s=sr.submit(sys.argv[2],url=sys.argv[3]);print(s.shortlink)",
+     "import os,sys,praw;from praw.models import PostMedia;e=os.environ;r=praw.Reddit(client_id=e['REDDIT_CLIENT_ID'],client_secret=e['REDDIT_CLIENT_SECRET'],username=e['REDDIT_USERNAME'],password=e['REDDIT_PASSWORD'],user_agent=e.get('REDDIT_USER_AGENT') or 'AMAL-tool-shelf/1.0 (by u/'+e['REDDIT_USERNAME']+')');sr=r.subreddit(sys.argv[1]);s=sr.submit(sys.argv[2],url=sys.argv[3]);print(s.shortlink)",
      "{subreddit}",
      "{title}",
      "{url}"
@@ -1817,7 +1817,7 @@
     "cmd": [
      "{python}",
      "-c",
-     "import os,sys,praw;from praw.models import PostMedia;e=os.environ;r=praw.Reddit(client_id=e['REDDIT_CLIENT_ID'],client_secret=e['REDDIT_CLIENT_SECRET'],username=e['REDDIT_USERNAME'],password=e['REDDIT_PASSWORD'],user_agent=e.get('REDDIT_USER_AGENT') or 'MODO-tool-shelf/1.0 (by u/'+e['REDDIT_USERNAME']+')');sr=r.subreddit(sys.argv[1]);s=sr.submit(sys.argv[2],image=PostMedia(sys.argv[3]));print(s.shortlink if s else 'submitted')",
+     "import os,sys,praw;from praw.models import PostMedia;e=os.environ;r=praw.Reddit(client_id=e['REDDIT_CLIENT_ID'],client_secret=e['REDDIT_CLIENT_SECRET'],username=e['REDDIT_USERNAME'],password=e['REDDIT_PASSWORD'],user_agent=e.get('REDDIT_USER_AGENT') or 'AMAL-tool-shelf/1.0 (by u/'+e['REDDIT_USERNAME']+')');sr=r.subreddit(sys.argv[1]);s=sr.submit(sys.argv[2],image=PostMedia(sys.argv[3]));print(s.shortlink if s else 'submitted')",
      "{subreddit}",
      "{title}",
      "{image}"
@@ -1909,7 +1909,7 @@
     "ask": true
    }
   },
-  "notes": "Secret: DISCORD_WEBHOOK_URL (Channel settings > Integrations > Webhooks). The package also ships a CLI (discord_webhook -u URL -c TEXT) but it takes the URL as an argument, so it is not used. 'attachment' is an optional positional argument - MODO should drop it from argv when empty.",
+  "notes": "Secret: DISCORD_WEBHOOK_URL (Channel settings > Integrations > Webhooks). The package also ships a CLI (discord_webhook -u URL -c TEXT) but it takes the URL as an argument, so it is not used. 'attachment' is an optional positional argument - AMAL should drop it from argv when empty.",
   "verified_from": "Tag 1.4.1: discord_webhook/webhook.py DiscordWebhook(url, content=...), add_file(file: bytes, filename), execute() -> requests.Response; discord_webhook/__init__.py exports; async_webhook.py imports httpx lazily (no extra needed); pyproject python ^3.10. piwheels mirror of PyPI: discord-webhook 1.4.1. Executed here against a local HTTP server: multipart POST with the PNG attachment, status 200."
  },
  {
@@ -1994,7 +1994,7 @@
     "timeout": 300
    }
   },
-  "notes": "Each zip holds a single binary named like the zip minus '.zip' (versioned, per-platform) - the exe field is therefore a per-platform map; MODO may instead rename it to gdscript-formatter(.exe) after unzip. Make it executable and clear macOS quarantine. Also on winget as GDQuest.GDScript.Formatter.",
+  "notes": "Each zip holds a single binary named like the zip minus '.zip' (versioned, per-platform) - the exe field is therefore a per-platform map; AMAL may instead rename it to gdscript-formatter(.exe) after unzip. Make it executable and clear macOS quarantine. Also on winget as GDQuest.GDScript.Formatter.",
   "verified_from": "README + .github/workflows/release.yml matrix (name gdscript-formatter-<tag>-<os>-<arch>[.exe], zipped as <name>.zip) @19a9239; wingetly listing gives the same Windows asset names for 0.27.0. Asset URL linux returned 200 and was run here: --help shows -c/--check, --verify-structure, lint subcommand; --check exited 1 on an unformatted file, format fixed it, --check then exited 0."
  },
  {
@@ -2106,7 +2106,7 @@
    "ref": "v6.2.2"
   },
   "check": [
-   "{modo_python}",
+   "{amal_python}",
    "-c",
    "import os,sys;sys.exit(0 if os.path.isfile(sys.argv[1]) else 1)",
    "{src}/addons/gdUnit4/plugin.cfg"
@@ -2115,7 +2115,7 @@
    "install-addon": {
     "what": "Copy addons/gdUnit4 into a Godot project and enable the plugin.",
     "cmd": [
-     "{modo_python}",
+     "{amal_python}",
      "{runners}/godot_addon.py",
      "{src}/addons/gdUnit4",
      "{project}"
@@ -2163,7 +2163,7 @@
     "timeout": 1800
    }
   },
-  "notes": "gdUnit4 v6.2.x supports Godot 4.5-4.7.1 (v5.x for 4.3/4.4). A freshly copied add-on needs one import pass before the CLI tool can resolve its class_names: run 'godot --headless --path <project> --import' once (or open the project in the editor). The runner refuses headless mode unless --ignoreHeadlessMode is given (UI input events do not work headless). '--remote-debug tcp://127.0.0.1:0' is copied from runtest.sh to stop Godot's interactive debugger hanging on script errors. Exit code 0 = all passed. {godot} is the Godot executable (arg here; a MODO-wide placeholder would be nicer).",
+  "notes": "gdUnit4 v6.2.x supports Godot 4.5-4.7.1 (v5.x for 4.3/4.4). A freshly copied add-on needs one import pass before the CLI tool can resolve its class_names: run 'godot --headless --path <project> --import' once (or open the project in the editor). The runner refuses headless mode unless --ignoreHeadlessMode is given (UI input events do not work headless). '--remote-debug tcp://127.0.0.1:0' is copied from runtest.sh to stop Godot's interactive debugger hanging on script errors. Exit code 0 = all passed. {godot} is the Godot executable (arg here; a AMAL-wide placeholder would be nicer).",
   "verified_from": "Tag v6.2.2: addons/gdUnit4/plugin.cfg (version 6.2.2), addons/gdUnit4/runtest.sh (exact Godot invocation), src/core/runners/GdUnitTestCIRunner.gd CmdOptions (-a/--add, -c/--continue, -rd, --ignoreHeadlessMode, headless check), documentation/doc/_advanced_testing/cmd.md, README compatibility table. Executed here with Godot 4.5.1 headless on a project with the add-on copied in: 1 test case passed, reports written, exit 0."
  },
  {
@@ -2186,7 +2186,7 @@
    "ref": "v9.7.1"
   },
   "check": [
-   "{modo_python}",
+   "{amal_python}",
    "-c",
    "import os,sys;sys.exit(0 if os.path.isfile(sys.argv[1]) else 1)",
    "{src}/addons/gut/plugin.cfg"
@@ -2195,7 +2195,7 @@
    "install-addon": {
     "what": "Copy addons/gut into a Godot project and enable the plugin.",
     "cmd": [
-     "{modo_python}",
+     "{amal_python}",
      "{runners}/godot_addon.py",
      "{src}/addons/gut",
      "{project}"
@@ -2239,14 +2239,14 @@
     "timeout": 1800
    }
   },
-  "notes": "GUT versions track Godot minors: 9.7.1 = Godot 4.7.x, 9.6.1 = 4.6.x, 9.5.0 = 4.5.x, 9.4.0 = 4.3-4.4 (README table) - set ref to match MODO's Godot. Like gdUnit4, run 'godot --headless --path <project> --import' once after copying. A .gutconfig.json in the project can hold the options instead. The licence file is addons/gut/LICENSE.md (MIT); the repo root has none.",
+  "notes": "GUT versions track Godot minors: 9.7.1 = Godot 4.7.x, 9.6.1 = 4.6.x, 9.5.0 = 4.5.x, 9.4.0 = 4.3-4.4 (README table) - set ref to match AMAL's Godot. Like gdUnit4, run 'godot --headless --path <project> --import' once after copying. A .gutconfig.json in the project can hold the options instead. The licence file is addons/gut/LICENSE.md (MIT); the repo root has none.",
   "verified_from": "Tag v9.7.1: addons/gut/plugin.cfg, documentation/docs/Command-Line.md ('godot -d -s --path \"$PWD\" addons/gut/gut_cmdln.gd', -gdir, -ginclude_subdirs, -gexit), addons/gut/cli/gut_cli.gd option table, README version table, addons/gut/LICENSE.md. Executed here with Godot 4.5.1 headless: passing suite exit 0, failing assert exit 1."
  },
  {
   "id": "godot-mcp-runtime",
   "name": "Godot MCP Runtime",
   "area": "godot",
-  "what": "MCP server that lets MODO's agents edit scenes and run/inspect a live Godot 4 game (screenshots, input, live GDScript).",
+  "what": "MCP server that lets AMAL's agents edit scenes and run/inspect a live Godot 4 game (screenshots, input, live GDScript).",
   "repo": "https://github.com/erodenn/godot-mcp-runtime",
   "license": "MIT",
   "weights": null,
@@ -2263,14 +2263,14 @@
    ]
   },
   "check": [
-   "{modo_python}",
+   "{amal_python}",
    "-c",
    "import os,sys;sys.exit(0 if os.path.exists(sys.argv[1]) else 1)",
    "{exe}"
   ],
   "actions": {
    "serve": {
-    "what": "Start the MCP server on stdio (MODO's MCP client launches this and talks JSON-RPC over stdin/stdout).",
+    "what": "Start the MCP server on stdio (AMAL's MCP client launches this and talks JSON-RPC over stdin/stdout).",
     "cmd": [
      "{exe}"
     ],
@@ -2283,7 +2283,7 @@
     "timeout": 0
    }
   },
-  "notes": "Not a Godot add-on: nothing is copied into the project. It injects a temporary McpBridge autoload when a game is run/attached and removes it on stop (artifacts under .mcp/godot-runtime/, auto-added to .gitignore). Needs Node >=20. Set GODOT_PATH to the Godot executable (auto-detected from PATH otherwise). For unattended agents set GODOT_MCP_STRICT=true, or GODOT_MCP_DISABLE_ELICITATION=true if MODO's MCP client cannot show confirmation prompts. Never set GODOT_MCP_DISABLE_SECURITY on the user's behalf (README). The binary takes no CLI flags, so the check only confirms the npm bin exists. Equivalent zero-install launch: npx -y godot-mcp-runtime.",
+  "notes": "Not a Godot add-on: nothing is copied into the project. It injects a temporary McpBridge autoload when a game is run/attached and removes it on stop (artifacts under .mcp/godot-runtime/, auto-added to .gitignore). Needs Node >=20. Set GODOT_PATH to the Godot executable (auto-detected from PATH otherwise). For unattended agents set GODOT_MCP_STRICT=true, or GODOT_MCP_DISABLE_ELICITATION=true if AMAL's MCP client cannot show confirmation prompts. Never set GODOT_MCP_DISABLE_SECURITY on the user's behalf (README). The binary takes no CLI flags, so the check only confirms the npm bin exists. Equivalent zero-install launch: npx -y godot-mcp-runtime.",
   "verified_from": "README.md install section (npx -y godot-mcp-runtime / npm install -g, env GODOT_PATH, optional env vars, security note); package.json (bin godot-mcp-runtime -> dist/index.js, version 3.8.1, engines node >=20, MIT); src/index.ts StdioServerTransport, no argv handling @0492500. socket.dev npm listing: latest 3.8.1. npm registry is blocked here, so it was not started."
  }
 ]

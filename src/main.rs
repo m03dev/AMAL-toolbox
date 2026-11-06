@@ -1,11 +1,11 @@
-//! toolbox - the tested code MODO asks for, kept apart from MODO itself.
+//! toolbox - the tested code AMAL asks for, kept apart from AMAL itself.
 //!
-//! MODO's agent says what it needs ("cut out the background of renders/a.png", "logo marks for NOVA"); the toolbox
+//! AMAL's agent says what it needs ("cut out the background of renders/a.png", "logo marks for NOVA"); the toolbox
 //! runs proven code for it in the job's folder, checks the files it must make and answers with them. It holds:
 //!   capabilities/  tested commands (capability.json each: what it takes, the command, the files it makes, a check)
-//!   shelf/         MODO 16's Tool Shelf: 54 open-source tools, each installed on first use into its own folder
-//!   skills/        MODO 16's skills and agents (how a specialist works), found by what a job is about
-//!   data/learned/  capabilities MODO's jobs wrote - kept only when their test passed - and how each run went
+//!   shelf/         the Python app's (0.16) Tool Shelf: 54 open-source tools, each installed on first use into its own folder
+//!   skills/        the Python app's (0.16) skills and agents (how a specialist works), found by what a job is about
+//!   data/learned/  capabilities AMAL's jobs wrote - kept only when their test passed - and how each run went
 //!
 //!   GET  /health                      what it holds
 //!   GET  /list?q=words&n=12           the capabilities and tools that fit, best first
@@ -120,10 +120,11 @@ async fn health() -> Json<Value> {
 
 #[tokio::main]
 async fn main() {
-    // settings from before the rename (LOKI_X) count as MODO_X: a launcher from before the rename passes only those
-    let before = "LOKI_";   // the setting prefix from before the rename
-    let pairs: Vec<(String, String)> = std::env::vars().filter_map(|(k, v)| k.strip_prefix(before).map(|r| (format!("MODO_{r}"), v))).collect();
-    for (k, v) in pairs { if std::env::var_os(&k).is_none() { std::env::set_var(k, v); } }
+    // settings from before a rename (MODO_X, LOKI_X) count as AMAL_X: an app from before the rename passes only those
+    for before in ["MODO_", "LOKI_"] {
+        let pairs: Vec<(String, String)> = std::env::vars().filter_map(|(k, v)| k.strip_prefix(before).map(|r| (format!("AMAL_{r}"), v))).collect();
+        for (k, v) in pairs { if std::env::var_os(&k).is_none() { std::env::set_var(k, v); } }
+    }
     let port: u16 = std::env::var("TOOLBOX_PORT").ok().and_then(|p| p.parse().ok()).unwrap_or(7720);
     let app = Router::new()
         .route("/health", get(health))

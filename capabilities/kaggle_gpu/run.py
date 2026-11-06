@@ -4,7 +4,7 @@
 
 The script runs as a private Kaggle notebook (kernel) with the GPU and the internet on; whatever it writes to its working
 folder (/kaggle/working) comes back into --out. Files given with --inputs are uploaded beside it as a private dataset and
-are at /kaggle/input/<dataset>/ (the script also gets their folder as the environment variable MODO_INPUTS).
+are at /kaggle/input/<dataset>/ (the script also gets their folder as the environment variable AMAL_INPUTS).
 Needs the owner's Kaggle API token: KAGGLE_API_TOKEN (Settings > Account > API > Create New Token), or KAGGLE_USERNAME +
 KAGGLE_KEY, or ~/.kaggle/kaggle.json. The `kaggle` package is installed on first use.
 """
@@ -12,8 +12,8 @@ import argparse, json, os, re, shutil, subprocess, sys, tempfile, time
 
 
 def load_keys():
-    """Keys saved in MODO's Connections after this program started: ~/.modo/keys.env (one KEY=value a line)."""
-    f = os.path.join(os.path.expanduser("~"), ".modo", "keys.env")
+    """Keys saved in AMAL's Connections after this program started: ~/.amal/keys.env (one KEY=value a line)."""
+    f = os.path.join(os.path.expanduser("~"), ".amal", "keys.env")
     for line in open(f, encoding="utf-8").read().splitlines() if os.path.isfile(f) else []:
         k, _, v = line.partition("=")
         k, v = k.strip().removeprefix("export ").strip(), v.strip().strip('"')
@@ -47,7 +47,7 @@ def username():
 
 
 def slug(s):
-    return re.sub(r"[^a-z0-9-]+", "-", s.lower()).strip("-")[:40] or "modo-job"
+    return re.sub(r"[^a-z0-9-]+", "-", s.lower()).strip("-")[:40] or "amal-job"
 
 
 def main():
@@ -67,13 +67,13 @@ def main():
         return wait_and_fetch(a, user, name)
     if not (os.environ.get("KAGGLE_API_TOKEN") or os.environ.get("KAGGLE_KEY") or os.path.isfile(os.path.expanduser("~/.kaggle/kaggle.json"))):
         raise SystemExit("no Kaggle API token: the owner creates one at kaggle.com > Settings > Account > API > Create New Token "
-                         "and saves it in MODO's Settings > Models > Connections (Kaggle)")
+                         "and saves it in AMAL's Settings > Models > Connections (Kaggle)")
     need_kaggle()
     user = username()
     if not user:
         raise SystemExit("could not tell the Kaggle user name (set KAGGLE_USERNAME)")
     name = slug(a.title or os.path.splitext(os.path.basename(a.script))[0]) + "-" + time.strftime("%m%d%H%M")
-    work = tempfile.mkdtemp(prefix="modo-kaggle-")
+    work = tempfile.mkdtemp(prefix="amal-kaggle-")
     sources = []
     if a.inputs:
         ds = os.path.join(work, "data")
@@ -87,10 +87,10 @@ def main():
     k = os.path.join(work, "kernel")
     os.makedirs(k)
     body = open(a.script, encoding="utf-8").read()
-    pre = f"import os\nos.environ.setdefault('MODO_INPUTS', '/kaggle/input/{name}-in')\n" if sources else "import os\n"
+    pre = f"import os\nos.environ.setdefault('AMAL_INPUTS', '/kaggle/input/{name}-in')\n" if sources else "import os\n"
     # Kaggle quietly runs a script on the CPU when the account may not use a GPU (not phone-verified): say so
     pre += ("import shutil as _sh, subprocess as _sp\n"
-            "print('MODO_GPU:', (_sp.run(['nvidia-smi', '-L'], capture_output=True, text=True).stdout.strip() or 'none') if _sh.which('nvidia-smi') else 'none', flush=True)\n")
+            "print('AMAL_GPU:', (_sp.run(['nvidia-smi', '-L'], capture_output=True, text=True).stdout.strip() or 'none') if _sh.which('nvidia-smi') else 'none', flush=True)\n")
     open(os.path.join(k, "main.py"), "w", encoding="utf-8").write(pre + body)
     json.dump({"id": f"{user}/{name}", "title": name, "code_file": "main.py", "language": "python", "kernel_type": "script",
                "is_private": True, "enable_gpu": True, "enable_internet": True, "machine_shape": "NvidiaTeslaT4" if a.gpu == "T4" else "NvidiaTeslaP100",
@@ -112,9 +112,9 @@ def wait_and_fetch(a, user, name):
             break
     os.makedirs(a.out, exist_ok=True)
     print(cli("kernels", "output", f"{user}/{name}", "-p", a.out, check=False))
-    print(f"MODO_KAGGLE {user}/{name}: {status.strip()}")
+    print(f"AMAL_KAGGLE {user}/{name}: {status.strip()}")
     logs = "".join(open(os.path.join(a.out, f), encoding="utf-8", errors="replace").read() for f in os.listdir(a.out) if f.endswith(".log"))
-    if "MODO_GPU: none" in logs:
+    if "AMAL_GPU: none" in logs:
         raise SystemExit("Kaggle ran this on its CPU, not a GPU: the Kaggle account may not use GPUs yet - the owner verifies his "
                          "phone number at kaggle.com > Settings > Phone verification (that also turns on internet for scripts)")
     if "complete" not in status:

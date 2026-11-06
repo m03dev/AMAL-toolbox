@@ -1,4 +1,4 @@
-//! The skill library: MODO 16's skills and agents (and any added here), found by what a job is about.
+//! The skill library: the Python app's (0.16) skills and agents (and any added here), found by what a job is about.
 
 use crate::place;
 use serde_json::{json, Value};

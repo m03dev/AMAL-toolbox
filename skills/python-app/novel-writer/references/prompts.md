@@ -3,7 +3,7 @@
 Translated from Chinese, from MuMuAINovel (xiamuceer-j/MuMuAINovel,
 backend/app/services/prompt_service.py: WORLD_BUILDING, CHARACTERS_BATCH_GENERATION, OUTLINE_CREATE,
 OUTLINE_CONTINUE, CHAPTER_GENERATION_ONE_TO_ONE / _NEXT, PLOT_ANALYSIS), GPL-3.0 - see
-`../LICENSE-MuMuAINovel-GPL-3.0.txt`. Adapted for MODO: the output goes into files under `novel/`
+`../LICENSE-MuMuAINovel-GPL-3.0.txt`. Adapted for AMAL: the output goes into files under `novel/`
 (JSON where a later stage reads it back, markdown for the author). `{placeholders}` are filled
 from the earlier stages' files.
 

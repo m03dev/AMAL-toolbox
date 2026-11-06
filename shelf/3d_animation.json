@@ -277,7 +277,7 @@
     "timeout": 1800
    }
   },
-  "notes": "Headless mode starts when --input is given, but main() still builds a QApplication and MainWindow (it just doesn't show it), so it needs a desktop session. On a Linux server it probably needs xvfb/offscreen (not tested). Input and output are OBJ only. macOS ships only as a .dmg: MODO must mount it (hdiutil attach) and copy autoremesher.app, and the exe is then autoremesher.app/Contents/MacOS/autoremesher. It is built on macos-latest (arm64) and only ad-hoc signed, so Gatekeeper/quarantine has to be cleared. Windows exe is autoremesher.exe inside the zip. Optional extra flags in the parser: --report <file>, --smooth-normal <deg>, --anisotropy <0-1>.",
+  "notes": "Headless mode starts when --input is given, but main() still builds a QApplication and MainWindow (it just doesn't show it), so it needs a desktop session. On a Linux server it probably needs xvfb/offscreen (not tested). Input and output are OBJ only. macOS ships only as a .dmg: AMAL must mount it (hdiutil attach) and copy autoremesher.app, and the exe is then autoremesher.app/Contents/MacOS/autoremesher. It is built on macos-latest (arm64) and only ad-hoc signed, so Gatekeeper/quarantine has to be cleared. Windows exe is autoremesher.exe inside the zip. Optional extra flags in the parser: --report <file>, --smooth-normal <deg>, --anisotropy <0-1>.",
   "verified_from": "src/main.cpp QCommandLineParser options + headless path at tag 1.2.0 (d9ef96bd) and HEAD 4a49f82f; README.md 'Running a quick test' + 'Quick Start'; .github/workflows/release.yml asset naming; asset URLs releases/download/1.2.0/{autoremesher-1.2.0-win32-x86_64.zip, autoremesher-1.2.0.dmg, autoremesher-1.2.0.AppImage} answer 302."
  },
  {
@@ -368,7 +368,7 @@
     "timeout": 3600
    }
   },
-  "notes": "There is no -o flag: both binaries write into the input mesh's folder, with names built from the input filename, so MODO must copy the input into the workspace and then collect the results. Always pass the step argument: the source reads argv[2] even when argc==2. The paths assume the zip is extracted flat into {tool}/ (the zip holds quadwild[.exe], quad_from_patches[.exe], config/, README_release.md). On Windows the second binary is quad_from_patches.exe. The macOS binaries are universal (x86_64 + arm64), unsigned, and need quarantine cleared. There is no zero-exit check command (no args returns 1), so check is null. GPL-3.0 is fine to run as a separate process from AGPL MODO.",
+  "notes": "There is no -o flag: both binaries write into the input mesh's folder, with names built from the input filename, so AMAL must copy the input into the workspace and then collect the results. Always pass the step argument: the source reads argv[2] even when argc==2. The paths assume the zip is extracted flat into {tool}/ (the zip holds quadwild[.exe], quad_from_patches[.exe], config/, README_release.md). On Windows the second binary is quad_from_patches.exe. The macOS binaries are universal (x86_64 + arm64), unsigned, and need quarantine cleared. There is no zero-exit check command (no args returns 1), so check is null. GPL-3.0 is fine to run as a separate process from AGPL AMAL.",
   "verified_from": "quadwild/quadwild.cpp actual_main argv handling + usage text; components/quad_from_patches/main.cpp usage '<input.obj> [num] [setup.txt] [out_stats.json]' and output name '_<num>_quadrangulation_smooth.obj' at e722c7e9; README.md + README_release.md; .github/workflows/build.yaml; asset URLs releases/download/v0.0.2/{linux,windows,macos}-binaries.zip answer 302; downloaded windows and macos zips and listed their contents; `file` shows the macOS quadwild is Mach-O universal x86_64+arm64."
  },
  {
@@ -387,7 +387,7 @@
   ],
   "install": {
    "kind": "manual",
-   "manual": "There are no GitHub releases (the repo has no tags). Download the prebuilt zip for your OS from the README links: Windows https://instant-meshes.s3.eu-central-1.amazonaws.com/Release/instant-meshes-windows.zip, macOS https://instant-meshes.s3.eu-central-1.amazonaws.com/instant-meshes-macos.zip, Linux https://instant-meshes.s3.eu-central-1.amazonaws.com/instant-meshes-linux.zip. Extract it into <data>/tools/instant-meshes/ and point MODO's {exe} at 'Instant Meshes.exe' (Windows) or the binary inside 'Instant Meshes.app/Contents/MacOS/' (macOS). The binaries are Intel 64-bit only, so the Mac mini runs them under Rosetta 2. Alternative: build from source with 'git clone --recursive' + 'cmake .' + 'make'."
+   "manual": "There are no GitHub releases (the repo has no tags). Download the prebuilt zip for your OS from the README links: Windows https://instant-meshes.s3.eu-central-1.amazonaws.com/Release/instant-meshes-windows.zip, macOS https://instant-meshes.s3.eu-central-1.amazonaws.com/instant-meshes-macos.zip, Linux https://instant-meshes.s3.eu-central-1.amazonaws.com/instant-meshes-linux.zip. Extract it into <data>/tools/instant-meshes/ and point AMAL's {exe} at 'Instant Meshes.exe' (Windows) or the binary inside 'Instant Meshes.app/Contents/MacOS/' (macOS). The binaries are Intel 64-bit only, so the Mac mini runs them under Rosetta 2. Alternative: build from source with 'git clone --recursive' + 'cmake .' + 'make'."
   },
   "check": null,
   "actions": {
@@ -835,7 +835,7 @@
     "timeout": 1800
    }
   },
-  "notes": "SOMA only: the model is hard-wired to kimodo-soma-rp (resolves to nvidia/Kimodo-SOMA-RP-v1.2). Never use kimodo-smplx-rp: its weights are under the NVIDIA R&D (non-commercial) licence and it needs SMPL-X files. The text encoder stays on CPU through TEXT_ENCODER_DEVICE=cpu, which the README says cuts VRAM from ~17 GB to under 3 GB. TEXT_ENCODER_MODE=local skips probing the kimodo_textencoder service on 127.0.0.1:9550. Cost: Llama-3-8B in bfloat16 on CPU needs about 16 GB of system RAM (plan on 32 GB on the PC) and is slow for each run. For batches, run 'kimodo_textencoder' once in the background and drop TEXT_ENCODER_MODE. Mac mini: generate.py only picks cuda or cpu (no MPS) and 16 GB of RAM can't hold the encoder, so darwin is left out. Before the first run, the owner must request access to meta-llama/Meta-Llama-3-8B-Instruct on Hugging Face and run 'hf auth login' (MODO cannot do this step for them). pip install builds the bundled MotionCorrection C++ extension, so CMake and a C++ compiler (MSVC or MinGW) must be on PATH. Output: --output X.bvh writes X.bvh (SOMA 77-joint BVH) and X.bvh.npz (Kimodo NPZ: posed_joints, global/local rot mats, foot_contacts, ...). FBX is not offered. SOMA-X (py-soma-x 0.3.4) is installed as the 'soma' extra for skinned viz; BVH export itself doesn't need it. torch==2.6.0 from the cu124 index is a choice MODO makes, not a pin from the repo (the docs only say PyTorch 2.0+), and the index could not be reached from here.",
+  "notes": "SOMA only: the model is hard-wired to kimodo-soma-rp (resolves to nvidia/Kimodo-SOMA-RP-v1.2). Never use kimodo-smplx-rp: its weights are under the NVIDIA R&D (non-commercial) licence and it needs SMPL-X files. The text encoder stays on CPU through TEXT_ENCODER_DEVICE=cpu, which the README says cuts VRAM from ~17 GB to under 3 GB. TEXT_ENCODER_MODE=local skips probing the kimodo_textencoder service on 127.0.0.1:9550. Cost: Llama-3-8B in bfloat16 on CPU needs about 16 GB of system RAM (plan on 32 GB on the PC) and is slow for each run. For batches, run 'kimodo_textencoder' once in the background and drop TEXT_ENCODER_MODE. Mac mini: generate.py only picks cuda or cpu (no MPS) and 16 GB of RAM can't hold the encoder, so darwin is left out. Before the first run, the owner must request access to meta-llama/Meta-Llama-3-8B-Instruct on Hugging Face and run 'hf auth login' (AMAL cannot do this step for them). pip install builds the bundled MotionCorrection C++ extension, so CMake and a C++ compiler (MSVC or MinGW) must be on PATH. Output: --output X.bvh writes X.bvh (SOMA 77-joint BVH) and X.bvh.npz (Kimodo NPZ: posed_joints, global/local rot mats, foot_contacts, ...). FBX is not offered. SOMA-X (py-soma-x 0.3.4) is installed as the 'soma' extra for skinned viz; BVH export itself doesn't need it. torch==2.6.0 from the cu124 index is a choice AMAL makes, not a pin from the repo (the docs only say PyTorch 2.0+), and the index could not be reached from here.",
   "verified_from": "README.md 'Command-Line Interface', 'Default NPZ Output Format', VRAM note; docs/source/getting_started/{installation,installation_virtual_env,quick_start}.md; pyproject.toml (scripts kimodo_gen etc., deps, extras soma); kimodo/scripts/generate.py argparse (--model --duration --output --bvh --bvh_standard_tpose --seed) + main (cuda or cpu) + _single_file_path; kimodo/model/registry.py (DEFAULT_MODEL kimodo-soma-rp, repo ids); kimodo/model/load_model.py (TEXT_ENCODER_MODE, llm2vec preset bfloat16); kimodo/model/llm2vec/llm2vec_wrapper.py (TEXT_ENCODER_DEVICE) at e1c219c9; SOMA-X setup.cfg name py-soma-x 0.3.4, tag v0.3.4 = 56a3d957."
  },
  {
@@ -856,11 +856,11 @@
    "kind": "manual",
    "git": "https://github.com/freemocap/freemocap",
    "ref": "75c8acc2cd7fa486ee674021473be4b95b7be2cb",
-   "manual": "There is no headless CLI. The 'freemocap' console script (freemocap.__main__:run_main) starts a FastAPI/uvicorn server on localhost:8005 for the Electron/React GUI. Install with uv as the README says ('uv venv' then 'uv sync', or 'uv sync --no-default-groups --group cpu' for CPU only), run 'python freemocap/__main__.py', and use the GUI. Its HTTP API does have POST /recording/import, /recording/process and calibration endpoints, so MODO could drive it over HTTP later, but that is not a command-line recipe and the request bodies were not checked."
+   "manual": "There is no headless CLI. The 'freemocap' console script (freemocap.__main__:run_main) starts a FastAPI/uvicorn server on localhost:8005 for the Electron/React GUI. Install with uv as the README says ('uv venv' then 'uv sync', or 'uv sync --no-default-groups --group cpu' for CPU only), run 'python freemocap/__main__.py', and use the GUI. Its HTTP API does have POST /recording/import, /recording/process and calibration endpoints, so AMAL could drive it over HTTP later, but that is not a command-line recipe and the request bodies were not checked."
   },
   "check": null,
   "actions": {},
-  "notes": "Version 2.0.0a25 (alpha), Python >= 3.11. Same licence family as MODO (AGPL-3.0). For quick single-camera pose from video, use the mediapipe-pose recipe instead.",
+  "notes": "Version 2.0.0a25 (alpha), Python >= 3.11. Same licence family as AMAL (AGPL-3.0). For quick single-camera pose from video, use the mediapipe-pose recipe instead.",
   "verified_from": "pyproject.toml [project.scripts] + version; freemocap/__main__.py (uvicorn server, port sentinel); freemocap/api/http/mocap/mocap_router.py routes; README.md install section at 75c8acc2."
  },
  {
@@ -940,7 +940,7 @@
   "id": "ufbx",
   "name": "ufbx",
   "area": "3d",
-  "what": "Single-file C library that loads FBX/OBJ robustly. Useful inside MODO or a converter, but not a tool you can run.",
+  "what": "Single-file C library that loads FBX/OBJ robustly. Useful inside AMAL or a converter, but not a tool you can run.",
   "repo": "https://github.com/ufbx/ufbx",
   "license": "MIT or Unlicense (dual, your choice)",
   "weights": null,
