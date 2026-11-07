@@ -1,6 +1,6 @@
 # amal-toolbox
 
-The tested code [AMAL](https://github.com/m03dev/amal) asks for, kept apart from AMAL so AMAL stays small.
+The tested code [AMAL](https://github.com/m03dev/AMAL) asks for, kept apart from AMAL so AMAL stays small.
 
 AMAL's agent says what it needs; the toolbox runs proven code for it in the job's folder, checks the files it must make,
 and answers with them. It remembers how each run went, and keeps new code a job writes only when its test passes.

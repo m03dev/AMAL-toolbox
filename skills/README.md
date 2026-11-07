@@ -10,3 +10,4 @@ chosen ones reach the model, so the library costs nothing until a job needs it.
   specialists' roles and methods) and skills. Its `commands/` are not here: they drive Ruflo's own swarm tools, which
   AMAL does not have.
 - `godogen/` - game asset prompts (`godogen/LICENSE.md`).
+- `design/logo-design/` - logos and brand marks with letter-shape and vector tools (MIT, its own LICENSE; moved here from AMAL's playbooks to keep AMAL light).

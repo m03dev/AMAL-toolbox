@@ -120,11 +120,6 @@ async fn health() -> Json<Value> {
 
 #[tokio::main]
 async fn main() {
-    // settings from before a rename (MODO_X, LOKI_X) count as AMAL_X: an app from before the rename passes only those
-    for before in ["MODO_", "LOKI_"] {
-        let pairs: Vec<(String, String)> = std::env::vars().filter_map(|(k, v)| k.strip_prefix(before).map(|r| (format!("AMAL_{r}"), v))).collect();
-        for (k, v) in pairs { if std::env::var_os(&k).is_none() { std::env::set_var(k, v); } }
-    }
     let port: u16 = std::env::var("TOOLBOX_PORT").ok().and_then(|p| p.parse().ok()).unwrap_or(7720);
     let app = Router::new()
         .route("/health", get(health))

@@ -152,7 +152,7 @@ pub async fn shell(ws: &Path, cmd: &str, timeout: Duration) -> Outcome {
             let err = String::from_utf8_lossy(&o.stderr);
             if !err.trim().is_empty() { text.push_str("\n[stderr]\n"); text.push_str(&err); }
             // the lines that say what happened lead, so trimming a long log (Blender's add-on chatter) never hides them
-            // AMAL's own report lines always (a capability written before the rename says MODO_); then the last few error lines (a program's repeated tracebacks must not
+            // AMAL's own report lines always; then the last few error lines (a program's repeated tracebacks must not
             // push the report out - StableGen's draw errors did)
             let own: Vec<&str> = text.lines().map(str::trim).filter(|l| own_line(l)).collect();
             // error lines: "Error: ...", a Python exception's last line ("ValueError: ...") and the frame it was raised in
@@ -198,4 +198,4 @@ mod tree_tests {
 }
 
 /// A report line AMAL's scripts print (`AMAL_DONE ...`), or one a capability written before the rename prints.
-fn own_line(l: &str) -> bool { ["AMAL_", "MODO_"].iter().any(|p| l.starts_with(p)) }
+fn own_line(l: &str) -> bool { l.starts_with("AMAL_") }
