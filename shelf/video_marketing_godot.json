@@ -2285,5 +2285,152 @@
   },
   "notes": "Not a Godot add-on: nothing is copied into the project. It injects a temporary McpBridge autoload when a game is run/attached and removes it on stop (artifacts under .mcp/godot-runtime/, auto-added to .gitignore). Needs Node >=20. Set GODOT_PATH to the Godot executable (auto-detected from PATH otherwise). For unattended agents set GODOT_MCP_STRICT=true, or GODOT_MCP_DISABLE_ELICITATION=true if AMAL's MCP client cannot show confirmation prompts. Never set GODOT_MCP_DISABLE_SECURITY on the user's behalf (README). The binary takes no CLI flags, so the check only confirms the npm bin exists. Equivalent zero-install launch: npx -y godot-mcp-runtime.",
   "verified_from": "README.md install section (npx -y godot-mcp-runtime / npm install -g, env GODOT_PATH, optional env vars, security note); package.json (bin godot-mcp-runtime -> dist/index.js, version 3.8.1, engines node >=20, MIT); src/index.ts StdioServerTransport, no argv handling @0492500. socket.dev npm listing: latest 3.8.1. npm registry is blocked here, so it was not started."
+ },
+ {
+  "id": "mlx-video",
+  "name": "mlx-video (Wan 2.1 / 2.2 and LTX-2 video on Apple Silicon)",
+  "area": "video",
+  "what": "Makes short videos from a prompt (or a picture) on the Mac's own GPU with MLX: Wan 2.1 T2V 1.3B (480p, fits a 16 GB Mac when quantized), Wan 2.2 14B models (need 32 GB+: give them to the PC or Kaggle), LTX-2. Download the weights once, convert them, then generate.",
+  "repo": "https://github.com/Blaizzy/mlx-video",
+  "license": "MIT (Wan weights Apache-2.0)",
+  "weights": "Wan-AI/Wan2.1-T2V-1.3B (~17 GB download, ~4 GB converted at 4 bits)",
+  "hardware": "apple-silicon",
+  "platforms": [
+   "darwin"
+  ],
+  "install": {
+   "kind": "pip",
+   "python": "3.11",
+   "pip": [
+    "mlx-video @ git+https://github.com/Blaizzy/mlx-video.git@87db56a51758fefb748a359b90a5283bb8ba4837",
+    "torch"
+   ]
+  },
+  "check": [
+   "{python}",
+   "-c",
+   "import mlx_video, mlx.core"
+  ],
+  "actions": {
+   "download": {
+    "what": "Download a Wan checkpoint from Hugging Face into the tool's models folder (once).",
+    "cmd": [
+     "{python}",
+     "-c",
+     "import sys;from huggingface_hub import snapshot_download as d;print(d(sys.argv[1],local_dir=sys.argv[2]))",
+     "{repo_id}",
+     "{models}/{repo_name}"
+    ],
+    "args": {
+     "repo_id": {
+      "type": "choice",
+      "choices": [
+       "Wan-AI/Wan2.1-T2V-1.3B",
+       "Wan-AI/Wan2.2-TI2V-5B",
+       "Wan-AI/Wan2.2-T2V-A14B"
+      ],
+      "default": "Wan-AI/Wan2.1-T2V-1.3B"
+     },
+     "repo_name": {
+      "type": "choice",
+      "choices": [
+       "Wan2.1-T2V-1.3B",
+       "Wan2.2-TI2V-5B",
+       "Wan2.2-T2V-A14B"
+      ],
+      "default": "Wan2.1-T2V-1.3B"
+     }
+    },
+    "timeout": 7200
+   },
+   "convert": {
+    "what": "Convert a downloaded checkpoint to MLX, quantized to 4 bits so it fits in memory.",
+    "cmd": [
+     "{python}",
+     "-m",
+     "mlx_video.models.wan_2.convert",
+     "--checkpoint-dir",
+     "{models}/{repo_name}",
+     "--output-dir",
+     "{models}/{repo_name}-mlx-q4",
+     "--quantize",
+     "--bits",
+     "4"
+    ],
+    "args": {
+     "repo_name": {
+      "type": "choice",
+      "choices": [
+       "Wan2.1-T2V-1.3B",
+       "Wan2.2-TI2V-5B",
+       "Wan2.2-T2V-A14B"
+      ],
+      "default": "Wan2.1-T2V-1.3B"
+     }
+    },
+    "timeout": 3600
+   },
+   "generate": {
+    "what": "Make a video from a prompt with a converted model. Start small (480x832, 33 frames) and keep nothing else heavy running.",
+    "cmd": [
+     "{python}",
+     "-m",
+     "mlx_video.models.wan_2.generate",
+     "--model-dir",
+     "{models}/{repo_name}-mlx-q4",
+     "--prompt",
+     "{prompt}",
+     "--width",
+     "{width}",
+     "--height",
+     "{height}",
+     "--num-frames",
+     "{frames}",
+     "--output-path",
+     "{output}"
+    ],
+    "args": {
+     "repo_name": {
+      "type": "choice",
+      "choices": [
+       "Wan2.1-T2V-1.3B",
+       "Wan2.2-TI2V-5B",
+       "Wan2.2-T2V-A14B"
+      ],
+      "default": "Wan2.1-T2V-1.3B"
+     },
+     "prompt": {
+      "type": "text",
+      "what": "what happens in the video"
+     },
+     "width": {
+      "type": "int",
+      "default": 832,
+      "min": 256,
+      "max": 1280
+     },
+     "height": {
+      "type": "int",
+      "default": 480,
+      "min": 256,
+      "max": 1280
+     },
+     "frames": {
+      "type": "int",
+      "default": 33,
+      "min": 9,
+      "max": 121
+     },
+     "output": {
+      "type": "out",
+      "ext": ".mp4",
+      "default": "renders/video.mp4"
+     }
+    },
+    "timeout": 5400
+   }
+  },
+  "notes": "Apple Silicon only. The README's module names (mlx_video.wan2.*) are older than the code: the real modules are mlx_video.models.wan_2.convert / .generate (pyproject at 87db56a5). torch is needed only to read the original checkpoints when converting. Big files land in the tool's models folder under AMAL's home, which is on the external drive on the Mac.",
+  "verified_from": "pyproject.toml [project.scripts] and mlx_video/models/wan_2/{convert,generate}.py argparse at 87db56a5 (2026-05-13)."
  }
 ]

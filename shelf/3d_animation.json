@@ -960,5 +960,175 @@
   "actions": {},
   "notes": "Licence is friendly (MIT/public domain). For FBX conversion in the shelf today, UniRig's bpy-based pipeline or Blender/Godot importers are the practical routes.",
   "verified_from": "repo tree (ufbx.c, ufbx.h, bindgen/{parsette,ufbx_ir,ufbx_parser}.py, examples/{viewer,picort}), LICENSE dual MIT/Unlicense, README.md at 5955c5c0."
+ },
+ {
+  "id": "sand3d",
+  "name": "sand3d (3D objects as short programs)",
+  "area": "3d",
+  "what": "Builds hard-surface 3D objects - crates, doors, furniture, machines, mechanisms with working joints - as a short Python program over Blender (bpy), exported as GLB. Read the API first (action api, ~3,600 tokens), write the program, then build it.",
+  "repo": "https://github.com/Sandflow-ai/sand3d",
+  "license": "Apache-2.0",
+  "weights": null,
+  "hardware": "cpu",
+  "platforms": [
+   "darwin",
+   "win32",
+   "linux"
+  ],
+  "install": {
+   "kind": "pip",
+   "python": "3.11",
+   "pip": [
+    "sand3d==1.6.3"
+   ]
+  },
+  "check": [
+   "{python}",
+   "-c",
+   "import sand3d, bpy"
+  ],
+  "actions": {
+   "api": {
+    "what": "Print sand3d's whole API (verbs, profiles, placement and joints) - read it before writing a program.",
+    "cmd": [
+     "{python}",
+     "-c",
+     "import sys;print(open(sys.argv[1],encoding='utf-8').read())",
+     "{runners}/sand3d_api.md"
+    ],
+    "args": {},
+    "timeout": 60
+   },
+   "build": {
+    "what": "Run a sand3d program from the job folder and check its GLB: the program starts `import sys, sand3d as s3d`, builds in millimetres and ends `s3d.export(root, sys.argv[1])`. Prints every part's size in mm.",
+    "cmd": [
+     "{python}",
+     "{runners}/sand3d_run.py",
+     "{program}",
+     "{output}"
+    ],
+    "args": {
+     "program": {
+      "type": "file",
+      "exts": [
+       ".py"
+      ],
+      "what": "the sand3d program"
+     },
+     "output": {
+      "type": "out",
+      "ext": ".glb",
+      "default": "renders/{input_stem}.glb"
+     }
+    },
+    "timeout": 600
+   }
+  },
+  "notes": "bpy 4.5 LTS on Python 3.11 (the wheel sand3d 1.6.3 pins); tested 2026-11-08 on Linux: a two-part crate built and checked in under a second. Units are millimetres unless the program calls s3d.units('m').",
+  "verified_from": "PyPI sand3d 1.6.3 requires_dist; docs/api.md and README at 84c980a5; a real build run 2026-11-08."
+ },
+ {
+  "id": "vork",
+  "name": "vork (headless 3D and VFX engine for agents)",
+  "area": "3d",
+  "what": "Renders 3D scenes and VFX written as code (scene JSON, or Python/TypeScript that writes it) on the GPU - stills, frame sequences, MP4 - with passes (depth, normals, object index). Fast for crowds, particles and simulations; no editor. Start with init, render a std/draft preview, look, then std/final.",
+  "repo": "https://github.com/voyager-so/vork",
+  "license": "source-available, free during the research preview (its LICENSE)",
+  "weights": null,
+  "hardware": "gpu",
+  "platforms": [
+   "darwin",
+   "win32",
+   "linux"
+  ],
+  "install": {
+   "kind": "release",
+   "release": {
+    "repo": "voyager-so/vork",
+    "tag": "v0.2.0",
+    "assets": {
+     "darwin": "vork-0.2.0-darwin-arm64.tar.gz",
+     "win32": "vork-0.2.0-windows-x64.zip",
+     "linux": "vork-0.2.0-linux-x64.tar.gz"
+    },
+    "exe": "vork"
+   }
+  },
+  "check": [
+   "{exe}",
+   "--version"
+  ],
+  "actions": {
+   "help": {
+    "what": "vork's own guide for agents (topics: limits, field PATH, upgrade...).",
+    "cmd": [
+     "{exe}",
+     "help",
+     "{topic}"
+    ],
+    "args": {
+     "topic": {
+      "type": "text",
+      "optional": true,
+      "what": "a topic, or empty for the start"
+     }
+    },
+    "timeout": 60
+   },
+   "init": {
+    "what": "Write a starting scene (scene.json + README) into a new folder.",
+    "cmd": [
+     "{exe}",
+     "init",
+     "{folder}"
+    ],
+    "args": {
+     "folder": {
+      "type": "text",
+      "what": "a new folder in the job, e.g. shot"
+     }
+    },
+    "timeout": 60
+   },
+   "render": {
+    "what": "Render a scene: a .png still, a folder of frames, or an .mp4. profile std/draft for a quick look, std/final to deliver, std/path for glass and caustics.",
+    "cmd": [
+     "{exe}",
+     "render",
+     "{scene}",
+     "--out",
+     "{output}",
+     "--profile",
+     "{profile}"
+    ],
+    "args": {
+     "scene": {
+      "type": "file",
+      "exts": [
+       ".json"
+      ],
+      "what": "the scene.json"
+     },
+     "output": {
+      "type": "out",
+      "ext": ".png",
+      "default": "renders/{input_stem}.png"
+     },
+     "profile": {
+      "type": "choice",
+      "choices": [
+       "std/draft",
+       "std/previs",
+       "std/final",
+       "std/path"
+      ],
+      "default": "std/draft"
+     }
+    },
+    "timeout": 1800
+   }
+  },
+  "notes": "Needs Apple Silicon (Metal) or a recent NVIDIA card (Vulkan): the Mac and the PC. Authoring new Slang programs on the Mac needs macOS 26; bundled programs and scene JSON work without it. Tested 2026-11-08: installs and answers --version and help on Linux; a GPU-less machine refuses to render ('No supported GPU adapter found'). One GPU job at a time (AMAL rule 7).",
+  "verified_from": "install.sh / install.ps1 of release v0.2.0 (asset names); vork 0.2.0 commit b65e3ded help output."
  }
 ]

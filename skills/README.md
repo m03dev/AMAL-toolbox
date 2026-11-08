@@ -11,3 +11,10 @@ chosen ones reach the model, so the library costs nothing until a job needs it.
   AMAL does not have.
 - `godogen/` - game asset prompts (`godogen/LICENSE.md`).
 - `design/logo-design/` - logos and brand marks with letter-shape and vector tools (MIT, its own LICENSE; moved here from AMAL's playbooks to keep AMAL light).
+- `game-studios/` - github.com/Donchitos/Claude-Code-Game-Studios (MIT, `game-studios/PROVENANCE.md`): 49 game studio
+  roles (creative director, game designer, Godot specialists, technical artist, QA...) and 74 skills for a game's design,
+  production, code review and release (owner 2026-11-08: "Claude dev studio agent skills and others like it").
+- `godotprompter/` - github.com/jame581/godotprompter (MIT): Godot 4 skills and agents (architecture, state machines,
+  navigation, physics, UI, animation, GDScript/C# review).
+- `3dviz-pro-max/` - github.com/viettranx/3dviz-pro-max (MIT): 3D scenes in Three.js or Blender from an idea, with kits,
+  looks and checks of what is on screen.
