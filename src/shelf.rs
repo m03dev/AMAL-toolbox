@@ -126,6 +126,9 @@ fn placeholders(r: &Value, d: &Path) -> Vec<(String, String)> {
         ("amal_python".into(), system_python()),
         ("runners".into(), place::root().join("shelf").join("runners").display().to_string()),
         ("bin".into(), if cfg!(windows) { "Scripts".into() } else { "bin".into() }),
+        // AMAL's free models behind one OpenAI-compatible address (the driver's /v1): a tool that wants an LLM uses it,
+        // so nothing on the shelf ever needs a paid key
+        ("amal_llm".into(), format!("http://127.0.0.1:{}/v1", std::env::var("AMAL_DRIVER_PORT").ok().filter(|p| !p.is_empty()).unwrap_or_else(|| "7717".into()))),
     ]
 }
 
@@ -137,10 +140,14 @@ fn fill(parts: &[Value], ph: &[(String, String)]) -> Vec<String> {
     }).collect()
 }
 
-async fn exec(cmd: &[String], cwd: Option<&Path>, secs: u64) -> Result<String, String> {
+async fn exec(cmd: &[String], cwd: Option<&Path>, secs: u64) -> Result<String, String> { exec_env(cmd, cwd, secs, &[]).await }
+
+/// A command with environment variables of its own (an action's or a recipe's "env", placeholders filled).
+async fn exec_env(cmd: &[String], cwd: Option<&Path>, secs: u64, env: &[(String, String)]) -> Result<String, String> {
     let Some((prog, rest)) = cmd.split_first() else { return Err("empty command".into()) };
     let mut c = tokio::process::Command::new(prog);
     c.args(rest).kill_on_drop(true);
+    for (k, v) in env { c.env(k, v); }
     if let Some(d) = cwd { c.current_dir(d); }
     #[cfg(windows)]
     { c.creation_flags(0x0800_0000); }
@@ -305,7 +312,10 @@ pub async fn run(name: &str, args: &Value, ws: &Path) -> Outcome {
     let Some(d) = tool_dir(id) else { return Outcome::Err("AMAL_HOME is not set".into()) };
     let (cmd, outputs, secs) = match build(&r, &act, args, ws, &d) { Ok(x) => x, Err(e) => return Outcome::Err(e) };
     let started = std::time::SystemTime::now() - Duration::from_secs(2);
-    match exec(&cmd, Some(ws), secs).await {
+    let ph = placeholders(&r, &d);
+    let env: Vec<(String, String)> = r["env"].as_object().into_iter().flatten().chain(act["env"].as_object().into_iter().flatten())
+        .map(|(k, v)| (k.clone(), fill(std::slice::from_ref(v), &ph).remove(0))).collect();
+    match exec_env(&cmd, Some(ws), secs, &env).await {
         Err(e) => Outcome::Err(format!("{name} failed: {e}")),
         Ok(log) => {
             let made: Vec<String> = outputs.iter().filter(|p| p.metadata().is_ok_and(|m| m.len() > 0 && m.modified().is_ok_and(|t| t >= started)))
