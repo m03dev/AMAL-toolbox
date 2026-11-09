@@ -18,3 +18,22 @@ chosen ones reach the model, so the library costs nothing until a job needs it.
   navigation, physics, UI, animation, GDScript/C# review).
 - `3dviz-pro-max/` - github.com/viettranx/3dviz-pro-max (MIT): 3D scenes in Three.js or Blender from an idea, with kits,
   looks and checks of what is on screen.
+- `mattpocock/` - github.com/mattpocock/skills (MIT): Matt Pocock's engineering skills - grill-me, PRDs and issues, TDD,
+  refactor plans, triage, domain modelling, code review.
+- `addyosmani/` - github.com/addyosmani/agent-skills (MIT): Addy Osmani's production engineering lifecycle - spec,
+  plan, build in small steps, test, review, simplify, ship - and his reviewer agents.
+- `cloudflare-security-audit/` - github.com/cloudflare/security-audit-skill (MIT): a six-phase audit of a codebase with
+  verified, machine-readable findings, for code AMAL or the owner wrote.
+- `obsidian/` - github.com/kepano/obsidian-skills (MIT, Steph Ango, Obsidian's CEO): Obsidian Markdown, Bases, JSON
+  Canvas, the Obsidian CLI and Defuddle - how AMAL writes its knowledge vault.
+- `google/` - github.com/google/skills (Apache-2.0): Google's official skills - Google Cloud, Gemini API, Firebase.
+- `goldfish/` - github.com/anortham/goldfish (MIT): checkpoints, recall, briefs and hand-offs as method.
+- `gbrain/` - github.com/garrytan/gbrain (MIT): Garry Tan's brain skillpack - ingest, link, enrich, query, maintain.
+- `cog-second-brain/` - github.com/huytieu/COG-second-brain (MIT): braindumps, briefs, weekly reviews, knowledge
+  consolidation and its anti-slop design skills.
+- `open-second-brain/` - github.com/itechmeat/open-second-brain (MIT): an agent-owned Brain/ folder in an Obsidian vault.
+- `memory/` - AMAL's own: `llm-wiki` (Karpathy's LLM Wiki pattern for the vault and projects) and `agent-memory` (the
+  seven kinds of memory and how a job uses each).
+
+Each pack has its LICENSE and a PROVENANCE.md with the commit it was copied from (2026-11-09).
+

@@ -1,0 +1,74 @@
+---
+name: brief
+description: Saves and maintains the durable Goldfish brief for a project (goal, constraints, success criteria, status). Use when starting multi-session work, capturing approved project direction, updating goals or constraints, or when the user asks for durable strategic context that should persist across sessions
+---
+
+# Brief
+
+## Workspace binding
+
+For user-level MCP registrations, pass workspace as the conversation's host-native absolute project root on every checkpoint, brief, and current-project recall call. In a git worktree, pass the worktree path, not the main checkout. Change it when you enter or leave a worktree. Omission and "current" work only with fixed absolute GOLDFISH_WORKSPACE or supported legacy Roots. recall({ workspace: "all" }) is explicit cross-project search, never a fallback; it is invalid for checkpoint and brief. Cwd, registry, and parent-walk candidates are suggestions only. If unbound, retry with {"workspace":"<absolute-project-root>"}.
+
+## Core Split
+
+Goldfish brief = durable direction.
+
+- Harness plan mode owns execution planning for the current session.
+- `docs/plans/` owns implementation specs and task breakdowns.
+- Goldfish brief owns the compact strategic context that future sessions need.
+
+Do not copy a harness task list or `docs/plans/` checklist into the brief. Link to execution artifacts instead.
+
+## What Belongs In A Brief
+
+Keep the brief compact and stable:
+
+- Goal
+- Why now
+- Constraints
+- Success criteria
+- References to `docs/plans/...` or other design docs
+- Status
+
+## What Does Not Belong
+
+- Step by step task breakdowns
+- File by file implementation notes
+- A mirrored `ExitPlanMode` plan blob
+- Session noise that belongs in checkpoints
+- Git logs, command output, or test transcripts (name the commit or doc instead)
+
+## Save A Brief
+
+```ts
+brief({
+  workspace: "/absolute/path/to/project",
+  action: "save",
+  title: "Brief API surface around strategic context",
+  content: "## Goal\n\nRename the forward-looking artifact to brief.\n\n## Why Now\n\nHarnesses now own execution planning.\n\n## Constraints\n\nKeep one-release compatibility for plan callers.\n\n## Success Criteria\n\nRecall, skills, hooks, and docs all present brief as canonical.\n\n## References\n\n- docs/plans/2026-04-16-brief-repositioning-design.md",
+  tags: ["memory", "migration"],
+  activate: true
+})
+```
+
+## Lifecycle
+
+- Save a brief when a direction needs to survive session boundaries.
+- Update it when goals, constraints, or success criteria change.
+- Complete it when the direction has landed.
+- Archive it when it has been superseded.
+
+Only one brief should be active per workspace.
+
+## Retrieval
+
+- `brief({ action: "get", workspace: "/absolute/path/to/project" })` gets the active brief.
+- `brief({ action: "list", workspace: "/absolute/path/to/project" })` shows saved briefs.
+- `recall({ workspace: "/absolute/path/to/project", limit: 0 })` shows the active brief without loading checkpoints.
+
+## Rules
+
+- Treat the brief as a compact strategic document.
+- Use checkpoints for evidence of work done.
+- Use `docs/plans/` for execution detail.
+- If an older workflow says `plan`, translate it to brief semantics unless the user is asking about a legacy artifact on purpose.

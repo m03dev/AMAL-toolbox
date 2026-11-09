@@ -75,3 +75,21 @@ pub fn find(q: &str, n: usize) -> Value {
     scored.sort_by(|a, b| b.0.cmp(&a.0));
     json!(scored.into_iter().take(n).map(|(_, s)| json!({"name": s.name, "description": s.description, "path": s.path.display().to_string()})).collect::<Vec<_>>())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The packs added 2026-11-09 are found by name and by what a job asks for.
+    #[test]
+    fn the_added_skill_packs_are_found() {
+        let names: Vec<String> = all().into_iter().map(|s| s.name).collect();
+        for want in ["security-audit", "obsidian-markdown", "llm-wiki", "agent-memory", "grill-me", "interview-me"] {
+            assert!(names.iter().any(|n| n == want), "{want} missing");
+        }
+        let hits = find("audit this codebase for security vulnerabilities", 5).to_string();
+        assert!(hits.contains("security-audit"), "{hits}");
+        let hits = find("keep a wiki of what we learned, ingest sources and lint pages", 5).to_string();
+        assert!(hits.contains("llm-wiki"), "{hits}");
+    }
+}

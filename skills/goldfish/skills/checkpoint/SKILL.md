@@ -1,0 +1,110 @@
+---
+name: checkpoint
+description: Saves developer context to Goldfish memory as a structured markdown checkpoint. Use when a consequential decision, a surprising failure, or unfinished work must survive the session, not for routine edits or commits
+---
+
+# Checkpoint — Save Developer Memory
+
+## Workspace binding
+
+For user-level MCP registrations, pass workspace as the conversation's host-native absolute project root on every checkpoint, brief, and current-project recall call. In a git worktree, pass the worktree path, not the main checkout. Change it when you enter or leave a worktree. Omission and "current" work only with fixed absolute GOLDFISH_WORKSPACE or supported legacy Roots. recall({ workspace: "all" }) is explicit cross-project search, never a fallback; it is invalid for checkpoint and brief. Cwd, registry, and parent-walk candidates are suggestions only. If unbound, retry with {"workspace":"<absolute-project-root>"}.
+
+## When to Checkpoint
+
+Checkpoint when a future session will need what you know now:
+
+- **Consequential decision** — an architecture, tradeoff, or approach choice that future sessions must follow. Record the option you rejected and why.
+- **Surprising failure** — a root cause, blocker, or discovery that cost real investigation. Record the evidence.
+- **Unfinished work** — a stopping point, a task switch, or context compaction ahead while work remains. Record the next step in `next`.
+
+A routine edit or commit needs no checkpoint; git already records it. When a checkpoint is warranted and a commit follows, write the checkpoint BEFORE the commit so the checkpoint file rides along in it.
+
+Set `next` whenever work continues: it is the field a resuming session uses most. Space out checkpoints so each one captures a distinct piece of progress — one per logical milestone is the right cadence.
+
+## How to Write Good Descriptions
+
+Your description becomes the **markdown body** of a `.md` file. Format it with structure — headers, bullet points, bold, code spans.
+
+### The WHAT/WHY/HOW/IMPACT Formula
+
+```
+checkpoint({
+  workspace: "/absolute/path/to/project",
+  description: "## Implemented JWT refresh token rotation\n\nThe existing single-token approach was vulnerable to token theft.\n\n- **Approach:** Rotate tokens on each use, limiting the attack window\n- **Added:** `RefreshTokenStore` with atomic file writes and 7-day expiry\n- **Tests:** All 12 auth tests passing\n- **Impact:** Unblocks the session management PR",
+  tags: ["feature", "auth", "security", "jwt", "refresh-token", "token-rotation", "session-management"]
+})
+```
+
+### Good vs Bad
+
+**GOOD (structured markdown):**
+```
+## Fixed race condition in checkpoint writes
+
+Concurrent saves could corrupt a checkpoint file.
+
+- **Root cause:** Non-atomic write pattern
+- **Fix:** Switched to write-tmp-then-rename with file locking
+- **Verified:** Reproduced with parallel test, confirmed fix
+```
+
+**BAD (no structure):** "Fixed race condition in checkpoint file writes where concurrent saves could corrupt a checkpoint file. Root cause was non-atomic write pattern."
+
+**BAD (no context):** "Fixed file writing bug"
+
+## Long Descriptions — Use description_file
+
+Large inline descriptions can break the tool call before Goldfish runs. Unescaped `\` from Windows paths and real newlines corrupt the tool-call JSON, and the host rejects it.
+
+- Keep the inline `description` under ~2KB.
+- For a longer writeup, write the markdown to a file inside the selected workspace and pass `description_file` instead of `description`. Pass exactly one of the two. Absolute paths work only when the resolved file is inside the workspace; traversal and symlink targets outside it are rejected.
+- If the source writeup is outside the workspace, copy the intended content into a workspace draft first. Goldfish does not copy external files for you.
+- Draft under `.memories/` (for example `.memories/draft.md`) — that directory is excluded from the captured changed-files list.
+- Delete the draft after the checkpoint saves. Goldfish does not delete it.
+- Use `/` path separators, even on Windows. Do not draft in `/tmp` on Windows — Git Bash `/tmp` is invisible to native Windows tools.
+
+## Structured Fields
+
+Use `type` to classify your checkpoint for better searchability:
+
+- `type: "decision"` → include `decision` + `alternatives`
+- `type: "incident"` → include `context` + `evidence`
+- `type: "learning"` → include `impact`
+
+All types benefit from `symbols`, `next`, and `impact`.
+
+Populate `symbols` with the key functions, classes, or modules you touched (e.g. `["resolveWorkspace", "resolveActiveBrief"]`). Intent-blame recall can filter on them later with `recall({ workspace: "/absolute/path/to/project", symbol: "resolveWorkspace" })`.
+
+## Tags — Think About Future Search
+
+Recall search (BM25 ranking) indexes tags. Write them for **discoverability** — how would future-you search for this?
+
+**Category tags** (1-2):
+- **Type:** `feature`, `bug-fix`, `refactor`, `docs`, `test`
+- **Area:** `auth`, `api`, `ui`, `database`, `build`
+- **Status:** `wip`, `blocked`, `discovery`, `decision`
+
+**Concept tags** (3-6) — the important part:
+- Include **synonyms and related terms** for the core topic
+- Include **the problem domain**, not just the solution
+- Think: "what words might I use when searching for this later?"
+
+Example: a checkpoint about implementing retry logic for payment webhooks:
+- BAD tags: `["bug-fix", "payments"]`
+- GOOD tags: `["bug-fix", "payments", "retry", "resilience", "webhooks", "fault-tolerance", "idempotency"]`
+
+Example: a decision to use WebSockets over SSE for real-time updates:
+- BAD tags: `["decision", "api"]`
+- GOOD tags: `["decision", "real-time", "websockets", "sse", "push", "streaming", "notifications"]`
+
+## What Gets Captured Automatically
+
+You don't need to include these — Goldfish captures them:
+- **Git branch** — current branch name
+- **Git commit** — current HEAD short hash
+- **Changed files** — files modified since last commit (`.memories/` excluded)
+- **Timestamp** — UTC, always
+
+`git.files` reflects the working tree at checkpoint time. When a commit follows, **checkpoint first** so captured paths match what you just changed; committed-only changes are not in the diff snapshot.
+
+Focus your description on the MEANING, not the mechanics.

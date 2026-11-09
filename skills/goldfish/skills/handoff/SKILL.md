@@ -1,0 +1,115 @@
+---
+name: handoff
+description: Produces a structured session-resumption summary for one project from the active brief, recent checkpoints, and git state. Use when returning to a project after time away, switching harnesses, or handing work off to another agent
+---
+
+# Handoff
+
+## Workspace binding
+
+For user-level MCP registrations, pass workspace as the conversation's host-native absolute project root on every checkpoint, brief, and current-project recall call. In a git worktree, pass the worktree path, not the main checkout. Change it when you enter or leave a worktree. Omission and "current" work only with fixed absolute GOLDFISH_WORKSPACE or supported legacy Roots. recall({ workspace: "all" }) is explicit cross-project search, never a fallback; it is invalid for checkpoint and brief. Cwd, registry, and parent-walk candidates are suggestions only. If unbound, retry with {"workspace":"<absolute-project-root>"}.
+
+## When To Use
+
+Three triggers:
+
+- **Returning to a project after time away.** Yesterday's work, last week's branch, something you parked.
+- **Switching harnesses.** You were on Claude Code and are now in Codex, or the reverse. Native harness memory does not survive the jump.
+- **Handing off to a different agent.** A parallel agent picks up where another left off in the same repo.
+
+### How `/handoff` differs from neighbors
+
+- `/standup` aggregates **across projects** for a daily-update audience (you, looking at what you did everywhere).
+- `/recall` returns **raw checkpoints** for an in-session agent that needs memory restored.
+- `/handoff` synthesizes **within one project** into a single resumption document for a different agent or a returning you, picking up cold.
+
+Pick by audience and scope.
+
+## Workflow
+
+Four steps. Run them in order, then compose the document.
+
+### 1. Load the active brief
+
+```ts
+recall({ workspace: "/absolute/path/to/project", limit: 0 })
+```
+
+This returns the active brief without pulling checkpoints. If no brief is active, note that in the output and keep going.
+
+### 2. Load recent checkpoints
+
+```ts
+recall({ workspace: "/absolute/path/to/project", days: 3, limit: 10, full: true })
+```
+
+Default window is 3 days. If the user passed a time argument (for example `--since 2d` or `--since 4h`), honour it:
+
+```ts
+recall({ workspace: "/absolute/path/to/project", since: "2d", limit: 10, full: true })
+```
+
+`full: true` is required so you see `next`, `unknowns`, and git context.
+
+Git state validates the retrieved history. The last commit does not create an implicit branch or date filter.
+
+### 3. Capture git state
+
+```bash
+git rev-parse --abbrev-ref HEAD
+git status -s
+git log -1 --oneline
+```
+
+### 4. Synthesize the document
+
+Compose one markdown document using the sections in **Output Format** below. Do not dump tool output verbatim; distill it.
+
+## Output Format
+
+One markdown document, sections in this order:
+
+### `## Direction`
+
+3-5 lines summarizing the active brief: goal, key constraints, current status. If no brief is active, write "No active brief" and lean on the checkpoint trail for direction.
+
+### `## State at handoff`
+
+- Current branch (from `git rev-parse --abbrev-ref HEAD`)
+- Last commit (from `git log -1 --oneline`)
+- Uncommitted changes (from `git status -s`), or "clean working tree"
+
+Keep this compact. Three bullets maximum.
+
+### `## Recent activity`
+
+Last 5-10 checkpoints, dense format. Group adjacent checkpoints into logical milestones when they tell a continuous story; otherwise list chronologically. For each checkpoint include:
+
+- One-line summary (the checkpoint's title or first sentence)
+- Associated commit or tag if the git context identifies one
+
+When clustering, lead the cluster with a one-line milestone header, then nest the supporting checkpoints beneath it.
+
+### `## Next steps`
+
+Pull from the most recent checkpoint's `next` field. Add any success criteria from the active brief that do not yet have checkpoint evidence. Short bullets; concrete actions.
+
+### `## Open questions`
+
+Pull from recent checkpoints' `unknowns` fields and from any open items in the active brief. If there are no open questions, say so plainly.
+
+### `## Source pointers`
+
+File paths the receiving agent can read deeper from:
+
+- The active brief file (`.memories/briefs/<id>.md`)
+- The 2-3 most recent checkpoint files (`.memories/<date>/<time>_<hash>.md`)
+- Any `docs/plans/` documents referenced by the brief or a recent checkpoint
+
+## Rules
+
+- Synthesize, do not dump. The receiving agent reads one document, not a transcript.
+- Lead each section with the signal, not the mechanics.
+- If a section is empty (no brief, no unknowns, clean tree), say so in one line and move on.
+- Keep the whole document short enough to read in one pass.
+- Checkpoints are historical. Before you state a checkpoint claim as current (a version, a passing test, a finished task), check it against the live tree and git state, or mark it as "as of" the checkpoint date.

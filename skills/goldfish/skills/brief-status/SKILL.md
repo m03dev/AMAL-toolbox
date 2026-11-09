@@ -1,0 +1,70 @@
+---
+name: brief-status
+description: Reports progress against the active Goldfish brief, with checkpoints and docs/plans as evidence. Use when the user asks for progress against current project direction, wants a status check on the active brief, or needs evidence-backed assessment across briefs, checkpoints, and docs/plans
+---
+
+# Brief Status
+
+## Workspace binding
+
+For user-level MCP registrations, pass workspace as the conversation's host-native absolute project root on every checkpoint, brief, and current-project recall call. In a git worktree, pass the worktree path, not the main checkout. Change it when you enter or leave a worktree. Omission and "current" work only with fixed absolute GOLDFISH_WORKSPACE or supported legacy Roots. recall({ workspace: "all" }) is explicit cross-project search, never a fallback; it is invalid for checkpoint and brief. Cwd, registry, and parent-walk candidates are suggestions only. If unbound, retry with {"workspace":"<absolute-project-root>"}.
+
+## Core Split
+
+Assess status from three sources:
+
+- Goldfish brief = strategic direction
+- `docs/plans/` = execution detail
+- Checkpoints = evidence
+
+## Workflow
+
+### 1. Load the current brief
+
+```ts
+recall({ workspace: "/absolute/path/to/project", limit: 0 })
+```
+
+If the user asks about a specific brief, fetch it directly:
+
+```ts
+brief({ action: "get", id: "brief-id", workspace: "/absolute/path/to/project" })
+```
+
+### 2. Pull recent evidence
+
+```ts
+recall({ workspace: "/absolute/path/to/project", days: 7, limit: 20, full: true })
+```
+
+Use `full: true` when you need files, git context, or detailed checkpoint metadata.
+
+### 3. Read `docs/plans/` when execution detail matters
+
+Use project plan docs to understand implementation sequencing, task lists, and status headers. Do not trust the status header blindly. Verify it against checkpoints.
+
+## What To Report
+
+- Which brief goals have checkpoint evidence
+- Which goals are active but unfinished
+- Which goals have no recent evidence
+- Whether `docs/plans/` execution detail matches the brief
+- Drift, blockers, and unplanned work
+
+## Report Shape
+
+Use short sections:
+
+- `Direction` for the active brief
+- `Evidence` for completed and active work
+- `Drift` for work that does not map back to the brief
+- `Next` for likely immediate follow-up
+
+Be direct. If the brief is stale, say so. If the implementation work has drifted away from the brief, say so.
+
+## Rules
+
+- Do not fabricate progress.
+- Checkpoints beat status headers.
+- `docs/plans/` can explain how the team is executing, but the brief explains why.
+- If no brief exists, say that and assess status from checkpoints plus `docs/plans/`.
