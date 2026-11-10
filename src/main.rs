@@ -9,6 +9,7 @@
 //!
 //!   GET  /health                      what it holds
 //!   GET  /list?q=words&n=12           the capabilities and tools that fit, best first
+//!   GET  /named?q=a message           the ones a message names in its own words
 //!   POST /use   {name, args, ws, blender?}   run one in the folder `ws`
 //!   POST /make  {name, does, files, run, args, outputs, check?, test, ws}   add one; kept only if its test passes
 //!   GET  /skills?q=words&n=8          skills and agents that fit
@@ -63,6 +64,15 @@ async fn list(Query(q): Query<HashMap<String, String>>) -> Json<Value> {
         let (ok, bad) = rec.get(&name).copied().unwrap_or_default();
         json!({"name": name, "does": does, "args": args, "passed": ok, "failed": bad})
     }).collect::<Vec<_>>()))
+}
+
+/// The tools a message names in its own words ("with markovjunior", "use moneyprinterturbo"): every entry whose own
+/// name (before its action) is said in it - looked for in the whole catalog, not in the best matches for its words.
+async fn named(Query(q): Query<HashMap<String, String>>) -> Json<Value> {
+    let flat = |t: &str| t.to_lowercase().chars().filter(|c| c.is_alphanumeric()).collect::<String>();
+    let said = flat(q.get("q").map(String::as_str).unwrap_or(""));
+    Json(json!(catalog().into_iter().filter(|(name, _, _)| { let own = flat(name.split('.').next().unwrap_or(name)); own.len() >= 6 && said.contains(&own) })
+        .map(|(name, does, args)| json!({"name": name, "does": does, "args": args})).collect::<Vec<_>>()))
 }
 
 async fn use_(Json(b): Json<Value>) -> Json<Value> {
@@ -123,7 +133,7 @@ async fn main() {
     let port: u16 = std::env::var("TOOLBOX_PORT").ok().and_then(|p| p.parse().ok()).unwrap_or(7720);
     let app = Router::new()
         .route("/health", get(health))
-        .route("/list", get(list))
+        .route("/list", get(list)).route("/named", get(named))
         .route("/use", post(use_))
         .route("/make", post(make))
         .route("/skills", get(find_skills))
