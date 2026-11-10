@@ -142,6 +142,50 @@ fn fill(parts: &[Value], ph: &[(String, String)]) -> Vec<String> {
 
 async fn exec(cmd: &[String], cwd: Option<&Path>, secs: u64) -> Result<String, String> { exec_env(cmd, cwd, secs, &[]).await }
 
+/// The programs a tool needs that the tool brings itself when the machine has none (a recipe's "programs": name, the
+/// folder it goes in under the tool's own, the installer to fetch and how to run it - per platform, no administrator
+/// rights, nothing changed on the system): their folders, to put first on PATH for the tool's commands.
+/// (MarkovJunior needs .NET; the job tried `brew install --cask`, which wanted the owner's password, and gave up -
+/// 2026-11-10.)
+fn program_dirs(r: &Value, d: &Path) -> Vec<PathBuf> {
+    let ph = placeholders(r, d);
+    r["programs"].as_array().into_iter().flatten().filter_map(|p| p["dir"].as_str().map(|x| PathBuf::from(fill(&[json!(x)], &ph).remove(0)))).filter(|x| x.is_dir()).collect()
+}
+
+/// What the tool's commands get for the programs it brought itself: PATH with their folders first, and each one's own
+/// "env" (only for a program that is there - the machine's own copy needs none of it). Empty when it brought none.
+fn program_path(r: &Value, d: &Path) -> Vec<(String, String)> {
+    let dirs = program_dirs(r, d);
+    if dirs.is_empty() { return vec![]; }
+    let ph = placeholders(r, d);
+    let mut out: Vec<(String, String)> = r["programs"].as_array().into_iter().flatten()
+        .filter(|p| p["dir"].as_str().is_some_and(|x| Path::new(&fill(&[json!(x)], &ph).remove(0)).is_dir()))
+        .flat_map(|p| p["env"].as_object().cloned().unwrap_or_default().into_iter().map(|(k, v)| (k, fill(&[v], &ph).remove(0))).collect::<Vec<_>>()).collect();
+    let mut all = dirs;
+    all.extend(std::env::var_os("PATH").map(|p| std::env::split_paths(&p).collect::<Vec<_>>()).unwrap_or_default());
+    if let Ok(p) = std::env::join_paths(all) { out.push(("PATH".to_string(), p.to_string_lossy().to_string())); }
+    out
+}
+
+/// Fetch and install each program the tool needs and the machine lacks, into the tool's own folder.
+async fn get_programs(r: &Value, d: &Path, log: &mut Vec<String>) -> Result<(), String> {
+    let ph = placeholders(r, d);
+    for p in r["programs"].as_array().into_iter().flatten() {
+        let name = p["name"].as_str().unwrap_or("");
+        let dir = PathBuf::from(fill(&[p["dir"].clone()], &ph).remove(0));
+        if name.is_empty() || which(name).is_some() || dir.join(exe_name(name)).is_file() { continue; }
+        let how = format!("{name} is not on this machine and this tool has no way to bring it for {}", plat());
+        if let Some(f) = p["fetch"][plat()].as_array() {
+            let f = fill(f, &ph);
+            if f.len() == 2 { download(&f[0], Path::new(&f[1])).await?; }
+        }
+        let run = p["run"][plat()].as_array().ok_or(how)?;
+        log.push(exec(&fill(run, &ph), Some(d), 3600).await.map_err(|e| format!("could not bring {name}: {e}"))?);
+        if !dir.join(exe_name(name)).is_file() { return Err(format!("{name}'s installer ran but {} is not there", dir.join(exe_name(name)).display())); }
+    }
+    Ok(())
+}
+
 /// A command with environment variables of its own (an action's or a recipe's "env", placeholders filled).
 async fn exec_env(cmd: &[String], cwd: Option<&Path>, secs: u64, env: &[(String, String)]) -> Result<String, String> {
     let Some((prog, rest)) = cmd.split_first() else { return Err("empty command".into()) };
@@ -282,9 +326,15 @@ pub async fn install(id: &str) -> Result<String, String> {
         let target = d.join(to);
         if !target.is_file() { download(m["url"].as_str().unwrap_or(""), &target).await?; }
     }
+    get_programs(&r, &d, &mut log).await?;
     let ph = placeholders(&r, &d);
+    let own: Vec<(String, String)> = r["env"].as_object().into_iter().flatten().map(|(k, v)| (k.clone(), fill(std::slice::from_ref(v), &ph).remove(0)))
+        .chain(program_path(&r, &d)).collect();
     for step in inst["after"].as_array().into_iter().flatten() {
-        log.push(exec(&fill(step.as_array().map(|a| a.as_slice()).unwrap_or(&[]), &ph), Some(&d), 3600).await?);
+        let mut cmd = fill(step.as_array().map(|a| a.as_slice()).unwrap_or(&[]), &ph);
+        // a program the tool brought itself is started from its own folder
+        if let Some(first) = cmd.first_mut() { if let Some(at) = program_dirs(&r, &d).iter().map(|x| x.join(exe_name(first))).find(|x| x.is_file()) { *first = at.display().to_string(); } }
+        log.push(exec_env(&cmd, Some(&d), 3600, &own).await?);
     }
     let _ = std::fs::write(d.join("installed.json"), json!({"recipe": r}).to_string());
     let ph = placeholders(&r, &d);
@@ -314,7 +364,7 @@ pub async fn run(name: &str, args: &Value, ws: &Path) -> Outcome {
     let started = std::time::SystemTime::now() - Duration::from_secs(2);
     let ph = placeholders(&r, &d);
     let env: Vec<(String, String)> = r["env"].as_object().into_iter().flatten().chain(act["env"].as_object().into_iter().flatten())
-        .map(|(k, v)| (k.clone(), fill(std::slice::from_ref(v), &ph).remove(0))).collect();
+        .map(|(k, v)| (k.clone(), fill(std::slice::from_ref(v), &ph).remove(0))).chain(program_path(&r, &d)).collect();
     match exec_env(&cmd, Some(ws), secs, &env).await {
         Err(e) => Outcome::Err(format!("{name} failed: {e}")),
         Ok(log) => {
