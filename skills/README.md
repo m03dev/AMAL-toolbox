@@ -34,6 +34,16 @@ chosen ones reach the model, so the library costs nothing until a job needs it.
 - `open-second-brain/` - github.com/itechmeat/open-second-brain (MIT): an agent-owned Brain/ folder in an Obsidian vault.
 - `memory/` - AMAL's own: `llm-wiki` (Karpathy's LLM Wiki pattern for the vault and projects) and `agent-memory` (the
   seven kinds of memory and how a job uses each).
+- `superpowers/` - github.com/obra/superpowers (MIT, Jesse Vincent): the method - brainstorm the design first, write and
+  execute plans, test-driven development, systematic debugging (root cause before any fix), verification before saying
+  done, code review, parallel agents, writing skills.
+- `ponytail/` - github.com/DietrichGebert/ponytail (MIT): the smallest complete change - reuse what is there before
+  writing anything new, never cutting validation, error handling or security - plus its review, audit and debt skills.
+  AMAL's Code line follows it on every code job.
+- `ecc/` - github.com/affaan-m/ECC (MIT), a chosen part: building, running and measuring an agent harness (loops,
+  verification, evals, search first, prompt optimizer, councils of models, skill scouting), engineering for Rust, Python
+  and C++, security review, MCP servers, video (editing, Remotion, Manim), content and marketing, interface craft; and
+  its planner, architect, reviewer, build-resolver and loop-operator agents.
 
 Each pack has its LICENSE and a PROVENANCE.md with the commit it was copied from (2026-11-09).
 

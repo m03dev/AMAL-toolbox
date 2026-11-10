@@ -91,5 +91,13 @@ mod tests {
         assert!(hits.contains("security-audit"), "{hits}");
         let hits = find("keep a wiki of what we learned, ingest sources and lint pages", 5).to_string();
         assert!(hits.contains("llm-wiki"), "{hits}");
+        // added 2026-11-10: Superpowers, Ponytail and the chosen part of ECC
+        for want in ["systematic-debugging", "verification-before-completion", "ponytail", "ponytail-review", "prompt-optimizer", "search-first", "rust-patterns", "video-editing"] {
+            assert!(names.iter().any(|n| n == want), "{want} missing");
+        }
+        let hits = find("a test failure and unexpected behavior - debug it before proposing fixes", 6).to_string();
+        assert!(hits.contains("systematic-debugging"), "{hits}");
+        let hits = find("simplest solution, least code, no over-engineering", 6).to_string();
+        assert!(hits.contains("ponytail"), "{hits}");
     }
 }
