@@ -1529,7 +1529,7 @@
      "-s",
      "{scale}",
      "-m",
-     "{models}"
+     "{tool}/bin/models"
     ],
     "args": {
      "input": {
@@ -1568,7 +1568,7 @@
     "timeout": 600
    }
   },
-  "notes": "The archive holds the program and models/ at its root; the program looks for models relative to where it is started, so -m {models} points at the tool's own folder. Needs a Vulkan driver (every current NVIDIA/AMD/Intel driver; MoltenVK is built in on macOS).",
+  "notes": "The release is unpacked into the tool's bin/ folder with models/ beside the program; the program looks for models relative to where it is started, so -m {tool}/bin/models points at them (a first run on the PC failed with {models}, 2026-11-10). Needs a Vulkan driver (every current NVIDIA/AMD/Intel driver; MoltenVK is built in on macOS).",
   "verified_from": "release v0.2.5.0 assets (HTTP 200: windows 45.5 MB, macos 51.8 MB); the ubuntu build run here under Mesa lavapipe: -n realesr-animevideov3 -s 2 -m models turned the bundled 220x220 input.jpg into a 440x440 PNG (2026-11-10)."
  }
 ]
