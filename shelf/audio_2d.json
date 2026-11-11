@@ -1483,5 +1483,92 @@
   },
   "notes": "WEIGHTS LICENCE: code is Apache-2.0, but the checkpoints are OpenRAIL++-M (LICENSE-MODEL.txt). Commercial use is allowed, with use-based restrictions that must pass on to anyone you distribute the model to. Outputs are not restricted the same way. The repo's own CLI (script/normals/run.py, script/depth/run.py) only takes --input_rgb_dir (a folder) and writes normals_vis/ + normals_npy/ (or depth_bw/ depth_colored/ depth_npy/) subfolders, so these one-liners call the repo's MarigoldNormalsPipeline/MarigoldDepthPipeline the same way run.py does (from_pretrained(checkpoint) -> pipe(image, ensemble_size=...) -> .normals_img / .depth_np*65535 saved as I;16, mirroring run.py). requirements.txt pins torch==2.4.1/torchvision==0.19.1; on Windows the cu124 index is needed to get CUDA builds. The Mac uses MPS (run.py has --apple_silicon for the same thing). Weights (~2-3 GB each, SD-based) download from Hugging Face on first run. VRAM on 8 GB was not documented; the run.py --fp16 path (variant='fp16', torch_dtype=float16) halves it but is not wired up here. Marigold pipelines also ship in diffusers>=0.28 (MarigoldNormalsPipeline), which was not used here to keep to code read in this repo.",
   "verified_from": "README.md 'Inference' (run.py commands + options list), 'License'; LICENSE.txt + LICENSE-MODEL.txt; script/normals/run.py and script/depth/run.py argparse, device logic, pipeline calls and saving (depth uint16 I;16); marigold/marigold_normals_pipeline.py + marigold_depth_pipeline.py __call__ signatures and output fields; requirements.txt at 2bfbdea"
+ },
+ {
+  "id": "realesrgan",
+  "name": "Real-ESRGAN (ncnn-vulkan)",
+  "area": "2d",
+  "what": "Upscales pictures 2-4x with Real-ESRGAN's anime models - clean ink lines and flat colour stay sharp, so manga panels, sprites and concept art hold up at print size. Runs on any GPU through Vulkan (NVIDIA, AMD, Apple), no Python.",
+  "repo": "https://github.com/xinntao/Real-ESRGAN",
+  "license": "BSD-3-Clause",
+  "weights": "bundled (models/ in the release: realesr-animevideov3 x2/x3/x4, realesrgan-x4plus-anime, realesrgan-x4plus)",
+  "hardware": "gpu",
+  "platforms": [
+   "darwin",
+   "win32",
+   "linux"
+  ],
+  "install": {
+   "kind": "release",
+   "release": {
+    "repo": "xinntao/Real-ESRGAN",
+    "tag": "v0.2.5.0",
+    "assets": {
+     "darwin": "realesrgan-ncnn-vulkan-20220424-macos.zip",
+     "win32": "realesrgan-ncnn-vulkan-20220424-windows.zip",
+     "linux": "realesrgan-ncnn-vulkan-20220424-ubuntu.zip"
+    },
+    "exe": "realesrgan-ncnn-vulkan"
+   }
+  },
+  "check": [
+   "{exe}",
+   "-h"
+  ],
+  "actions": {
+   "upscale": {
+    "what": "Upscale one picture: scale 2, 3 or 4 with realesr-animevideov3 (fast, line art and anime), or scale 4 with realesrgan-x4plus-anime (slower, the finest anime detail) or realesrgan-x4plus (photos, painted art).",
+    "cmd": [
+     "{exe}",
+     "-i",
+     "{input}",
+     "-o",
+     "{output}",
+     "-n",
+     "{model}",
+     "-s",
+     "{scale}",
+     "-m",
+     "{models}"
+    ],
+    "args": {
+     "input": {
+      "type": "file",
+      "exts": [
+       ".png",
+       ".jpg",
+       ".jpeg",
+       ".webp"
+      ],
+      "what": "the picture"
+     },
+     "output": {
+      "type": "out",
+      "ext": ".png",
+      "default": "{input_stem}_x{scale}.png"
+     },
+     "scale": {
+      "type": "int",
+      "default": 2,
+      "min": 2,
+      "max": 4,
+      "what": "how many times larger (realesrgan-x4plus models: 4 only)"
+     },
+     "model": {
+      "type": "choice",
+      "default": "realesr-animevideov3",
+      "choices": [
+       "realesr-animevideov3",
+       "realesrgan-x4plus-anime",
+       "realesrgan-x4plus"
+      ],
+      "what": "which model"
+     }
+    },
+    "timeout": 600
+   }
+  },
+  "notes": "The archive holds the program and models/ at its root; the program looks for models relative to where it is started, so -m {models} points at the tool's own folder. Needs a Vulkan driver (every current NVIDIA/AMD/Intel driver; MoltenVK is built in on macOS).",
+  "verified_from": "release v0.2.5.0 assets (HTTP 200: windows 45.5 MB, macos 51.8 MB); the ubuntu build run here under Mesa lavapipe: -n realesr-animevideov3 -s 2 -m models turned the bundled 220x220 input.jpg into a 440x440 PNG (2026-11-10)."
  }
 ]

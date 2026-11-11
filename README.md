@@ -8,7 +8,7 @@ and answers with them. It remembers how each run went, and keeps new code a job 
 | Folder | What |
 | --- | --- |
 | `capabilities/` | tested commands - `capability.json` each: what it takes, the command, the files it makes, a check |
-| `shelf/` | the Python app's (0.16) Tool Shelf: 54 open-source tools (background removal, mesh LODs, remeshing, captions, sprites, ...), each installed on first use into its own folder |
+| `shelf/` | the Python app's (0.16) Tool Shelf: 55 open-source tools (background removal, mesh LODs, remeshing, captions, sprites, Real-ESRGAN upscaling, ...), each installed on first use into its own folder |
 | `skills/` | the Python app's (0.16) skills and agents (marketing, writing, Anthropic's open skills, Ruflo's agents) |
 | `data/` (not in git) | what it learned: new capabilities, installed tools, how each run went |
 
