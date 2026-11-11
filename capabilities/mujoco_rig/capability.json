@@ -1,0 +1,16 @@
+{
+  "name": "mujoco_rig",
+  "does": "Check a skeleton's range of motion in MuJoCo (Google DeepMind's physics engine) before it is rigged or animated: every joint is turned through its range and through mixed poses, and parts that pass through each other are reported - at rest (a bad skeleton: a limb inside the body, two tails on top of each other) and in motion (how far each joint turns before its part hits another). Reads the plan `amald skeleton` writes; writes a report with PASS or FAIL, the free range per joint and the pairs that collide. Part thickness is taken from the kind of part and the model's height (not yet measured on the mesh), so the ranges are a guide for animation limits and only a joint that can hardly move at all fails. Needs no graphics card",
+  "when": ["rig", "rigging", "skeleton", "joint", "joints", "range of motion", "self-collision", "limits", "mujoco", "physics", "animation", "deform"],
+  "args": {
+    "skeleton": {"type": "string", "description": "the skeleton plan (.json) from `amald skeleton <model> <plan.json>`"},
+    "out": {"type": "string", "description": "the report to write", "default": "renders/rig_motion.json"},
+    "poses": {"type": "integer", "description": "mixed poses to try", "default": 300},
+    "min_free": {"type": "number", "description": "degrees a joint must be able to turn at least one way about each axis before its part hits another", "default": 8}
+  },
+  "required": ["skeleton"],
+  "run": "{python} {dir}/rig_motion.py {skeleton} --out {out} --poses {poses} --min-free {min_free}",
+  "outputs": ["{out}"],
+  "check": "the report says PASS",
+  "timeout_s": 300
+}
