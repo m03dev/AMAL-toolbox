@@ -1,15 +1,56 @@
 {
   "name": "logo_marks",
-  "does": "Brand marks from real letters for a name (or acronym): every font x five layouts (word, tile = app icon, badge, stack, cut), plus one contact sheet to look at",
-  "when": ["logo", "brand", "rebrand", "wordmark", "monogram", "lettermark", "badge", "app icon", "acronym"],
+  "does": "Brand marks from real letters for a name (or acronym): every font x five layouts (word, tile = app icon, badge, stack, cut), plus one contact sheet to look at. A long name's tile, badge, stack and cut use its monogram (EMBER & OAK -> E&O) with the whole name beneath where there is room. Give `picture` - the mascot, a product shot, anything the logo has to belong with - and the marks take their colours from it, so the two look like one brand",
+  "when": [
+    "logo",
+    "brand",
+    "rebrand",
+    "wordmark",
+    "monogram",
+    "lettermark",
+    "badge",
+    "app icon",
+    "acronym"
+  ],
   "args": {
-    "text": {"type": "string", "description": "the name or letters, e.g. NOVA"},
-    "fonts": {"type": "array", "description": "3-4 font ids that fit the brief (font_list shows them)", "default": ["russo-one", "syne", "michroma", "archivo-black"]},
-    "palettes": {"type": "array", "description": "brand colours, hex", "default": ["#111111"]},
-    "layouts": {"type": "array", "description": "any of word tile badge stack cut (default all)"}
+    "text": {
+      "type": "string",
+      "description": "the name or letters, e.g. NOVA"
+    },
+    "fonts": {
+      "type": "array",
+      "description": "3-4 font ids that fit the brief (font_list shows them)",
+      "default": [
+        "russo-one",
+        "syne",
+        "michroma",
+        "archivo-black"
+      ]
+    },
+    "palettes": {
+      "type": "array",
+      "description": "brand colours, hex - used when there is no picture",
+      "default": [
+        "#111111"
+      ]
+    },
+    "layouts": {
+      "type": "array",
+      "description": "any of word tile badge stack cut (default all)"
+    },
+    "picture": {
+      "type": "string",
+      "description": "a picture the marks have to belong with (the job's mascot or key art): its main colours become the palette",
+      "default": "none"
+    }
   },
-  "required": ["text"],
-  "run": "{python} {root}/capabilities/logo/scripts/marks_svg.py {text} --out brand/{text}/marks [--fonts {fonts}] [--palettes {palettes}] [--layouts {layouts}]",
-  "outputs": ["brand/{text}/marks/sheet.png", "brand/{text}/marks/*.svg"],
+  "required": [
+    "text"
+  ],
+  "run": "{python} {root}/capabilities/logo/scripts/marks_svg.py {text} --out brand/{text}/marks [--fonts {fonts}] [--palettes {palettes}] [--picture {picture}] [--layouts {layouts}]",
+  "outputs": [
+    "brand/{text}/marks/sheet.png",
+    "brand/{text}/marks/*.svg"
+  ],
   "timeout_s": 600
 }
