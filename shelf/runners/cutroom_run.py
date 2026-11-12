@@ -25,7 +25,7 @@ OPTIONS_JSON (every key optional; what is not given keeps the short-video defaul
   transition      "Cut" | "Fade" | "Slide" | "Zoom" | "Mixed"
   cut_seconds     1-10                               the longest a picture stays before the next
   fit             "Fill" | "Fit"                    crop to fill the frame, or keep the whole picture
-  language        e.g. "en", "es"
+  language        "English", "Spanish" ... or a code ("en", "es")
 """
 import glob, json, os, re, shutil, subprocess, sys
 
@@ -114,8 +114,14 @@ elif on("music", True):
     cmd += ["--bgm-type", "random", "--bgm-volume", f"{num('music_volume', 0.15, 0, 0.6):.2f}"]
 else:
     cmd += ["--bgm-type", "none"]
-if str(opt.get("language", "")).strip():
-    cmd += ["--video-language", str(opt["language"]).strip()]
+# the narration's language as a code ("English" -> en); a name it does not know is left to the voice
+LANGS = {"english": "en", "spanish": "es", "french": "fr", "german": "de", "italian": "it", "portuguese": "pt",
+         "arabic": "ar", "japanese": "ja", "korean": "ko", "chinese": "zh", "russian": "ru", "dutch": "nl", "turkish": "tr",
+         "hindi": "hi", "polish": "pl", "swedish": "sv"}
+lang = str(opt.get("language", "")).strip()
+lang = LANGS.get(lang.lower(), lang if re.fullmatch(r"[a-z]{2}(-[A-Z]{2})?", lang) else "")
+if lang:
+    cmd += ["--video-language", lang]
 if script != "-":
     cmd += ["--video-script", script]
 
