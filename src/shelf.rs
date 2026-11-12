@@ -46,7 +46,28 @@ fn root() -> Option<PathBuf> {
     Some(place::data().join("tools"))
 }
 
-fn tool_dir(id: &str) -> Option<PathBuf> { root().map(|r| r.join(id)) }
+/// A tool's folder. A tool renamed on the shelf names its earlier ids in `was`: the first time it is asked for under
+/// its new name, the folder installed under an earlier one becomes its own - no second download and install (the
+/// video composer was renamed from moneyprinter to cutroom, 2026-11-12, with its install on the PC).
+fn tool_dir(id: &str) -> Option<PathBuf> {
+    let root = root()?;
+    let dir = root.join(id);
+    if !dir.exists() {
+        let was: Vec<String> = recipes().into_iter().find(|r| r["id"] == id)
+            .and_then(|r| r["was"].as_array().map(|a| a.iter().filter_map(|w| w.as_str().filter(|w| valid_id(w)).map(String::from)).collect()))
+            .unwrap_or_default();
+        adopt_earlier(&root, id, &was);
+    }
+    Some(dir)
+}
+
+/// The first earlier id with an installed folder under `root` becomes `id`'s folder.
+fn adopt_earlier(root: &Path, id: &str, was: &[String]) -> bool {
+    match was.iter().map(|w| root.join(w)).find(|d| d.join("installed.json").is_file()) {
+        Some(old) => std::fs::rename(&old, root.join(id)).is_ok(),
+        None => false,
+    }
+}
 
 pub fn installed(id: &str) -> bool { tool_dir(id).is_some_and(|d| d.join("installed.json").is_file()) }
 
@@ -465,6 +486,21 @@ fn build(r: &Value, act: &Value, args: &Value, ws: &Path, d: &Path) -> Result<(V
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_renamed_tool_takes_over_its_earlier_install() {
+        let root = std::env::temp_dir().join(format!("toolbox-was-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(root.join("moneyprinter/venv")).unwrap();
+        std::fs::write(root.join("moneyprinter/installed.json"), "{}").unwrap();
+        assert!(!adopt_earlier(&root, "cutroom", &["nothing-here".into()]));
+        assert!(adopt_earlier(&root, "cutroom", &["moneyprinter".into()]));
+        assert!(root.join("cutroom/installed.json").is_file() && root.join("cutroom/venv").is_dir() && !root.join("moneyprinter").exists());
+        let cut = all_recipes().into_iter().find(|r| r["id"] == "cutroom").expect("the shelf has cutroom");
+        assert_eq!(cut["was"][0], "moneyprinter");
+        assert!(cut["actions"]["short"]["cmd"].as_array().unwrap().iter().any(|a| a == "{options}"));
+        let _ = std::fs::remove_dir_all(&root);
+    }
 
     fn all_recipes() -> Vec<Value> {
         let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("shelf");

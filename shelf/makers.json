@@ -278,10 +278,10 @@
   "verified_from": "README (npm @alibaba-group/open-code-review, ocr review / --from --to / --commit, --format json --output) and the configuration docs' OCR_LLM_URL / OCR_LLM_AUTH_TOKEN"
  },
  {
-  "id": "moneyprinter",
-  "name": "MoneyPrinterTurbo (short videos from a topic)",
+  "id": "cutroom",
+  "name": "Cutroom (narrated shorts: voice, captions, music and the cut)",
   "area": "video",
-  "what": "A topic or a script becomes a narrated short (TikTok/Reels 9:16 or 16:9) with subtitles and music: script by AMAL's free models, voice by edge-tts, footage from the job's own pictures and clips (or Pexels with a free key).",
+  "what": "A script and the job's own pictures and clips become a finished short (9:16, 16:9 or 1:1): the voice, word-by-word captions in the platforms' safe zone, a slow camera move on every picture, transitions, music under the voice - each one set by AMAL's settings. Built on MoneyPrinterTurbo (MIT): its voice (edge-tts), captions (faster-whisper) and render.",
   "repo": "https://github.com/harry0703/MoneyPrinterTurbo",
   "license": "MIT",
   "weights": "faster-whisper is fetched by the tool when subtitles use it",
@@ -308,17 +308,18 @@
   ],
   "actions": {
    "short": {
-    "what": "Make a short video about a topic (or from a script) out of the pictures and clips in a folder of this job; the MP4 lands in the job's folder.",
+    "what": "Cut a short video from a script and the pictures and clips in a folder of this job, in their order; the MP4 lands in the job's folder.",
     "cmd": [
      "{python}",
-     "{runners}/moneyprinter_run.py",
+     "{runners}/cutroom_run.py",
      "{src}",
      "{video}",
      "{topic}",
      "{media}",
      "{aspect}",
      "{voice}",
-     "{script}"
+     "{script}",
+     "{options}"
     ],
     "args": {
      "video": {
@@ -351,13 +352,21 @@
       "type": "text",
       "default": "-",
       "what": "the narration word for word, or '-' to have it written"
+     },
+     "options": {
+      "type": "text",
+      "default": "-",
+      "what": "how it looks and sounds, as JSON: captions, caption_style (Word pop / Word by word / Sentence), caption_place (Lower third / Bottom / Middle / Top), caption_size, caption_color, caption_outline, caption_box, font (Bold / Clean / Display / Script), voice_speed, voice_volume, music, music_volume, music_file, motion (Slow zoom / Still), transition (Cut / Fade / Slide / Zoom / Mixed), cut_seconds, fit (Fill / Fit), language - see the runner"
      }
     },
     "timeout": 5400
    }
   },
   "notes": "The online stock footage providers need keys of their own; the default here is local footage from the job, so nothing is paid. edge-tts needs the internet.",
-  "verified_from": "cli.py (--video-subject, --video-script, --video-source local, --video-materials, --video-aspect, --voice-name, --task-id; prints {task_id, result{videos}}) and config.example.toml (llm_provider, openai_base_url, openai_api_key, openai_model_name) at c2353548"
+  "verified_from": "cli.py (--video-subject, --video-script, --video-source local, --video-materials, --video-aspect, --voice-name, --task-id; prints {task_id, result{videos}}) and config.example.toml (llm_provider, openai_base_url, openai_api_key, openai_model_name) at c2353548",
+  "was": [
+   "moneyprinter"
+  ]
  },
  {
   "id": "markovjunior",

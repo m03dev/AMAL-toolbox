@@ -66,7 +66,7 @@ async fn list(Query(q): Query<HashMap<String, String>>) -> Json<Value> {
     }).collect::<Vec<_>>()))
 }
 
-/// The tools a message names in its own words ("with markovjunior", "use moneyprinterturbo"): every entry whose own
+/// The tools a message names in its own words ("with markovjunior", "use cutroom"): every entry whose own
 /// name (before its action) is said in it - looked for in the whole catalog, not in the best matches for its words.
 async fn named(Query(q): Query<HashMap<String, String>>) -> Json<Value> {
     let flat = |t: &str| t.to_lowercase().chars().filter(|c| c.is_alphanumeric()).collect::<String>();
