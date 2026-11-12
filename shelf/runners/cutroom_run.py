@@ -83,9 +83,11 @@ colour = COLOURS.get(colour.lower(), colour if re.fullmatch(r"#[0-9a-fA-F]{6}", 
 
 style = pick("caption_style", {"word pop": ("word_by_word", "pop_spring"), "word by word": ("word_by_word", "none"),
                                "sentence": ("sentence", "none")}, "Word pop")
-# out of the platforms' buttons: a vertical feed covers its bottom fifth or more, so captions sit at about two thirds
-place = pick("caption_place", {"lower third": "two_thirds_bottom", "bottom": "bottom", "middle": "center", "top": "top"},
-             "Lower third")
+# out of the platforms' buttons: a vertical feed covers its bottom fifth to third, so the lower third sits 68% down.
+# (MoneyPrinterTurbo's "two_thirds_bottom" is two thirds UP from the bottom - a third from the top, where the first
+# Cutroom video put them.)
+place = pick("caption_place", {"lower third": ("custom", 68), "bottom": ("bottom", None), "middle": ("center", None),
+                               "top": ("top", None)}, "Lower third")
 transition = pick("transition", {"cut": "none", "fade": "fade-in", "slide": "slide-in", "zoom": "zoom-in",
                                  "mixed": "shuffle"}, "Cut")
 
@@ -101,9 +103,11 @@ cmd = [py, "cli.py", "--video-subject", topic, "--video-source", "local", "--vid
        "--voice-volume", f"{num('voice_volume', 1.0, 0.5, 2.0):.2f}"]
 if on("captions", True):
     cmd += ["--subtitle-enabled", "--subtitle-display-mode", style[0], "--subtitle-animation", style[1],
-            "--subtitle-position", place, "--font-name", font, "--text-fore-color", colour,
-            "--font-size", str(int(num("caption_size", 72, 40, 120))),
+            "--subtitle-position", place[0], "--font-name", font, "--text-fore-color", colour,
+            "--font-size", str(int(num("caption_size", 90, 40, 120))),
             "--stroke-color", "#000000", "--stroke-width", f"{num('caption_outline', 2, 0, 6):.1f}"]
+    if place[1] is not None:
+        cmd += ["--custom-position", str(place[1])]
     cmd += ["--subtitle-background-enabled" if on("caption_box", False) else "--no-subtitle-background-enabled"]
 else:
     cmd += ["--no-subtitle-enabled"]
