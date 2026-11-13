@@ -141,6 +141,20 @@ def rendercv_input(r, theme, page):
     return clean({"cv": cv, "design": {"theme": theme, "page": {"size": size}}})
 
 
+def rendercv_problems(out):
+    """RenderCV's validation table (Location | Input Value | Explanation) as sentences; else the last lines it printed."""
+    rows = []
+    for line in out.splitlines():
+        cells = [c.strip() for c in line.strip().strip("│").split("│")]
+        cells = [c for c in cells if c]
+        if len(cells) == 3 and cells[0] != "Location" and not set(cells[0]) <= set("─┼├┤"):
+            rows.append(f"{cells[0]} ({cells[1]}): {cells[2]}")
+    if rows:
+        return "; ".join(rows)
+    tail = [l.strip("│ ╭╮╰╯─") for l in out.strip().splitlines() if l.strip("│ ╭╮╰╯─")]
+    return " ".join(tail[-6:]) or "it printed nothing"
+
+
 def pdf_pages(pdf):
     try:
         out = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True, timeout=30).stdout
@@ -165,11 +179,11 @@ def resume(src, out, theme, page, job=""):
     with open(yml, "w", encoding="utf-8") as f:   # kept beside the PDF: the resume as RenderCV reads it, to edit by hand
         y.dump(data, f)
     pdf, png = work / "resume.pdf", work / "resume.png"
+    env = dict(os.environ, COLUMNS="240", NO_COLOR="1", PYTHONIOENCODING="utf-8")   # its tables unwrapped, as plain text
     p = subprocess.run([sys.executable, "-m", "rendercv", "render", str(yml), "-o", str(work), "-pdf", str(pdf), "-png", str(png),
-                        "-nomd", "-nohtml", "-q"], capture_output=True, text=True, timeout=600)
+                        "-nomd", "-nohtml"], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=600, env=env)
     if not pdf.is_file():
-        tail = (p.stderr or p.stdout).strip().splitlines()
-        done(False, error="RenderCV did not make the PDF: " + " ".join(l.strip("│ ") for l in tail[-6:]))
+        done(False, error="RenderCV did not make the PDF: " + rendercv_problems(p.stdout + "\n" + p.stderr))
     shutil.copyfile(pdf, out)
     pngs = sorted(work.glob("resume*.png"))
     files = [str(out), str(yml)]
