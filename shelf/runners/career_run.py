@@ -280,7 +280,8 @@ def jobs(terms, location, out, count, days, remote, sites):
         names = list(dict.fromkeys(SITE_NAMES[k] for k in (x.strip().lower() for x in sites.split(",")) if k in SITE_NAMES)) or ["indeed", "linkedin", "google"]
     count, hours = max(1, min(int(float(count)), 200)), max(1, int(float(days) * 24))
     kw = dict(site_name=names, search_term=terms, location=location or None, results_wanted=count, hours_old=hours,
-              is_remote=str(remote).lower() in ("true", "yes", "1", "remote", "on"), description_format="markdown", verbose=0)
+              is_remote=str(remote).lower() in ("true", "yes", "1", "remote", "on"), description_format="markdown", verbose=0,
+              linkedin_fetch_description=True)   # LinkedIn's postings come with their text only when asked
     if "google" in names:
         kw["google_search_term"] = f"{terms} jobs near {location} since {'yesterday' if hours <= 24 else 'last week'}" if location else f"{terms} jobs"
     if "indeed" in names or "glassdoor" in names:
@@ -295,13 +296,25 @@ def jobs(terms, location, out, count, days, remote, sites):
     logging.getLogger("jobspy").addHandler(Keep())
     for n in names:
         logging.getLogger(f"jobspy.{n}").addHandler(Keep())
-    try:
-        df = scrape_jobs(**kw)
-    except Exception as e:
-        errors.append(str(e)[:300])
-        df = None
+    def search(words):
+        k = dict(kw, search_term=words)
+        if "google_search_term" in k:
+            k["google_search_term"] = kw["google_search_term"].replace(terms, words, 1)
+        try:
+            return scrape_jobs(**k)
+        except Exception as e:
+            errors.append(str(e)[:300])
+            return None
+    frames = [search(terms)]
+    widened = ""
+    # job boards match every word: a long search that finds little is asked once more with its first three words
+    got = sum(len(f) for f in frames if f is not None)
+    words = terms.split()
+    if got < max(5, count // 4) and len(words) > 3:
+        widened = " ".join(words[:3])
+        frames.append(search(widened))
     found = []
-    if df is not None and len(df):
+    for df in [f for f in frames if f is not None and len(f)]:
         for _, row in df.iterrows():
             g = lambda k: (None if str(row.get(k, "")) in ("", "nan", "None", "NaT") else row.get(k))
             pay = None
@@ -320,7 +333,13 @@ def jobs(terms, location, out, count, days, remote, sites):
         unique.append(j)
     out = Path(out)
     out.write_text(json.dumps({"terms": terms, "location": location, "sites": names, "jobs": unique}, ensure_ascii=False, indent=1), encoding="utf-8")
-    lines = [f"# {len(unique)} jobs: {terms}" + (f" near {location}" if location else ""), "", "| # | Title | Company | Place | Pay | Site |", "|---|---|---|---|---|---|"]
+    failed_now = sorted({e.split(":")[0] for e in errors})
+    lines = [f"# {len(unique)} jobs: {terms}" + (f" near {location}" if location else ""), ""]
+    if widened:
+        lines += [f"Few postings matched every word, so the search was also run for \"{widened}\".", ""]
+    if failed_now:
+        lines += [f"Sites that turned the search away this time: {', '.join(failed_now)}.", ""]
+    lines += ["| # | Title | Company | Place | Pay | Site |", "|---|---|---|---|---|---|"]
     for i, j in enumerate(unique, 1):
         lines.append(f"| {i} | [{j['title']}]({j['url']}) | {j['company'] or ''} | {j['place'] or ''}{' (remote)' if j['remote'] and 'remote' not in str(j['place'] or '').lower() else ''} | {j['pay'] or ''} | {j['site']} |")
     # for ranking: every posting in a few lines (its title, company, place, pay, link and the start of what it asks)
@@ -335,7 +354,7 @@ def jobs(terms, location, out, count, days, remote, sites):
         if errors:
             done(False, error=f"no site answered ({', '.join(failed)}): {errors[0]}", files=[str(out)])
         done(False, error="no job was found for those words and place in that time - widen the place, the words or the hours", files=[str(out)])
-    done(True, files=[str(out), str(md), str(brief)], found=len(unique), sites_failed=failed)
+    done(True, files=[str(out), str(md), str(brief)], found=len(unique), sites_failed=failed, widened=widened or None)
 
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
