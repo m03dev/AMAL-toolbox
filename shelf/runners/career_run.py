@@ -58,6 +58,14 @@ def when(d):
     return f"{m.group(1)}-{int(m.group(2)):02d}" if m.group(2) else m.group(1)
 
 
+def link(u):
+    """A web address as RenderCV and browsers take it: samrivera.example.com -> https://samrivera.example.com."""
+    u = str(u or "").strip()
+    if not u or " " in u or "." not in u:
+        return None
+    return u if re.match(r"^[a-z][a-z0-9+.-]*://", u, re.I) else "https://" + u.lstrip("/")
+
+
 def clean(x):
     if isinstance(x, list):
         return [clean(v) for v in x if v not in (None, "", [], {})]
@@ -82,7 +90,7 @@ def rendercv_input(r, theme, page):
     b = r.get("basics") or {}
     loc = b.get("location") or {}
     cv = {"name": b.get("name"), "headline": b.get("label"), "email": b.get("email"), "phone": None,
-          "website": b.get("url") or None,
+          "website": link(b.get("url")),
           "location": ", ".join(x for x in [loc.get("city"), loc.get("region"), loc.get("countryCode")] if x) or None}
     phone = re.sub(r"[^\d+]", "", str(b.get("phone") or ""))
     if phone:
@@ -93,8 +101,8 @@ def rendercv_input(r, theme, page):
         user = str(p.get("username") or "").strip() or str(p.get("url") or "").rstrip("/").split("/")[-1]
         if net and user:
             socials.append({"network": net, "username": user})
-        elif p.get("url"):
-            extra.append({"fontawesome_icon": "link", "placeholder": p.get("network") or p["url"], "url": p["url"]})
+        elif link(p.get("url")):
+            extra.append({"fontawesome_icon": "link", "placeholder": p.get("network") or p["url"], "url": link(p["url"])})
     cv["social_networks"] = socials
     cv["custom_connections"] = extra
     sec = {}
@@ -110,14 +118,14 @@ def rendercv_input(r, theme, page):
                                      "highlights": ([f"GPA: {e['score']}"] if e.get("score") else []) + list(e.get("courses") or [])})
                             for e in r["education"]]
     if r.get("projects"):
-        sec["projects"] = [span(p, {"name": f"[{p['name']}]({p['url']})" if p.get("url") else p.get("name"),
+        sec["projects"] = [span(p, {"name": f"[{p['name']}]({link(p['url'])})" if link(p.get("url")) else p.get("name"),
                                     "summary": p.get("description"), "highlights": p.get("highlights")}) for p in r["projects"]]
     if r.get("volunteer"):
         sec["volunteering"] = [span(v, {"company": v.get("organization"), "position": v.get("position"),
                                         "summary": v.get("summary"), "highlights": v.get("highlights")}) for v in r["volunteer"]]
     if r.get("publications"):
         sec["publications"] = [{"title": p.get("name"), "authors": [b.get("name")], "journal": p.get("publisher"),
-                                "date": when(p.get("releaseDate")), "url": p.get("url")} for p in r["publications"]]
+                                "date": when(p.get("releaseDate")), "url": link(p.get("url"))} for p in r["publications"]]
     if r.get("awards"):
         sec["awards"] = [{"bullet": " - ".join(x for x in [a.get("title"), a.get("awarder"), (when(a.get("date")) or "")[:4]] if x)} for a in r["awards"]]
     if r.get("certificates"):
