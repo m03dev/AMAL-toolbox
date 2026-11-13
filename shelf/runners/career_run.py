@@ -1,6 +1,6 @@
 """Career: a resume as data, made into finished pages, and the jobs that fit it.
 
-    career_run.py resume    <resume.json> <out.pdf> <theme> <page> [<job name>]
+    career_run.py resume    <resume.json> <out.pdf> <theme> <page> [<length: One page | Two pages | As long as it needs>]
     career_run.py letter    <letter.md> <resume.json> <out.pdf>
     career_run.py jobs      <terms> <location> <out.json> <count> <days> <remote> <sites>
     career_run.py portfolio <resume.json> <media dir or -> <out folder> <style>
@@ -164,7 +164,10 @@ def pdf_pages(pdf):
         return None
 
 
-def resume(src, out, theme, page, job=""):
+PAGES = {"one page": 1, "two pages": 2}
+
+
+def resume(src, out, theme, page, length=""):
     from ruamel.yaml import YAML  # RenderCV's own YAML library
     r = load_resume(src)
     theme = theme if theme in THEMES else "classic"
@@ -198,6 +201,9 @@ def resume(src, out, theme, page, job=""):
             f.unlink()
         except OSError:
             pass
+    most = PAGES.get(str(length).strip().lower())
+    if most and pages and pages > most:   # checked before it counts: the length he set is the length he gets
+        done(False, error=f"the resume came out {pages} pages; {length} was asked - fewer highlights, or Length: Two pages", files=files)
     done(True, files=files, pages=pages, theme=theme)
 
 

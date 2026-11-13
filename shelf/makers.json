@@ -577,7 +577,8 @@
      "{resume}",
      "{pdf}",
      "{theme}",
-     "{page}"
+     "{page}",
+     "{length}"
     ],
     "args": {
      "resume": {
@@ -611,6 +612,11 @@
        "A4"
       ],
       "default": "Letter"
+     },
+     "length": {
+      "type": "text",
+      "default": "As long as it needs",
+      "what": "One page or Two pages: a PDF longer than that fails the step"
      }
     }
    },
