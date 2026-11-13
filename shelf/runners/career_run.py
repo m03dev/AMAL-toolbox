@@ -323,6 +323,11 @@ def jobs(terms, location, out, count, days, remote, sites):
     lines = [f"# {len(unique)} jobs: {terms}" + (f" near {location}" if location else ""), "", "| # | Title | Company | Place | Pay | Site |", "|---|---|---|---|---|---|"]
     for i, j in enumerate(unique, 1):
         lines.append(f"| {i} | [{j['title']}]({j['url']}) | {j['company'] or ''} | {j['place'] or ''}{' (remote)' if j['remote'] and 'remote' not in str(j['place'] or '').lower() else ''} | {j['pay'] or ''} | {j['site']} |")
+    # for ranking: every posting in a few lines (its title, company, place, pay, link and the start of what it asks)
+    brief = out.with_name(out.stem + "_brief.json")
+    brief.write_text(json.dumps([{"n": i, "title": j["title"], "company": j["company"], "place": j["place"], "remote": j["remote"], "pay": j["pay"],
+                                  "url": j["url"], "asks": re.sub(r"\s+", " ", j["description"])[:420]} for i, j in enumerate(unique, 1)],
+                                ensure_ascii=False, indent=0), encoding="utf-8")
     md = out.with_suffix(".md")
     md.write_text("\n".join(lines) + "\n", encoding="utf-8")
     failed = sorted({e.split(":")[0] for e in errors})
@@ -330,7 +335,7 @@ def jobs(terms, location, out, count, days, remote, sites):
         if errors:
             done(False, error=f"no site answered ({', '.join(failed)}): {errors[0]}", files=[str(out)])
         done(False, error="no job was found for those words and place in that time - widen the place, the words or the hours", files=[str(out)])
-    done(True, files=[str(out), str(md)], found=len(unique), sites_failed=failed)
+    done(True, files=[str(out), str(md), str(brief)], found=len(unique), sites_failed=failed)
 
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
