@@ -540,5 +540,215 @@
   "actions": {},
   "notes": "A desktop app, not a command line: AMAL's agents open it for the owner; its generations land in his folders and the Library picks them up.",
   "verified_from": "repository description and README (Rust desktop app, image and video generation IDE)"
+ },
+ {
+  "id": "career",
+  "name": "Career (resume, cover letter, job search, portfolio)",
+  "area": "career",
+  "what": "A resume kept as JSON Resume data becomes a typeset PDF in one of seven RenderCV themes, with a picture of each page to look at; a cover letter set in the same type; jobs found on LinkedIn, Indeed, Glassdoor, Google and ZipRecruiter with JobSpy (title, company, place, pay, the link to apply, the posting); a self-contained portfolio page from the resume and chosen pictures and videos.",
+  "repo": "https://github.com/rendercv/rendercv",
+  "license": "MIT (RenderCV, JobSpy)",
+  "hardware": "cpu",
+  "platforms": [
+   "darwin",
+   "win32",
+   "linux"
+  ],
+  "install": {
+   "kind": "pip",
+   "python": "3.12",
+   "pip": [
+    "rendercv[full]==2.8",
+    "python-jobspy==1.4.1"
+   ]
+  },
+  "check": [
+   "{python}",
+   "-c",
+   "import rendercv, typst, jobspy; print('ok')"
+  ],
+  "actions": {
+   "resume": {
+    "what": "Typeset a resume (JSON Resume data) as a PDF; a PNG of each page and the RenderCV YAML land beside it.",
+    "cmd": [
+     "{python}",
+     "{runners}/career_run.py",
+     "resume",
+     "{resume}",
+     "{pdf}",
+     "{theme}",
+     "{page}"
+    ],
+    "args": {
+     "resume": {
+      "type": "file",
+      "exts": [
+       ".json"
+      ],
+      "what": "the resume as JSON Resume data"
+     },
+     "pdf": {
+      "type": "out",
+      "default": "resume.pdf"
+     },
+     "theme": {
+      "type": "choice",
+      "choices": [
+       "classic",
+       "engineeringresumes",
+       "sb2nov",
+       "moderncv",
+       "engineeringclassic",
+       "harvard",
+       "ember"
+      ],
+      "default": "classic"
+     },
+     "page": {
+      "type": "choice",
+      "choices": [
+       "Letter",
+       "A4"
+      ],
+      "default": "Letter"
+     }
+    }
+   },
+   "letter": {
+    "what": "Set a cover letter (Markdown) as a PDF in the resume's type, the resume's name and contact on top.",
+    "cmd": [
+     "{python}",
+     "{runners}/career_run.py",
+     "letter",
+     "{letter}",
+     "{resume}",
+     "{pdf}",
+     "{page}"
+    ],
+    "args": {
+     "letter": {
+      "type": "file",
+      "exts": [
+       ".md",
+       ".txt"
+      ],
+      "what": "the letter's text"
+     },
+     "resume": {
+      "type": "file",
+      "exts": [
+       ".json"
+      ],
+      "what": "the resume (for the name and contact)"
+     },
+     "pdf": {
+      "type": "out",
+      "default": "cover_letter.pdf"
+     },
+     "page": {
+      "type": "choice",
+      "choices": [
+       "Letter",
+       "A4"
+      ],
+      "default": "Letter"
+     }
+    }
+   },
+   "jobs": {
+    "what": "Find job postings: every one found with its title, company, place, pay, link and description, as jobs.json and a table in jobs.md.",
+    "cmd": [
+     "{python}",
+     "{runners}/career_run.py",
+     "jobs",
+     "{terms}",
+     "{location}",
+     "{out}",
+     "{count}",
+     "{hours}",
+     "{remote}",
+     "{sites}"
+    ],
+    "args": {
+     "terms": {
+      "type": "text",
+      "what": "what to search for: a job title and a skill or two"
+     },
+     "location": {
+      "type": "text",
+      "what": "a city and state or a country; '-' for anywhere",
+      "default": "-"
+     },
+     "out": {
+      "type": "out",
+      "default": "jobs.json"
+     },
+     "count": {
+      "type": "int",
+      "min": 1,
+      "max": 200,
+      "default": 30
+     },
+     "hours": {
+      "type": "int",
+      "min": 1,
+      "max": 2160,
+      "default": 168,
+      "what": "posted within this many hours"
+     },
+     "remote": {
+      "type": "choice",
+      "choices": [
+       "yes",
+       "no"
+      ],
+      "default": "no"
+     },
+     "sites": {
+      "type": "text",
+      "what": "comma-separated: indeed, linkedin, glassdoor, google, zip_recruiter",
+      "default": "indeed,linkedin,google"
+     }
+    }
+   },
+   "portfolio": {
+    "what": "A self-contained portfolio web page (index.html and its media folder) from the resume and the pictures and videos in a folder.",
+    "cmd": [
+     "{python}",
+     "{runners}/career_run.py",
+     "portfolio",
+     "{resume}",
+     "{media}",
+     "{site}",
+     "{style}"
+    ],
+    "args": {
+     "resume": {
+      "type": "file",
+      "exts": [
+       ".json"
+      ],
+      "what": "the resume"
+     },
+     "media": {
+      "type": "text",
+      "default": "-",
+      "what": "folder of this job with the pictures and videos to show, or '-'"
+     },
+     "site": {
+      "type": "out",
+      "default": "portfolio"
+     },
+     "style": {
+      "type": "choice",
+      "choices": [
+       "Light",
+       "Dark"
+      ],
+      "default": "Light"
+     }
+    }
+   }
+  }
  }
 ]
