@@ -186,12 +186,19 @@ def resume(src, out, theme, page, job=""):
         done(False, error="RenderCV did not make the PDF: " + rendercv_problems(p.stdout + "\n" + p.stderr))
     shutil.copyfile(pdf, out)
     pngs = sorted(work.glob("resume*.png"))
+    pages = pdf_pages(out) or len(pngs)
     files = [str(out), str(yml)]
     for i, f in enumerate(pngs, 1):
         dest = out.with_name(f"{out.stem}_page{i}.png")
         shutil.copyfile(f, dest)
         files.append(str(dest))
-    done(True, files=files, pages=pdf_pages(out) or len(pngs), theme=theme)
+    # RenderCV's working copies go: the PDF and its pictures are beside it once, the YAML stays to edit by hand
+    for f in [pdf, *pngs, *work.glob("*.typ")]:
+        try:
+            f.unlink()
+        except OSError:
+            pass
+    done(True, files=files, pages=pages, theme=theme)
 
 
 TYPST_LETTER = r"""
