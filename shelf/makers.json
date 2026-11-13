@@ -665,7 +665,7 @@
      "{location}",
      "{out}",
      "{count}",
-     "{hours}",
+     "{days}",
      "{remote}",
      "{sites}"
     ],
@@ -689,25 +689,22 @@
       "max": 200,
       "default": 30
      },
-     "hours": {
+     "days": {
       "type": "int",
       "min": 1,
-      "max": 2160,
-      "default": 168,
-      "what": "posted within this many hours"
+      "max": 90,
+      "default": 7,
+      "what": "posted within this many days"
      },
      "remote": {
-      "type": "choice",
-      "choices": [
-       "yes",
-       "no"
-      ],
-      "default": "no"
+      "type": "text",
+      "default": "no",
+      "what": "yes (or true) for remote postings only"
      },
      "sites": {
       "type": "text",
-      "what": "comma-separated: indeed, linkedin, glassdoor, google, zip_recruiter",
-      "default": "indeed,linkedin,google"
+      "default": "Indeed, LinkedIn, Google",
+      "what": "comma-separated: Indeed, LinkedIn, Glassdoor, Google, ZipRecruiter - or All five"
      }
     }
    },

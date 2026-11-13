@@ -2,7 +2,7 @@
 
     career_run.py resume    <resume.json> <out.pdf> <theme> <page> [<job name>]
     career_run.py letter    <letter.md> <resume.json> <out.pdf>
-    career_run.py jobs      <terms> <location> <out.json> <count> <hours> <remote> <sites>
+    career_run.py jobs      <terms> <location> <out.json> <count> <days> <remote> <sites>
     career_run.py portfolio <resume.json> <media dir or -> <out folder> <style>
 
 The resume is JSON Resume data (jsonresume.org/schema: basics, work, education, skills, projects, awards,
@@ -232,15 +232,20 @@ def letter(src, resume_path, out, paper="us-letter"):
     done(True, files=[str(out)] + sorted(str(p) for p in out.parent.glob(out.stem + "_page*.png")), pages=pdf_pages(out))
 
 
-def jobs(terms, location, out, count, hours, remote, sites):
+SITE_NAMES = {"indeed": "indeed", "linkedin": "linkedin", "glassdoor": "glassdoor", "google": "google",
+              "ziprecruiter": "zip_recruiter", "zip_recruiter": "zip_recruiter", "zip recruiter": "zip_recruiter"}
+
+
+def jobs(terms, location, out, count, days, remote, sites):
     from jobspy import scrape_jobs
     location = "" if location.strip() in ("", "-") else location.strip()
-    names = [s.strip().lower().replace(" ", "_") for s in sites.split(",") if s.strip()] or ["indeed", "linkedin", "google"]
-    ok_sites = {"indeed", "linkedin", "glassdoor", "google", "zip_recruiter"}
-    names = [n for n in names if n in ok_sites] or ["indeed", "linkedin", "google"]
-    count, hours = max(1, min(int(count), 200)), max(1, int(hours))
+    if sites.strip().lower() in ("all", "all five"):
+        names = ["indeed", "linkedin", "glassdoor", "google", "zip_recruiter"]
+    else:
+        names = list(dict.fromkeys(SITE_NAMES[k] for k in (x.strip().lower() for x in sites.split(",")) if k in SITE_NAMES)) or ["indeed", "linkedin", "google"]
+    count, hours = max(1, min(int(float(count)), 200)), max(1, int(float(days) * 24))
     kw = dict(site_name=names, search_term=terms, location=location or None, results_wanted=count, hours_old=hours,
-              is_remote=remote.lower() in ("true", "yes", "1", "remote"), description_format="markdown", verbose=0)
+              is_remote=str(remote).lower() in ("true", "yes", "1", "remote", "on"), description_format="markdown", verbose=0)
     if "google" in names:
         kw["google_search_term"] = f"{terms} jobs near {location} since {'yesterday' if hours <= 24 else 'last week'}" if location else f"{terms} jobs"
     if "indeed" in names or "glassdoor" in names:
