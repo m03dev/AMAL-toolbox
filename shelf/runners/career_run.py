@@ -138,7 +138,23 @@ def rendercv_input(r, theme, page):
         sec["interests"] = [{"label": i.get("name"), "details": ", ".join(i.get("keywords") or [])} for i in r["interests"] if i.get("name")]
     cv["sections"] = sec
     size = {"Letter": "us-letter", "A4": "a4"}.get(page, "us-letter")
-    return clean({"cv": cv, "design": {"theme": theme, "page": {"size": size}}})
+    design = {"theme": theme, "page": {"size": size}}
+    # RenderCV prints a year alone as "Jan 2020" and counts months from it: when any date he gave has no month, the
+    # whole resume is shown by year and without month counts, so no month is shown that he never wrote
+    if any(re.fullmatch(r"\d{4}", str(v or "").strip()) for v in dates_in(r)):
+        design["templates"] = {"single_date": "YEAR"}
+        design["sections"] = {"show_time_spans_in": []}
+    return {"cv": clean(cv), "design": design}   # `clean` would drop the empty list
+
+
+def dates_in(r):
+    """Every date a JSON Resume gives (work, education, projects, volunteering, awards, ...)."""
+    for v in r.values():
+        for e in v if isinstance(v, list) else []:
+            if isinstance(e, dict):
+                for k in ("startDate", "endDate", "date", "releaseDate"):
+                    if e.get(k) and str(e[k]).lower() not in ("present", "now", "current"):
+                        yield e[k]
 
 
 def rendercv_problems(out):
