@@ -43,7 +43,18 @@ def username():
         return json.load(open(cfg)).get("username", "")
     out = cli("config", "view", check=False)
     m = re.search(r"username:\s*(\S+)", out)
-    return m.group(1) if m else ""
+    if m and m.group(1).lower() != "none":
+        return m.group(1)
+    # an API token alone (KAGGLE_API_TOKEN, the kind Kaggle makes now) carries no user name, and a notebook is pushed
+    # as <user>/<name>: the name is read from the account's own notebooks or datasets (every SkinTokens and kaggle_gpu
+    # run since the owner switched to a token stopped here, 2026-11-14)
+    for kind in ("kernels", "datasets"):
+        out = cli(kind, "list", "--mine", "--csv", check=False)
+        for line in out.splitlines()[1:]:
+            ref = line.split(",", 1)[0].strip().strip('"')
+            if "/" in ref:
+                return ref.split("/", 1)[0]
+    return ""
 
 
 def slug(s):
