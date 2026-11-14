@@ -391,7 +391,10 @@ pub async fn run(name: &str, args: &Value, ws: &Path) -> Outcome {
     let ph = placeholders(&r, &d);
     let env: Vec<(String, String)> = r["env"].as_object().into_iter().flatten().chain(act["env"].as_object().into_iter().flatten())
         .map(|(k, v)| (k.clone(), fill(std::slice::from_ref(v), &ph).remove(0))).chain(program_path(&r, &d)).collect();
-    match exec_env(&cmd, Some(ws), secs, &env).await {
+    // an action can run from another folder ("cwd", placeholders allowed): QuadWild's quad_from_patches opens the config
+    // files its flow config names relative to where it runs, not to itself (2026-11-14)
+    let cwd = act["cwd"].as_str().map(|c| PathBuf::from(fill(&[json!(c)], &ph).remove(0))).filter(|d| d.is_dir());
+    match exec_env(&cmd, Some(cwd.as_deref().unwrap_or(ws)), secs, &env).await {
         Err(e) => Outcome::Err(format!("{name} failed: {e}")),
         Ok(log) => {
             let made: Vec<String> = outputs.iter().filter(|p| p.metadata().is_ok_and(|m| m.len() > 0 && m.modified().is_ok_and(|t| t >= started)))

@@ -365,7 +365,8 @@
       "what": "flow.txt tries for better edge flow; flow_noalign.txt is the fallback"
      }
     },
-    "timeout": 3600
+    "timeout": 3600,
+    "cwd": "{exe_dir}"
    }
   },
   "notes": "There is no -o flag: both binaries write into the input mesh's folder, with names built from the input filename, so AMAL must copy the input into the workspace and then collect the results. Always pass the step argument: the source reads argv[2] even when argc==2. The paths assume the zip is extracted flat into {tool}/ (the zip holds quadwild[.exe], quad_from_patches[.exe], config/, README_release.md). On Windows the second binary is quad_from_patches.exe. The macOS binaries are universal (x86_64 + arm64), unsigned, and need quarantine cleared. There is no zero-exit check command (no args returns 1), so check is null. GPL-3.0 is fine to run as a separate process from AGPL AMAL.",
