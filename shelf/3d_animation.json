@@ -315,7 +315,7 @@
      "{exe}",
      "{input}",
      "2",
-     "{tool}/config/prep_config/{preset}"
+     "{exe_dir}/config/prep_config/{preset}"
     ],
     "args": {
      "input": {
@@ -342,10 +342,10 @@
    "quadrangulate": {
     "what": "Step 2: turn the traced patches into a quad mesh; writes <stem>_rem_p0_1_quadrangulation_smooth.obj next to the input.",
     "cmd": [
-     "{tool}/quad_from_patches",
+     "{exe_dir}/quad_from_patches",
      "{input}",
      "1",
-     "{tool}/config/main_config/{flow}"
+     "{exe_dir}/config/main_config/{flow}"
     ],
     "args": {
      "input": {

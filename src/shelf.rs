@@ -138,9 +138,14 @@ fn which(name: &str) -> Option<String> {
 
 fn placeholders(r: &Value, d: &Path) -> Vec<(String, String)> {
     let py = venv_python(d);
+    let exe = find_exe(d, &exe_for(r));
+    // the folder the program was found in: a release unpacks its configs and helper programs beside it, one folder
+    // down on Windows (QuadWild's windows zip keeps everything in bin/, so {tool}/config was not there, 2026-11-14)
+    let exe_dir = Path::new(&exe).parent().filter(|p| p.is_dir()).map(|p| p.display().to_string()).unwrap_or_else(|| d.display().to_string());
     vec![
         ("python".into(), if py.exists() { py.display().to_string() } else { system_python() }),
-        ("exe".into(), find_exe(d, &exe_for(r))),
+        ("exe_dir".into(), exe_dir),
+        ("exe".into(), exe),
         ("src".into(), d.join("src").display().to_string()),
         ("tool".into(), d.display().to_string()),
         ("models".into(), d.join("models").display().to_string()),
