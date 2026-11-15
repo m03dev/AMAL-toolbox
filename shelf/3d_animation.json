@@ -367,6 +367,33 @@
     },
     "timeout": 3600,
     "cwd": "{exe_dir}"
+   },
+   "quadrangulate_with": {
+    "what": "Step 2 with your own flow config: a copy of config/main_config/flow.txt in the workspace with a different scaleFact (quad edge = average edge x scaleFact; ~3 gives about a tenth of the quads of 1). Its json paths stay relative to QuadWild's folder. Writes <stem>_rem_p0_1_quadrangulation_smooth.obj next to the input.",
+    "cmd": [
+     "{exe_dir}/quad_from_patches",
+     "{input}",
+     "1",
+     "{setup}"
+    ],
+    "args": {
+     "input": {
+      "type": "file",
+      "exts": [
+       ".obj"
+      ],
+      "what": "the <stem>_rem_p0.obj from step 1"
+     },
+     "setup": {
+      "type": "file",
+      "exts": [
+       ".txt"
+      ],
+      "what": "the flow config file in the workspace"
+     }
+    },
+    "timeout": 3600,
+    "cwd": "{exe_dir}"
    }
   },
   "notes": "There is no -o flag: both binaries write into the input mesh's folder, with names built from the input filename, so AMAL must copy the input into the workspace and then collect the results. Always pass the step argument: the source reads argv[2] even when argc==2. The paths assume the zip is extracted flat into {tool}/ (the zip holds quadwild[.exe], quad_from_patches[.exe], config/, README_release.md). On Windows the second binary is quad_from_patches.exe. The macOS binaries are universal (x86_64 + arm64), unsigned, and need quarantine cleared. There is no zero-exit check command (no args returns 1), so check is null. GPL-3.0 is fine to run as a separate process from AGPL AMAL.",
