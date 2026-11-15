@@ -394,6 +394,33 @@
     },
     "timeout": 3600,
     "cwd": "{exe_dir}"
+   },
+   "prepare_with": {
+    "what": "Step 1 with your own setup file: a copy of config/prep_config/basic_setup.txt in the workspace (do_remesh, sharp_feature_thr, alpha, scaleFact). A larger scaleFact remeshes coarser, so fewer patches and fewer quads in step 2.",
+    "cmd": [
+     "{exe}",
+     "{input}",
+     "2",
+     "{setup}"
+    ],
+    "args": {
+     "input": {
+      "type": "file",
+      "exts": [
+       ".obj",
+       ".ply"
+      ],
+      "what": "the mesh (copy it into the workspace first: outputs land next to it)"
+     },
+     "setup": {
+      "type": "file",
+      "exts": [
+       ".txt"
+      ],
+      "what": "the setup file in the workspace"
+     }
+    },
+    "timeout": 1800
    }
   },
   "notes": "There is no -o flag: both binaries write into the input mesh's folder, with names built from the input filename, so AMAL must copy the input into the workspace and then collect the results. Always pass the step argument: the source reads argv[2] even when argc==2. The paths assume the zip is extracted flat into {tool}/ (the zip holds quadwild[.exe], quad_from_patches[.exe], config/, README_release.md). On Windows the second binary is quad_from_patches.exe. The macOS binaries are universal (x86_64 + arm64), unsigned, and need quarantine cleared. There is no zero-exit check command (no args returns 1), so check is null. GPL-3.0 is fine to run as a separate process from AGPL AMAL.",
