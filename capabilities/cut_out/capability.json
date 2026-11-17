@@ -1,0 +1,15 @@
+{
+  "name": "cut_out",
+  "does": "Cut the subjects out of a picture and write each one as its own picture, unchanged: every pixel is his, nothing is redrawn. The background goes (the picture's own transparency, a plain background, or a background remover for a photo or a screenshot); subjects that stand apart are told apart by themselves, and subjects that touch are parted along the line between them when 'subjects' says how many there are. Writes each subject on a transparent and on a white square, left to right, and a report. Use it before a picture is made into a 3D model, a sprite or a reference, whenever the picture he gave holds more than the one thing or has a background",
+  "when": ["cut out", "cutout", "crop", "separate", "split", "background", "remove background", "sprite", "reference", "two characters", "each character", "isolate", "transparent"],
+  "args": {
+    "picture": {"type": "string", "description": "the picture (.png/.jpg/.webp) in the job folder, e.g. refs/drawing.png"},
+    "out_dir": {"type": "string", "description": "the folder to write into", "default": "renders/cut_out"},
+    "subjects": {"type": "integer", "description": "how many subjects the picture holds; 0 = as many as stand apart", "default": 0},
+    "name": {"type": "string", "description": "what the files are called (name_1.png, name_2.png ...)", "default": "subject"}
+  },
+  "required": ["picture"],
+  "run": "{python} {dir}/cut_out.py {picture} --out-dir {out_dir} --subjects {subjects} --name {name}",
+  "outputs": ["{out_dir}/cut_out_report.json"],
+  "timeout_s": 600
+}
