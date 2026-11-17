@@ -14,5 +14,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: Every capability's file is valid
         run: for f in capabilities/*/capability.json shelf/*.json; do python3 -m json.tool "$f" > /dev/null || { echo "$f"; exit 1; }; done
+      - name: Every job script is valid Python
+        run: python3 -m py_compile job_scripts/*.py
       - name: Tests
         run: cargo test --release
