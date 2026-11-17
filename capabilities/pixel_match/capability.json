@@ -1,5 +1,6 @@
 {
   "name": "pixel_match",
+  "area": "3d",
   "does": "Put the reference picture's own pixels back on a 3D model's texture (AssetFurnace's Pixel Match): an image-to-3D model redraws the picture, so text, logos, faces and colours come back as lookalikes. Finds the camera the picture was taken from by itself (the turn and distance where the model's outline lies on the picture's cut-out, front told from back by the model's own paint), then every surface that picture sees takes the picture's pixel and the rest keeps the model's paint, shifted to the picture's colours. A second picture (the back) is used the same way. Only the base-colour image of the .glb changes. Writes the .glb, a report (the camera found, how well the outlines lie on each other, how much of the texture came from the picture, PASS or FAIL) and a before/after picture; an outline that does not fit is refused, not painted. Needs no graphics card",
   "when": ["3d", "model", "texture", "textures", "reference", "picture", "pixel match", "repaint", "project", "logo", "text", "face", "glb", "colour", "color"],
   "args": {

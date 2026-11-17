@@ -1,5 +1,6 @@
 {
   "name": "kaggle_gpu",
+  "area": "code",
   "does": "Run a Python script on Kaggle's free GPU (about 30 hours a week, 16 GB T4 or P100 - twice this PC's 8 GB) and bring back the files it writes: big models, long renders, training, anything too heavy for the machine",
   "when": ["gpu", "vram", "heavy", "big model", "kaggle", "cloud", "train", "too big", "out of memory"],
   "args": {

@@ -1,5 +1,6 @@
 {
   "name": "svg_to_png",
+  "area": "design",
   "does": "Render SVG files to PNG pictures (to look at them or deliver them), on a background colour",
   "when": ["svg", "png", "render", "logo", "icon", "preview"],
   "args": {

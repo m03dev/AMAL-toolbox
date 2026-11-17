@@ -1,5 +1,6 @@
 {
   "name": "concept_sheet",
+  "area": "design",
   "does": "One board showing several logo concepts side by side, each large and at 64/32/16 px, with its name and one-line idea - what the owner picks from",
   "when": ["logo", "concepts", "board", "present", "compare"],
   "args": {

@@ -13,10 +13,12 @@
 //!   POST /use   {name, args, ws, blender?}   run one in the folder `ws`
 //!   POST /make  {name, does, files, run, args, outputs, check?, test, ws}   add one; kept only if its test passes
 //!   GET  /skills?q=words&n=8          skills and agents that fit
+//!   GET  /market, POST /market/install|remove|switch   the window's Toolbox page (market.rs)
 //!
 //! Listens on 127.0.0.1:7720 (TOOLBOX_PORT); only this machine reaches it.
 
 mod capability;
+mod market;
 mod place;
 mod shelf;
 mod skills;
@@ -50,6 +52,9 @@ fn record() -> HashMap<String, (u32, u32)> {
 fn catalog() -> Vec<(String, String, String)> {
     let mut all: Vec<(String, String, String)> = capability::all().iter().map(|c| (c.name.clone(), c.does.clone() + " " + &c.when.join(" "), capability::arg_line(c))).collect();
     all.extend(shelf::entries());
+    // what he switched off on the Toolbox page is offered to no job
+    let off = market::off();
+    all.retain(|(name, _, _)| !market::is_off_in(&off, name));
     all
 }
 
@@ -96,6 +101,7 @@ async fn use_(Json(b): Json<Value>) -> Json<Value> {
         said = format!("(called as {name}: next time name it - {{\"name\": \"{name}\", \"args\": {{...}}}})\n");
     }
     let name = name.as_str();
+    if market::is_off(name) { return answer(Outcome::Err(format!("{name} is switched off in the Toolbox (he switched it off; the window's Toolbox page switches it on)"))); }
     if name.contains('.') {
         let t0 = std::time::Instant::now();
         let o = shelf::run(name, &args, &ws).await;
@@ -123,6 +129,18 @@ async fn stop(Json(b): Json<Value>) -> Json<Value> {
     Json(json!({"ok": true, "stopped": tools::stop_for(&ws)}))
 }
 
+async fn market_page(Query(q): Query<HashMap<String, String>>) -> Json<Value> {
+    Json(market::page(q.get("q").map(String::as_str).unwrap_or(""), q.get("area").map(String::as_str).unwrap_or(""), &record()))
+}
+
+fn said(r: Result<String, String>) -> Json<Value> {
+    Json(match r { Ok(t) => json!({"ok": true, "text": t}), Err(t) => json!({"ok": false, "text": t}) })
+}
+
+async fn market_install(Json(b): Json<Value>) -> Json<Value> { said(market::install(b["id"].as_str().unwrap_or(""))) }
+async fn market_remove(Json(b): Json<Value>) -> Json<Value> { said(market::remove(b["id"].as_str().unwrap_or(""))) }
+async fn market_switch(Json(b): Json<Value>) -> Json<Value> { said(market::switch(b["id"].as_str().unwrap_or(""), b["on"] != false)) }
+
 async fn health() -> Json<Value> {
     Json(json!({"ok": true, "capabilities": capability::all().len(), "tools": shelf::recipes().len(),
         "actions": shelf::entries().len(), "skills": skills::all().len(), "root": place::root().display().to_string()}))
@@ -137,7 +155,9 @@ async fn main() {
         .route("/use", post(use_))
         .route("/make", post(make))
         .route("/skills", get(find_skills))
-        .route("/stop", post(stop));
+        .route("/stop", post(stop))
+        .route("/market", get(market_page))
+        .route("/market/install", post(market_install)).route("/market/remove", post(market_remove)).route("/market/switch", post(market_switch));
     let l = match tokio::net::TcpListener::bind(("127.0.0.1", port)).await {
         Ok(l) => l,
         Err(e) => { eprintln!("toolbox: port {port} is taken ({e}) - another toolbox runs"); return; }

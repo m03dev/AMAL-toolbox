@@ -1,5 +1,6 @@
 {
   "name": "svg_audit",
+  "area": "design",
   "does": "Audit logo SVGs against design and production rules (structure, colours, tiny details, padding, strokes) - findings in audit.txt",
   "when": ["logo", "svg", "check", "audit"],
   "args": {"files": {"type": "array", "description": "the .svg paths"}},

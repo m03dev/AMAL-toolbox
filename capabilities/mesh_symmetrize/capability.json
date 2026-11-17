@@ -1,5 +1,6 @@
 {
   "name": "mesh_symmetrize",
+  "area": "3d",
   "does": "Make a 3D model (glb/fbx/obj) symmetrical left to right: finds its own mirror plane, cuts it there, keeps one half (the more complete one, or left/right), mirrors and welds it - never doubles the model. Writes the .glb and <name>_symmetry.json (plane turn, kept side); a model that is posed (under 35% mirrors) is refused - AMAL's rig re-poses it first and passes the plane",
   "when": [
     "3d",

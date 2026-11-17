@@ -1,0 +1,18 @@
+# The toolbox's tests on a clean Linux machine: push a change to a branch named check/<anything>, wait for the answer,
+# then put it on master (the machines build master themselves, and a toolbox that does not build is no toolbox).
+name: Check
+on:
+  push:
+    branches: ["check/**"]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Swatinem/rust-cache@v2
+      - name: Every capability's file is valid
+        run: for f in capabilities/*/capability.json shelf/*.json; do python3 -m json.tool "$f" > /dev/null || { echo "$f"; exit 1; }; done
+      - name: Tests
+        run: cargo test --release

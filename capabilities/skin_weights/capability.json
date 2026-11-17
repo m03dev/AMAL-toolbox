@@ -1,5 +1,6 @@
 {
   "name": "skin_weights",
+  "area": "animation",
   "does": "New skin weights for a rigged model with its skeleton kept (same joints and names, so its controls and clips still drive it): SkinTokens, a learned skinning model (MIT), run on Kaggle's free GPU - for creatures where bone heat or a voxel bind tears where parts touch. Writes the weights (.npz: 4 joints a vertex) and the model re-skinned. Needs Kaggle connected; takes about half an hour",
   "when": ["skin", "skinning", "weights", "skin weights", "rig", "tear", "stretch", "bind", "creature", "3d"],
   "args": {

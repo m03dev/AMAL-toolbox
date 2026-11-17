@@ -1,5 +1,6 @@
 {
   "name": "vectorize",
+  "area": "design",
   "does": "Trace a picture (a logo idea from the picture model, a drawing) into a clean SVG",
   "when": ["vector", "svg", "trace", "logo", "picture to svg"],
   "args": {

@@ -1,5 +1,6 @@
 {
   "name": "logo_marks",
+  "area": "design",
   "does": "Brand marks from real letters for a name (or acronym): every font x five layouts (word, tile = app icon, badge, stack, cut), plus one contact sheet to look at. A long name's tile, badge, stack and cut use its monogram (EMBER & OAK -> E&O) with the whole name beneath where there is room. Give `picture` - the mascot, a product shot, anything the logo has to belong with - and the marks take their colours from it, so the two look like one brand",
   "when": [
     "logo",

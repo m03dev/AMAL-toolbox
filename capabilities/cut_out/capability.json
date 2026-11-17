@@ -1,5 +1,6 @@
 {
   "name": "cut_out",
+  "area": "2d",
   "does": "Cut the subjects out of a picture and write each one as its own picture, unchanged: every pixel is his, nothing is redrawn. The background goes (the picture's own transparency, a plain background, or a background remover for a photo or a screenshot); subjects that stand apart are told apart by themselves, and subjects that touch are parted along the line between them when 'subjects' says how many there are. Writes each subject on a transparent and on a white square, left to right, and a report. Use it before a picture is made into a 3D model, a sprite or a reference, whenever the picture he gave holds more than the one thing or has a background",
   "when": ["cut out", "cutout", "crop", "separate", "split", "background", "remove background", "sprite", "reference", "two characters", "each character", "isolate", "transparent"],
   "args": {

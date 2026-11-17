@@ -71,6 +71,16 @@ fn adopt_earlier(root: &Path, id: &str, was: &[String]) -> bool {
 
 pub fn installed(id: &str) -> bool { tool_dir(id).is_some_and(|d| d.join("installed.json").is_file()) }
 
+/// Take a tool off this machine: its own folder (what it downloaded and set up) goes; it stays on the shelf and is
+/// installed again when asked for.
+pub fn remove(id: &str) -> Result<String, String> {
+    if !recipes().iter().any(|r| r["id"] == id) { return Err(format!("no tool '{id}' on the shelf")); }
+    let d = tool_dir(id).ok_or("no folder for tools")?;
+    if !d.is_dir() { return Ok(format!("{id} was not on this machine")); }
+    std::fs::remove_dir_all(&d).map_err(|e| format!("{id} could not be removed: {e}"))?;
+    Ok(format!("removed {id} from this machine"))
+}
+
 /// One line per action, for a job's list of capabilities: (name, what it does, its arguments).
 pub fn entries() -> Vec<(String, String, String)> {
     let mut out = vec![];

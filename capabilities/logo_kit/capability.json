@@ -1,5 +1,6 @@
 {
   "name": "logo_kit",
+  "area": "design",
   "does": "The delivery kit from one chosen master SVG: black, white and brand-colour versions, square, favicon, app icon, and the full web/app icon set (favicon.ico, apple-touch-icon, 192/512 icons, manifest)",
   "when": ["logo", "kit", "favicon", "app icon", "brand", "deliver", "export"],
   "args": {

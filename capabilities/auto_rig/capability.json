@@ -1,5 +1,6 @@
 {
   "name": "auto_rig",
+  "area": "animation",
   "does": "A skeleton AND skin weights for a bare 3D model, made by SkinTokens (TokenRig - the successor of UniRig, MIT) on Kaggle's free GPU, with its voxel clean-up against weights bleeding between parts that touch. Works for any body (creatures, wings, tails), no Maya or AdvancedSkeleton. Writes up to 3 rigs from different seeds (--out, then <out>_2, <out>_3) so the best can be kept - AMAL's creature_anim.py then makes each animation in its own file. Needs Kaggle connected; about half an hour",
   "when": ["rig", "auto rig", "rigging", "skeleton", "skin", "skin weights", "animate", "creature", "3d", "unirig", "tokenrig", "skintokens"],
   "args": {
