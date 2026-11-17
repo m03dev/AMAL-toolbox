@@ -11,6 +11,5 @@
   "required": ["skeleton"],
   "run": "{python} {dir}/rig_motion.py {skeleton} --out {out} --poses {poses} --min-free {min_free}",
   "outputs": ["{out}"],
-  "check": "the report says PASS",
   "timeout_s": 300
 }

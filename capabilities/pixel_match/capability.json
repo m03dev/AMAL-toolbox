@@ -12,6 +12,5 @@
   "required": ["model", "picture"],
   "run": "{python} {dir}/pixel_match.py {model} {picture} --back {back} --out {out} --min-fit {min_fit}",
   "outputs": ["{out}"],
-  "check": "the report says PASS",
   "timeout_s": 900
 }

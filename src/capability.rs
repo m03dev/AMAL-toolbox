@@ -405,6 +405,9 @@ mod tests {
             assert!(!cmd.contains("\"\""), "{}: {cmd}", c.name);
             for o in &c.outputs { fill(o, &vals, &fixed, false).unwrap_or_else(|e| panic!("{} output {o}: {e}", c.name)); }
             assert!(!c.outputs.is_empty(), "{} names no outputs: it could not be checked", c.name);
+            // a check is a command (it must exit 0), never words about one: "the report says PASS" was run as the
+            // program `the`, so two tools that had done their work were reported as failed on every machine (2026-11-16)
+            assert!(c.check.as_ref().is_none_or(|k| k.trim_start().starts_with('{')), "{}: its check is not a command: {:?}", c.name, c.check);
         }
     }
 
