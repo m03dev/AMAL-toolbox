@@ -1,0 +1,14 @@
+{
+ "id": "logo",
+ "name": "Logo",
+ "icon": "pentool",
+ "order": 3,
+ "tip": "logos, marks, monograms and app icons as editable vectors",
+ "about": "Logos, marks, monograms, wordmarks and app icons as clean vector SVG: several concepts drawn live in the window's Logo studio by free models (and one drawn by FLUX and traced into shapes), each checked to read at favicon size, then edited shape by shape and saved to the Library as SVG and PNG.",
+ "card": true,
+ "needs": [],
+ "playbook": "studio-logo",
+ "window": "logo",
+ "settings": [],
+ "ready": true
+}

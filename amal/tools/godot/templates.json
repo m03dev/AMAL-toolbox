@@ -1,0 +1,119 @@
+{
+ "about": "Starting points for a new Godot project (crates/amal-core/src/godot.rs). A template with a repo is fetched once - a shallow sparse clone of only its folder - into <home>/cache/godot-templates and reused; one without a repo is written by AMAL. Add any git repository + folder that holds a project.godot.",
+ "templates": [
+  {
+   "id": "empty_3d",
+   "name": "Empty 3D",
+   "about": "a new 3D game: main scene with camera, sun, sky light and a floor",
+   "godot": "4.x"
+  },
+  {
+   "id": "empty_2d",
+   "name": "Empty 2D",
+   "about": "a new 2D game: main scene with a camera",
+   "godot": "4.x"
+  },
+  {
+   "id": "flappy_2d",
+   "name": "Flappy Bird (2D)",
+   "about": "2D one-button flyer: tap, click or Space to flap through gaps in pipes, score, game over and play again - AMAL's own starter, played by its check",
+   "local": "tools/godot/starters/flappy_2d",
+   "godot": "4.3+"
+  },
+  {
+   "id": "snake_2d",
+   "name": "Snake (2D)",
+   "about": "2D snake on a grid: arrow keys, WASD or a swipe to steer, food to grow, walls and tail end it - AMAL's own starter, played by its check",
+   "local": "tools/godot/starters/snake_2d",
+   "godot": "4.3+"
+  },
+  {
+   "id": "breakout_2d",
+   "name": "Breakout (2D)",
+   "about": "2D brick breaker: a paddle moved by mouse, finger, pen or keys, a ball, rows of bricks, lives and score - AMAL's own starter, played by its check",
+   "local": "tools/godot/starters/breakout_2d",
+   "godot": "4.3+"
+  },
+  {
+   "id": "squash_the_creeps",
+   "name": "Squash the Creeps (3D)",
+   "about": "3D character that moves and jumps on enemies, score, mobs spawning - Godot's first-3D-game tutorial, finished",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "3d/squash_the_creeps",
+   "godot": "4.x"
+  },
+  {
+   "id": "platformer_3d",
+   "name": "Platformer 3D",
+   "about": "3D platformer: character controller, coins, enemies, moving platforms",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "3d/platformer",
+   "godot": "4.x"
+  },
+  {
+   "id": "truck_town",
+   "name": "Truck Town",
+   "about": "3D vehicles with physics in a small town",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "3d/truck_town",
+   "godot": "4.x"
+  },
+  {
+   "id": "dodge_the_creeps",
+   "name": "Dodge the Creeps (2D)",
+   "about": "2D top-down: player dodges enemies, score, game over - Godot's first-2D-game tutorial, finished",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "2d/dodge_the_creeps",
+   "godot": "4.x"
+  },
+  {
+   "id": "platformer_2d",
+   "name": "Platformer 2D",
+   "about": "2D side-scrolling platformer: player, enemies, coins, tiles",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "2d/platformer",
+   "godot": "4.x"
+  },
+  {
+   "id": "pong",
+   "name": "Pong (2D)",
+   "about": "2D pong: two paddles, a ball that bounces, score - a one-screen arcade game to build on (breakout, air hockey)",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "2d/pong",
+   "godot": "4.x"
+  },
+  {
+   "id": "rpg_2d",
+   "name": "Top-down RPG (2D)",
+   "about": "2D top-down role-playing game: a grid map, a player that walks, characters to talk to, a turn-based combat screen",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "2d/role_playing_game",
+   "godot": "4.x"
+  },
+  {
+   "id": "character_3d",
+   "name": "Third-person character (3D)",
+   "about": "3D third-person character: walk, run and jump in a small level with a following camera",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "3d/kinematic_character",
+   "godot": "4.x",
+   "bare": "3D"
+  },
+  {
+   "id": "souls_3d",
+   "name": "Souls-like action (3D)",
+   "about": "3D third-person melee action RPG (souls-like, action adventure, dungeon crawler, sword fighting, boss fight): lock-on, dodge roll, weapons and shields, enemies, ladders, pickups - a modular rig that takes any humanoid model with a standard Godot/Unity/Mixamo skeleton and plays the whole animation library on it. Code Unlicense, assets CC0 (Cat's Godot 4 Modular Souls-like Template)",
+   "repo": "https://github.com/catprisbrey/Cats-Godot4-Modular-Souls-like-Template.git",
+   "dir": "",
+   "godot": "4.x"
+  },
+  {
+   "id": "voxel_3d",
+   "name": "Voxel world (3D)",
+   "about": "3D voxel world in blocks you break and place, generated as you walk, first person - a block-building game to build on",
+   "repo": "https://github.com/godotengine/godot-demo-projects.git",
+   "dir": "3d/voxel",
+   "godot": "4.x"
+  }
+ ]
+}

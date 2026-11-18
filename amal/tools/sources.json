@@ -1,0 +1,829 @@
+{
+ "about": "The open-source projects AMAL's code, skills and tools come from or use. Checked every 24 hours (AMAL_TASKS.md): newest release or commit, licence, what changed that matters to AMAL. 'use' says how AMAL uses it: built-in (code copied into AMAL), toolbox (capability or skill in AMAL-toolbox), harness (a selectable agent harness), external (a program AMAL drives), research (watched, not installed), waiting (the owner linked it and it is not in AMAL yet - what it would be for is in 'why'), set-aside (in the Python app (0.16) or asked for before the rebuild of 2026-10-29 and not carried over; his word brings it back), dropped (the owner dropped it - the date and his reason are in 'why'; never checked, never brought back by itself). 'pinned' is the commit or release tag AMAL tested; empty = follows the newest. crates/amald/src/sources.rs checks them all once a day (Settings › Sources). Everything the owner ever linked or named for this project is here, so nothing he asked for is forgotten: a link he gives gets a line the same day.",
+ "sources": [
+  {
+   "repo": "deepseek-ai/deepseek-harness",
+   "use": "harness",
+   "licence": "MIT",
+   "why": "the fastest-growing agent harness; first selectable harness beside AMAL's own loop",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "earendil-works/pi",
+   "use": "harness",
+   "licence": "MIT",
+   "why": "the smallest open harness: four tools and under 2,000 tokens a call, so its turns fit the fast free models",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "Donchitos/Claude-Code-Game-Studios",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "game studio agents and skills (design, sprints, review, release) for Godot",
+   "machines": "both",
+   "pinned": "05ad7c8a5b8aa2aa86bbd3439ae7cf7295cac418"
+  },
+  {
+   "repo": "jame581/godotprompter",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "Godot 4 skills and agents (architecture, state machines, navigation, code review)",
+   "machines": "both",
+   "pinned": "d7b26cdb5fae14d4ef7b713c5bf259395e75c3c6"
+  },
+  {
+   "repo": "Coding-Solo/godot-mcp",
+   "use": "external",
+   "licence": "MIT",
+   "why": "launch the Godot editor, run projects, read debug output over MCP",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "godotengine/godot-demo-projects",
+   "use": "built-in",
+   "licence": "MIT",
+   "why": "the Godot project templates godot_project starts from (tools/godot/templates.json)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "viettranx/3dviz-pro-max",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "agent skill for Three.js/Blender scenes with checks of what is on screen",
+   "machines": "both",
+   "pinned": "d077e0e68915c25be8e71d74684d3144fd1c2aca"
+  },
+  {
+   "repo": "Sandflow-ai/sand3d",
+   "use": "toolbox",
+   "licence": "Apache-2.0",
+   "why": "3D objects as short programs over bpy; 106k-object dataset of examples",
+   "machines": "both",
+   "pinned": "84c980a523adcb0474420ed4e3990681d403dce3"
+  },
+  {
+   "repo": "voyager-so/vork",
+   "use": "external",
+   "licence": "source-available (free during preview)",
+   "why": "headless 3D/VFX engine for agents, Rust + Slang; Windows needs an NVIDIA GPU, Mac needs macOS 26",
+   "machines": "PC first",
+   "pinned": "v0.2.0"
+  },
+  {
+   "repo": "Blaizzy/mlx-video",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "Wan 2.1 / 2.2 and LTX-2 video on MLX; Wan 2.1 1.3B fits the Mac's 16 GB",
+   "machines": "Mac",
+   "pinned": "87db56a51758fefb748a359b90a5283bb8ba4837"
+  },
+  {
+   "repo": "mrbizarro/phosphene",
+   "use": "research",
+   "licence": "MIT (model weights have their own licences)",
+   "why": "offline video with sound, images, songs on Apple Silicon; most features need 32 GB+",
+   "machines": "Mac",
+   "pinned": ""
+  },
+  {
+   "repo": "mobile-next/mobile-mcp",
+   "use": "external",
+   "licence": "Apache-2.0",
+   "why": "drive the phone app on a simulator or device for tests",
+   "machines": "Mac",
+   "pinned": ""
+  },
+  {
+   "repo": "huggingface:models?filter=gguf",
+   "use": "research",
+   "licence": "per model",
+   "why": "local model search (amald/src/discover.rs)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "open-free-llm-api/awesome-freellm-apis",
+   "use": "research",
+   "licence": "list",
+   "why": "daily-refreshed list of free OpenAI-compatible model APIs, for the free model search",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "NousResearch/hermes-agent",
+   "use": "harness",
+   "licence": "MIT",
+   "why": "Nous Research's self-improving agent - a selectable harness (Settings > Coding harness > Hermes)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "mattpocock/skills",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "Matt Pocock's engineering skills (toolbox skills/mattpocock)",
+   "machines": "both",
+   "pinned": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d"
+  },
+  {
+   "repo": "addyosmani/agent-skills",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "Addy Osmani's production engineering skills and reviewer agents (toolbox skills/addyosmani)",
+   "machines": "both",
+   "pinned": "301b02b12bff98e4688e6984af6556802322bbde"
+  },
+  {
+   "repo": "cloudflare/security-audit-skill",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "Cloudflare's codebase security audit skill (toolbox skills/cloudflare-security-audit)",
+   "machines": "both",
+   "pinned": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8"
+  },
+  {
+   "repo": "kepano/obsidian-skills",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "Obsidian's own skills for the knowledge vault (toolbox skills/obsidian)",
+   "machines": "both",
+   "pinned": "3ccff5338ea700537839b21900aa5358a0402c98"
+  },
+  {
+   "repo": "google/skills",
+   "use": "toolbox",
+   "licence": "Apache-2.0",
+   "why": "Google's official agent skills (toolbox skills/google)",
+   "machines": "both",
+   "pinned": "2194d3b8b1f31975fef2f1a0ae6b9ab55bd7ceee"
+  },
+  {
+   "repo": "anortham/goldfish",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "developer memory method: checkpoints, recall, hand-offs (toolbox skills/goldfish)",
+   "machines": "both",
+   "pinned": "0f74184edd0a13fdc1400146e68219b29763e7f7"
+  },
+  {
+   "repo": "garrytan/gbrain",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "Garry Tan's brain skillpack; its files-are-truth line shapes AMAL's memory (toolbox skills/gbrain)",
+   "machines": "both",
+   "pinned": "555b73a8079de8d7061884358652e19d37f7acdf"
+  },
+  {
+   "repo": "huytieu/COG-second-brain",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "second-brain skills: braindump, briefs, reviews (toolbox skills/cog-second-brain)",
+   "machines": "both",
+   "pinned": "144c7a3a959cc99538b7dfee9c22c4b065a0e156"
+  },
+  {
+   "repo": "itechmeat/open-second-brain",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "agent-owned Brain/ folder in an Obsidian vault (toolbox skills/open-second-brain)",
+   "machines": "both",
+   "pinned": "2c0d11dd7c4f9a6451c7d4455c324d1b98b1e479"
+  },
+  {
+   "repo": "lightpanda-io/browser",
+   "use": "external",
+   "licence": "AGPL-3.0",
+   "why": "AMAL's one browser (owner 2026-11-09): reads pages and search results for jobs and the Web tab (amal_core::web)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "vincentsch/explainroo",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "narrated explainer videos and product demos from a script and drawn scenes, local voice (toolbox shelf explainroo)",
+   "machines": "both",
+   "pinned": "1916129d1c70a35e5506ad475867cf0678ce6a5c"
+  },
+  {
+   "repo": "alibaba/open-code-review",
+   "use": "toolbox",
+   "licence": "Apache-2.0",
+   "why": "code review of a job's repository on AMAL's free models (toolbox shelf open-code-review)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "hexgrad/kokoro",
+   "use": "research",
+   "licence": "Apache-2.0",
+   "why": "Kokoro-82M: a small, free, offline narrator voice that sounds far more natural than edge-tts and runs on the CPU - the next voice for Cutroom",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "gyoridavid/short-video-maker",
+   "use": "research",
+   "licence": "MIT",
+   "why": "shorts from text with Kokoro voices, whisper.cpp word timing and Remotion rendering, as a REST API and MCP server - its caption and voice choices to compare with Cutroom's",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "RayVentura/ShortGPT",
+   "use": "research",
+   "licence": "MIT",
+   "why": "a framework for automated short and long-form video (editing engine, translation, voice) - its editing steps to borrow for longer 16:9 videos",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "harry0703/MoneyPrinterTurbo",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "the voice, captions and render behind Cutroom, the video line's composer (toolbox shelf cutroom)",
+   "machines": "both",
+   "pinned": "c235354804104665b58679223847f78c2b5e27d4"
+  },
+  {
+   "repo": "mxgmn/MarkovJunior",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "procedural dungeons, levels and voxel buildings for game prototypes (toolbox shelf markovjunior)",
+   "machines": "both",
+   "pinned": "42aaf24bcf54ae164fba49c0a59348297904a676"
+  },
+  {
+   "repo": "storytold/artcraft",
+   "use": "external",
+   "licence": "other",
+   "why": "desktop IDE for directing AI images and video, opened beside AMAL (toolbox shelf artcraft)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "obra/superpowers",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "the method: design first, plans, tests first, systematic debugging, verification before done, code review",
+   "machines": "both",
+   "pinned": "22f0b463e7a5e579904dd6211a520321035526f7"
+  },
+  {
+   "repo": "DietrichGebert/ponytail",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "the smallest complete change - the Code line follows it on every code job; review, audit, debt",
+   "machines": "both",
+   "pinned": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846"
+  },
+  {
+   "repo": "affaan-m/ECC",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "a chosen part: agent harness, engineering (Rust, Python, C++), video, content and interface skills, reviewer and planner agents",
+   "machines": "both",
+   "pinned": "d2ef2680594f9a17526a6e1a2e18b3d242c5d17b"
+  },
+  {
+   "repo": "Comfy-Org/workflow_templates",
+   "use": "built-in",
+   "licence": "MIT",
+   "why": "the ComfyUI graphs AMAL converts its own from (picture and views to 3D model with TRELLIS.2 / Pixal3D)",
+   "machines": "pc",
+   "pinned": "611c497cca4087967ecd85fd62bc12fa7130e885"
+  },
+  {
+   "repo": "microsoft/TRELLIS.2",
+   "use": "external",
+   "licence": "MIT",
+   "why": "picture to 3D model on the PC's ComfyUI - the 3D line's maker (owner 2026-10-27: 'TRELLIS may be better'; 2026-11-01: 'get better at TRELLIS')",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "VAST-AI-Research/UniRig",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "rigging: SkinTokens / TokenRig, its successor, is the toolbox capability auto_rig on Kaggle's free GPU (owner 2026-11-04; reopened 2026-11-06 after a bad rig)",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "kijai/ComfyUI-LivePortraitKJ",
+   "use": "built-in",
+   "licence": "MIT",
+   "why": "LivePortrait portrait animation as the ComfyUI graph live_portrait (owner 2026-11-06)",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "htdt/godogen",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "game asset prompts (toolbox skills/godogen; owner 2026-10-17)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "ruvnet/ruflo",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "agent definitions and skills from the Python app (0.16) (toolbox skills/ruflo)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "open-pencil/open-pencil",
+   "use": "toolbox",
+   "licence": "MIT",
+   "why": "design files from the command line (toolbox shelf design_mobile; owner 2026-10-28: 'open-pencil somewhere')",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "FlashML-org/FreeToken",
+   "use": "waiting",
+   "licence": "Apache-2.0",
+   "why": "owner 2026-11-03: 'the kind of tool to use'. An engine that runs very large mixture-of-experts models (DeepSeek V4 Flash, Qwen 3.6 35B) on RTX 30 cards by keeping experts in host memory - Windows and Linux, not the Mac. For the PC: a strong local model for when the free tiers are capped. To prove on the 3070 Ti (8 GB, 16 GB RAM) before it becomes a local route",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "google-deepmind/mujoco",
+   "use": "toolbox",
+   "licence": "Apache-2.0",
+   "why": "rigging: the toolbox capability mujoco_rig checks a skeleton's range of motion - bones in the same place at rest fail it, and it reports how far each joint turns before its part hits another. Not in yet: secondary motion baked per clip, foot contact, part thickness measured on the mesh",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "Seed3D/Puppeteer",
+   "use": "waiting",
+   "licence": "Apache-2.0",
+   "why": "skin weights and skeletons for the rig line as a toolbox capability (AMAL_TASKS.md); needs the PC's graphics card or Kaggle",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "Bingeljell/image-to-3dlab",
+   "use": "toolbox",
+   "licence": "Apache-2.0",
+   "why": "AssetFurnace's Pixel Match: the reference picture's own pixels onto the model's texture, for textures that look like his picture (owner 2026-11-06: 'textures look nothing like the reference'). The toolbox capability `pixel_match` (2026-11-11) finds the picture's camera by itself - AMAL's models come with none - and paints with this code; a picture that does not fit is refused. numpy + Pillow + OpenCV, no graphics card. Tried on a made-up model; not yet run by a job on a model AMAL generated",
+   "machines": "both",
+   "pinned": "f6d7559cae6d8468e7fc10188c08708baa70408a"
+  },
+  {
+   "repo": "velopack/velopack",
+   "use": "built-in",
+   "licence": "MIT",
+   "why": "the installer for a tester's copy (owner 2026-11-10: 'an install UI'; 2026-11-11: 'go ahead with the prebuilt download'): the Setup, its shortcuts, uninstall and updates (crates/amal-app/src/installed.rs, .github/workflows/installer.yml). Installed and started on a clean Windows machine 2026-11-11",
+   "machines": "windows",
+   "pinned": "1.2"
+  },
+  {
+   "repo": "EmbarkStudios/crash-handling",
+   "use": "built-in",
+   "licence": "MIT / Apache-2.0",
+   "why": "a hard crash of the driver leaves a minidump (crates/amald/src/crash.rs: a watcher process beside the driver writes <home>/crashes/<time>.dmp; a tester's report names it)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "JustVugg/colibri",
+   "use": "waiting",
+   "licence": "Apache-2.0",
+   "why": "owner 2026-10-23: a local engine that keeps only the part of a very large model in memory that each token uses and reads the rest from disk (pure C, CPU, Vulkan or CUDA), with an OpenAI-style server on 127.0.0.1:8000 and tool calls. Its own table gives 5 to 10 tokens a second for a 30B on 8 to 18 GB - about what the owner saw on the PC. To measure against Ollama and FreeToken on the same model before it becomes a local route",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "miuuyy/codex-chatgpt-web",
+   "use": "waiting",
+   "licence": "MIT",
+   "why": "owner 2026-10-25: a web chat app as a model route ('the main guy'). It is a launcher for a coding command line: the turns run through his own signed-in web session, under that account's limits. It needs that command line and his sign-in on the machine, and it does not answer an address AMAL's pool can call - so it would come in as a selectable coding harness, not as a model route",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "decolua/9router",
+   "use": "waiting",
+   "licence": "MIT",
+   "why": "owner 2026-10-18: a router that gives coding tools one address over 40+ providers and falls back to free and cheap models, compressing tool output on the way (it says 20-40% fewer tokens). AMAL's pool already routes and falls back over its free accounts; what 9router would add is its output compression and any free provider the pool lacks - to compare on the same jobs before it is put in front of the pool",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: Higgsfield Genjutsu",
+   "use": "waiting",
+   "licence": "closed service",
+   "why": "owner 2026-11-10: 'as close to Higgsfield as possible ... Genjutsu embedded' - motion transfer and object swap on his own clip. Higgsfield is a closed service; the open route (Wan 2.2 Animate / VACE graphs on the PC) is not built yet",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "name: Blender character creator",
+   "use": "waiting",
+   "licence": "unknown",
+   "why": "owner 2026-11-07: 'a Blender character creator to look into' for game characters (MPFB / MakeHuman is the open one); not tested yet",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "CopilotKit/OpenDots",
+   "use": "set-aside",
+   "licence": "MIT",
+   "why": "owner 2026-10-25, when the Python app's helpers and skills were failing: always-on coworkers, each with its own computer (a hosted template needing CopilotKit's service). AMAL's own helpers on both machines do this work now",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "shinpr/sub-agents-skills",
+   "use": "set-aside",
+   "licence": "MIT",
+   "why": "owner 2026-10-25: one agent definition run on several coding tools. It drives paid coding command lines, which are not free routes; AMAL's helpers and its selectable harness cover the same ground",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "All-Hands-AI/OpenHands",
+   "use": "set-aside",
+   "licence": "MIT",
+   "why": "owner 2026-10-18: a coding agent to embed in the core. A candidate for a selectable coding harness beside DeepSeek Harness and Hermes Agent",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "langgenius/dify",
+   "use": "set-aside",
+   "licence": "see repository",
+   "why": "owner 2026-10-18: workflow builder to embed in the core. The company-app direction ended 2026-10-21; Flow and make_workflow are AMAL's own",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "wechaty/wechaty",
+   "use": "set-aside",
+   "licence": "Apache-2.0",
+   "why": "owner 2026-10-17: chat-app bots. The company-app direction ended 2026-10-21",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "block/goose",
+   "use": "set-aside",
+   "licence": "Apache-2.0",
+   "why": "owner 2026-11-03: an open harness to test before adopting. Not tested yet; DeepSeek Harness and Hermes Agent are the selectable ones",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "Panniantong/Agent-Reach",
+   "use": "set-aside",
+   "licence": "see repository",
+   "why": "web, GitHub and video reach for agents in the Python app (0.16) (owner 2026-10-14); Lightpanda is the one browser now",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "browser-use/browser-use",
+   "use": "set-aside",
+   "licence": "MIT",
+   "why": "browser automation in the Python app (0.16)'s conductor (owner 2026-10-13); Lightpanda is the one browser now (owner 2026-11-09)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "unclecode/crawl4ai",
+   "use": "set-aside",
+   "licence": "Apache-2.0",
+   "why": "page reading in the Python app (0.16)'s conductor; Lightpanda is the one browser now",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "firecrawl/firecrawl",
+   "use": "set-aside",
+   "licence": "AGPL-3.0",
+   "why": "page reading in the Python app (0.16)'s conductor; Lightpanda is the one browser now",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "D4Vinci/Scrapling",
+   "use": "set-aside",
+   "licence": "BSD-3-Clause",
+   "why": "page reading in the Python app (0.16)'s conductor; Lightpanda is the one browser now",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "ItzCrazyKns/Vane",
+   "use": "set-aside",
+   "licence": "MIT",
+   "why": "answer engine in the Python app (0.16)'s conductor (with Perplexity); AMAL's web tool searches through Lightpanda",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "vectorize-io/hindsight",
+   "use": "set-aside",
+   "licence": "MIT",
+   "why": "agent memory in the Python app (0.16)'s conductor; AMAL's memory, recall and vault took its place (the seven kinds of memory, owner 2026-11-09)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "sst/opencode",
+   "use": "set-aside",
+   "licence": "MIT",
+   "why": "the coding agent the Python app (0.16) ran jobs through; AMAL's own loop and the selectable harness replaced it",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "Yamz-Labs/kyojin",
+   "use": "set-aside",
+   "licence": "see repository",
+   "why": "owner 2026-10-14, for the Python app (0.16); not carried into the rebuild",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "yt-dlp/yt-dlp",
+   "use": "set-aside",
+   "licence": "Unlicense",
+   "why": "video and audio fetching in the Python app (0.16) (owner 2026-10-14); the Video line makes its own footage",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "unslothai/unsloth",
+   "use": "set-aside",
+   "licence": "Apache-2.0",
+   "why": "training a local model on the PC's card from its own finished work (owner 2026-10-14: self-improvement); not carried into the rebuild",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "receptron/laya",
+   "use": "set-aside",
+   "licence": "Apache-2.0",
+   "why": "the local decision model of the Python app (0.16). 'Laya' in AMAL is the first reading of a message by a fast model, not this package",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "ahujasid/blender-mcp",
+   "use": "set-aside",
+   "licence": "MIT",
+   "why": "Blender over MCP in the Python app (0.16) (owner 2026-10-26). AMAL drives Blender with its own scripts (tools/blender) and sessions",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: oniichan-ai / nano-banana-pro",
+   "use": "set-aside",
+   "licence": "unknown",
+   "why": "owner 2026-10-28: manga making; 2026-10-30: 'revisited later or just used by the agent'. The Mangaka line is AMAL's own",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: Perplexity, Headroom, SkillSpector, Kiln, herdr, AppIdea, VoiceStudio, PixelOE",
+   "use": "set-aside",
+   "licence": "various",
+   "why": "tools of the Python app (0.16)'s conductor and Lab (owner 2026-10-13 to 2026-10-26); what the toolbox kept of them is in its capabilities and shelf, the rest was not carried over",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "Tencent-Hunyuan/Hunyuan3D-2.1",
+   "use": "dropped",
+   "licence": "Tencent community licence",
+   "why": "dropped 2026-10-27: 'Tencent has been making bad models' - TRELLIS.2 took its place (its licence also forbids selling)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "storytold/cadcraft",
+   "use": "dropped",
+   "licence": "see repository",
+   "why": "dropped 2026-10-30 with the CAD route (FreeCAD and build123d made worse models) and Forge, which was not rebuilt",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "RodZill4/material-maker",
+   "use": "dropped",
+   "licence": "MIT",
+   "why": "dropped 2026-10-30 with Forge (not rebuilt: real Maya and Blender are driven instead); the same for GoBuild, Gator Model Studio, UVgami and Alpaca3D's labs",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: StableGen",
+   "use": "dropped",
+   "licence": "unknown",
+   "why": "dropped 2026-11-01: its painted textures were worse than TRELLIS's own",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: Pollinations",
+   "use": "dropped",
+   "licence": "service",
+   "why": "dropped 2026-10-26: 'awful results'",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: AirLLM",
+   "use": "dropped",
+   "licence": "unknown",
+   "why": "dropped 2026-11-03: too slow to improve AMAL",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: SearXNG and other browsers",
+   "use": "dropped",
+   "licence": "various",
+   "why": "dropped 2026-11-07 / 2026-11-09: Lightpanda is the only browser",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: Poly Haven, Kenney, Infinigen",
+   "use": "dropped",
+   "licence": "various",
+   "why": "dropped 2026-10-30: free asset libraries and Infinigen 'would be worst' for AMAL's 3D",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: AdvancedSkeleton",
+   "use": "dropped",
+   "licence": "free for use, not open source",
+   "why": "dropped 2026-11-04 for rigging ('clearly a big problem'), reopened as a maybe 2026-11-06; rigging is not the focus now (2026-11-10)",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "name: Spaces, the MMO world, Live Link and Engine tabs, Jev, net-merge",
+   "use": "dropped",
+   "licence": "-",
+   "why": "parts of AMAL itself the owner removed (2026-10-21, 2026-11-07, 2026-11-01); listed so they are not built again",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "n0-computer/iroh",
+   "use": "built-in",
+   "licence": "MIT / Apache-2.0",
+   "why": "the link between the machines (crates/amald/src/direct.rs): each machine is dialled by the key its name and the account's secret make - direct when the networks allow, through a relay otherwise, no account with anyone. The tunnel is the second way until this is seen on the Mac and the PC",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "drumih/turbo-fieldfare",
+   "use": "waiting",
+   "licence": "Apache-2.0",
+   "why": "owner 2026-10-23: wanted on the Mac for local models. A Swift and Metal engine that runs Gemma 4 26B-A4B on any Apple Silicon Mac in about 2 GB of memory (the Mac's present own model takes 5 GB for a 9B), with a local OpenAI-style server that returns tool calls. One model only; 14.3 GB on disk (the external drive); built with Swift 6.2 on macOS 26 or newer - the Mac has macOS 27. To do on the Mac: build its server, install the model, measure tokens a second and tool calls against the MLX model, and make it the Mac's own model if it wins",
+   "machines": "mac",
+   "pinned": ""
+  },
+  {
+   "repo": "RustCrypto/password-hashes",
+   "use": "built-in",
+   "licence": "MIT OR Apache-2.0",
+   "why": "Argon2id (the `argon2` crate): how the account server keeps passwords (account_server.rs)",
+   "machines": "the account server",
+   "pinned": "0.5"
+  },
+  {
+   "repo": "danielmiessler/SecLists",
+   "use": "built-in",
+   "licence": "MIT",
+   "why": "the UK NCSC's 100,000 most used passwords; the 1,256 of 12 characters and more are refused at sign-up (crates/amald/src/common_passwords.txt)",
+   "machines": "the account server",
+   "pinned": ""
+  },
+  {
+   "repo": "huxingyi/autoremesher",
+   "use": "research",
+   "licence": "MIT",
+   "why": "quad retopology with a command line (1.0, 2026-07): the next to try for the 3D line's Topology beside Blender's QuadriFlow, compared on the same model",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "buaacyw/MeshAnythingV2",
+   "use": "research",
+   "licence": "see repository",
+   "why": "low-poly artist-style mesh from a dense model or point cloud - a low-poly retopology step to try on the PC's card (owner 2026-11-11: 'there's definitely open source code there for low poly')",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "Tencent-Hunyuan/bpt",
+   "use": "research",
+   "licence": "Tencent licence - check before use",
+   "why": "low-poly artist meshes up to about 8k faces from a point cloud or picture; watched for its method",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "NeuralCarver/DeepMesh",
+   "use": "research",
+   "licence": "see repository",
+   "why": "autoregressive artist-mesh generation; watched for its method",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "VAST-AI-Research/TripoSR",
+   "use": "research",
+   "licence": "MIT",
+   "why": "a draft model from one picture in under a second on 6-8 GB: a blockout before the full model",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "Stability-AI/stable-fast-3d",
+   "use": "research",
+   "licence": "Stability community licence - check before use",
+   "why": "fast draft model with UVs from one picture; watched",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "meshy-dev/meshy-t2",
+   "use": "research",
+   "licence": "not released yet",
+   "why": "native mesh generation with artist topology in seconds; its code and weights are announced - checked daily",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "Roblox/cube",
+   "use": "research",
+   "licence": "see repository",
+   "why": "Cube 3D: open text-to-3D from Roblox; watched",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "sciences44/meshii",
+   "use": "research",
+   "licence": "MIT",
+   "why": "open image-to-3D platform with a game-ready step (topology, UVs, LODs): read for how it orders its pipeline",
+   "machines": "pc",
+   "pinned": ""
+  },
+  {
+   "repo": "rtk-ai/rtk",
+   "use": "external",
+   "licence": "Apache-2.0 (the rtk command line; its engine and proxy are BUSL-1.1 - rtk-oss is the open edition)",
+   "why": "owner 2026-11-13: 'get RTK and Headroom running on all machines and that should be an AMAL thing users can install'. One Rust program that shortens what commands print before a model reads it. In AMAL since 2026-11-14: Settings > Setup installs it (Mac: brew rtk-ai/tap/rtk-oss, the Apache-2.0 edition; Windows: winget rtk-ai.rtk, which also carries its BUSL-1.1 engine - free to use, not to resell), and a job's `run` asks `rtk rewrite` and runs the command through it when RTK has a filter for it (tools.rs rtk_form; AMAL_RTK=0 turns it off). Its telemetry is off unless turned on. Not measured yet: one code job with and without (calls.jsonl)",
+   "machines": "both",
+   "pinned": "v1.2.0 (2026-11-08) read; installed by brew / winget at its current version"
+  },
+  {
+   "repo": "chopratejas/headroom",
+   "use": "built-in",
+   "licence": "Apache-2.0",
+   "why": "owner 2026-11-13 (and 2026-10-13: it was in the Python app). A compression layer between an agent and its model. In AMAL since 2026-11-13: its two rule-based crushers, in Rust inside the loop (crates/amal-core/src/crush.rs) - a command's long output keeps its errors with the lines around them, its stack traces, a few distinct warnings, its summary and its end where it kept only its last 8,000 characters; a long JSON list keeps its first and last rows and the rows with errors. No Python and no second program on the path (rule 9). Not taken: its proxy, its learned compressor (Kompress), fetching the left-out rows back, its MCP server - to measure against the built-in rules on the same job before any of them is added. The Mac has a ~/.headroom folder from the Python app",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "diegosouzapw/OmniRoute",
+   "use": "waiting",
+   "licence": "MIT",
+   "why": "owner 2026-11-13: 'are we using omni route?' - no; AMAL routes with its own pool (pool.rs, llm.rs). OmniRoute is a local gateway (Node, 127.0.0.1:20128/v1, OpenAI-style) over some 350 providers with fall-back chains and RTK + Caveman compression - the same idea as 9router, which the Python app had. Much of its free list is other tools' subscriptions signed in through it, which is each service's terms and his call per account; the routes that are plainly free API tiers AMAL's free-model search can list itself. If tried: as one more route in the pool, bound to this machine only, never in place of the pool",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "klad-app/klad",
+   "use": "external",
+   "licence": "PolyForm Internal Use 1.0.0 with added permissions (source-available: free for personal use and companies under 500,000 EUR a year; may not be distributed). MIT: its file format, CLI reference, agent skills (docs/skill/) and the klad-client crate",
+   "why": "2D painting and animation an agent works in by command line beside him: strokes, fills, layers, a timeline with in-betweens, bones, and export to PNG, sprite sheets and Godot SpriteFrames - built from its source on each machine (setup: Klad), never shipped with AMAL",
+   "machines": "both",
+   "pinned": ""
+  },
+  {
+   "repo": "esengine/estella",
+   "use": "external",
+   "licence": "Apache-2.0 (engine, SDK, CLI, templates); its visual editor is free and closed; the bundled Spine runtimes need Esoteric's licence",
+   "why": "2D engine with a TypeScript SDK on a C++/WebAssembly core; exports to web, desktop, playable ads, Android and iOS; its editor is an MCP server with 65 tools an agent can drive - a second engine for the Game line's 2D web games",
+   "machines": "both",
+   "pinned": ""
+  }
+ ]
+}

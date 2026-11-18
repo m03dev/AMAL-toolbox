@@ -1,0 +1,270 @@
+{
+ "name": "logo_picture",
+ "version": "1.0",
+ "label": "Logo concepts: FLUX.1 Kontext [dev] + the Logo-Design LoRA (flat minimalist marks, to vectorize after)",
+ "license": "AGPL-3.0 (AMAL's own graph). Models: FLUX.1 Kontext [dev] and Shakker-Labs FLUX.1-dev-LoRA-Logo-Design, both under the FLUX.1 [dev] Non-Commercial License (the weights; the pictures are the owner's).",
+ "sources": {
+  "lora": "huggingface.co/Shakker-Labs/FLUX.1-dev-LoRA-Logo-Design (trigger: wablogo, logo, Minimalist; scale 0.8, 24 steps, guidance 3.5)"
+ },
+ "about": "Draws flat logo concepts from words - a mark with a real idea in it (a shape that hides a letter, two things in one silhouette). Reuses edit_picture's Kontext GGUF and text encoders; only the LoRA is new. Vectorize the pick with scripts/vectorize.py.",
+ "custom_nodes": {
+  "ComfyUI-GGUF": "https://github.com/city96/ComfyUI-GGUF"
+ },
+ "uploads": {},
+ "params": {
+  "prompt": {
+   "node": "7",
+   "input": "text",
+   "type": "string",
+   "default": ""
+  },
+  "seed": {
+   "node": "11",
+   "input": "seed",
+   "type": "int",
+   "default": 0,
+   "min": 0,
+   "max": 18446744073709551615
+  },
+  "steps": {
+   "node": "11",
+   "input": "steps",
+   "type": "int",
+   "default": 24,
+   "min": 1,
+   "max": 60
+  },
+  "width": {
+   "node": "6",
+   "input": "width",
+   "type": "int",
+   "default": 1024
+  },
+  "height": {
+   "node": "6",
+   "input": "height",
+   "type": "int",
+   "default": 1024
+  },
+  "prefix": {
+   "nodes": [
+    [
+     "13",
+     "filename_prefix"
+    ]
+   ],
+   "type": "string",
+   "default": "amal_render/logo"
+  }
+ },
+ "models": [
+  {
+   "node": "1",
+   "input": "unet_name",
+   "file": "flux1-kontext-dev-Q4_K_M.gguf",
+   "folder": "models/unet",
+   "repo": "QuantStack/FLUX.1-Kontext-dev-GGUF",
+   "revision": "main",
+   "path": "flux1-kontext-dev-Q4_K_M.gguf",
+   "license": "flux-1-dev-non-commercial"
+  },
+  {
+   "node": "5",
+   "input": "lora_name",
+   "file": "FLUX-dev-lora-Logo-Design.safetensors",
+   "folder": "models/loras",
+   "repo": "Shakker-Labs/FLUX.1-dev-LoRA-Logo-Design",
+   "revision": "main",
+   "path": "FLUX-dev-lora-Logo-Design.safetensors",
+   "license": "flux-1-dev-non-commercial"
+  },
+  {
+   "node": "2",
+   "input": "clip_name1",
+   "file": "clip_l.safetensors",
+   "folder": "models/text_encoders",
+   "repo": "comfyanonymous/flux_text_encoders",
+   "revision": "main",
+   "path": "clip_l.safetensors",
+   "license": "mit"
+  },
+  {
+   "node": "2",
+   "input": "clip_name2",
+   "file": "t5xxl_fp8_e4m3fn.safetensors",
+   "folder": "models/text_encoders",
+   "repo": "comfyanonymous/flux_text_encoders",
+   "revision": "main",
+   "path": "t5xxl_fp8_e4m3fn.safetensors",
+   "license": "apache-2.0"
+  },
+  {
+   "node": "3",
+   "input": "vae_name",
+   "file": "ae.safetensors",
+   "folder": "models/vae",
+   "repo": "Comfy-Org/z_image_turbo",
+   "revision": "main",
+   "path": "split_files/vae/ae.safetensors",
+   "license": "apache-2.0"
+  }
+ ],
+ "outputs": {
+  "image": "13",
+  "thumb": "13"
+ },
+ "prompt": {
+  "1": {
+   "class_type": "UnetLoaderGGUF",
+   "inputs": {
+    "unet_name": "flux1-kontext-dev-Q4_K_M.gguf"
+   },
+   "_meta": {
+    "title": "FLUX.1 Kontext dev (GGUF)"
+   }
+  },
+  "5": {
+   "class_type": "LoraLoaderModelOnly",
+   "inputs": {
+    "model": [
+     "1",
+     0
+    ],
+    "lora_name": "FLUX-dev-lora-Logo-Design.safetensors",
+    "strength_model": 0.8
+   },
+   "_meta": {
+    "title": "Logo-Design LoRA"
+   }
+  },
+  "2": {
+   "class_type": "DualCLIPLoader",
+   "inputs": {
+    "clip_name1": "clip_l.safetensors",
+    "clip_name2": "t5xxl_fp8_e4m3fn.safetensors",
+    "type": "flux",
+    "device": "default"
+   },
+   "_meta": {
+    "title": "Text encoders"
+   }
+  },
+  "3": {
+   "class_type": "VAELoader",
+   "inputs": {
+    "vae_name": "ae.safetensors"
+   },
+   "_meta": {
+    "title": "VAE"
+   }
+  },
+  "6": {
+   "class_type": "EmptySD3LatentImage",
+   "inputs": {
+    "width": 1024,
+    "height": 1024,
+    "batch_size": 1
+   },
+   "_meta": {
+    "title": "Size"
+   }
+  },
+  "7": {
+   "class_type": "CLIPTextEncode",
+   "inputs": {
+    "text": "",
+    "clip": [
+     "2",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Prompt"
+   }
+  },
+  "9": {
+   "class_type": "FluxGuidance",
+   "inputs": {
+    "conditioning": [
+     "7",
+     0
+    ],
+    "guidance": 3.5
+   },
+   "_meta": {
+    "title": "Guidance"
+   }
+  },
+  "10": {
+   "class_type": "ConditioningZeroOut",
+   "inputs": {
+    "conditioning": [
+     "7",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Negative"
+   }
+  },
+  "11": {
+   "class_type": "KSampler",
+   "inputs": {
+    "seed": 0,
+    "steps": 24,
+    "cfg": 1.0,
+    "sampler_name": "euler",
+    "scheduler": "simple",
+    "denoise": 1.0,
+    "model": [
+     "5",
+     0
+    ],
+    "positive": [
+     "9",
+     0
+    ],
+    "negative": [
+     "10",
+     0
+    ],
+    "latent_image": [
+     "6",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Sampler"
+   }
+  },
+  "12": {
+   "class_type": "VAEDecode",
+   "inputs": {
+    "samples": [
+     "11",
+     0
+    ],
+    "vae": [
+     "3",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Decode"
+   }
+  },
+  "13": {
+   "class_type": "SaveImage",
+   "inputs": {
+    "filename_prefix": "amal_render/logo",
+    "images": [
+     "12",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Logo concept"
+   }
+  }
+ }
+}

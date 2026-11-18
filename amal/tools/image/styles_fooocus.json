@@ -1,0 +1,1663 @@
+{
+ "about": "Fooocus's style library (github.com/lllyasviel/Fooocus@ae05379 sdxl_styles/*.json, GPL-3.0 - compatible with AMAL's AGPL-3.0; owner 2026-11-06: take what Fooocus does best). Each style is its prompt template ({prompt} is the subject) and what to avoid, with SD weight syntax such as (words:1.4) written as plain words for FLUX. AMAL's own styles (styles.json) win on a shared name. Mix styles with '+': style \"sai-cinematic+watercolor\".",
+ "license": "GPL-3.0 (Fooocus, lllyasviel and its style authors: SAI, MRE, twri, diva, Marc K3nt3l)",
+ "styles": {
+  "cinematic-diva": {
+   "name": "cinematic-diva",
+   "set": "diva",
+   "template": "UHD, 8K, ultra detailed, a cinematic photograph of {prompt}, beautiful lighting, great composition",
+   "avoid": "ugly, deformed, noisy, blurry, NSFW"
+  },
+  "abstract-expressionism": {
+   "name": "Abstract Expressionism",
+   "set": "diva",
+   "template": "Abstract Expressionism Art, {prompt}, High contrast, minimalistic, colorful, stark, dramatic, expressionism",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic"
+  },
+  "academia": {
+   "name": "Academia",
+   "set": "diva",
+   "template": "Academia, {prompt}, preppy Ivy League style, stark, dramatic, chic boarding school, academia",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, grunge, sloppy, unkempt"
+  },
+  "action-figure": {
+   "name": "Action Figure",
+   "set": "diva",
+   "template": "Action Figure, {prompt}, plastic collectable action figure, collectable toy action figure",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "adorable-3d-character": {
+   "name": "Adorable 3D Character",
+   "set": "diva",
+   "template": "Adorable 3D Character, {prompt}, 3D render, adorable character, 3D art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, grunge, sloppy, unkempt, photograph, photo, realistic"
+  },
+  "adorable-kawaii": {
+   "name": "Adorable Kawaii",
+   "set": "diva",
+   "template": "Adorable Kawaii, {prompt}, pretty, cute, adorable, kawaii",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, gothic, dark, moody, monochromatic"
+  },
+  "art-deco": {
+   "name": "Art Deco",
+   "set": "diva",
+   "template": "Art Deco, {prompt}, sleek, geometric forms, art deco style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "art-nouveau": {
+   "name": "Art Nouveau",
+   "set": "diva",
+   "template": "Art Nouveau, beautiful art, {prompt}, sleek, organic forms, long, sinuous, art nouveau style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, industrial, mechanical"
+  },
+  "astral-aura": {
+   "name": "Astral Aura",
+   "set": "diva",
+   "template": "Astral Aura, {prompt}, astral, colorful aura, vibrant energy",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "avant-garde": {
+   "name": "Avant-garde",
+   "set": "diva",
+   "template": "Avant-garde, {prompt}, unusual, experimental, avant-garde art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "baroque": {
+   "name": "Baroque",
+   "set": "diva",
+   "template": "Baroque, {prompt}, dramatic, exuberant, grandeur, baroque art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "bauhaus-style-poster": {
+   "name": "Bauhaus-Style Poster",
+   "set": "diva",
+   "template": "Bauhaus-Style Poster, {prompt}, simple geometric shapes, clean lines, primary colors, Bauhaus-Style Poster",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "blueprint-schematic-drawing": {
+   "name": "Blueprint Schematic Drawing",
+   "set": "diva",
+   "template": "Blueprint Schematic Drawing, {prompt}, technical drawing, blueprint, schematic",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "caricature": {
+   "name": "Caricature",
+   "set": "diva",
+   "template": "Caricature, {prompt}, exaggerated, comical, caricature",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realistic"
+  },
+  "cel-shaded-art": {
+   "name": "Cel Shaded Art",
+   "set": "diva",
+   "template": "Cel Shaded Art, {prompt}, 2D, flat color, toon shading, cel shaded style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "character-design-sheet": {
+   "name": "Character Design Sheet",
+   "set": "diva",
+   "template": "Character Design Sheet, {prompt}, character reference sheet, character turn around",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "classicism-art": {
+   "name": "Classicism Art",
+   "set": "diva",
+   "template": "Classicism Art, {prompt}, inspired by Roman and Greek culture, clarity, harmonious, classicism art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "color-field-painting": {
+   "name": "Color Field Painting",
+   "set": "diva",
+   "template": "Color Field Painting, {prompt}, abstract, simple, geometic, color field painting style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "colored-pencil-art": {
+   "name": "Colored Pencil Art",
+   "set": "diva",
+   "template": "Colored Pencil Art, {prompt}, colored pencil strokes, light color, visible paper texture, colored pencil art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "conceptual-art": {
+   "name": "Conceptual Art",
+   "set": "diva",
+   "template": "Conceptual Art, {prompt}, concept art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "constructivism": {
+   "name": "Constructivism",
+   "set": "diva",
+   "template": "Constructivism Art, {prompt}, minimalistic, geometric forms, constructivism art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "cubism": {
+   "name": "Cubism",
+   "set": "diva",
+   "template": "Cubism Art, {prompt}, flat geometric forms, cubism art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "dadaism": {
+   "name": "Dadaism",
+   "set": "diva",
+   "template": "Dadaism Art, {prompt}, satirical, nonsensical, dadaism art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "dark-fantasy": {
+   "name": "Dark Fantasy",
+   "set": "diva",
+   "template": "Dark Fantasy Art, {prompt}, dark, moody, dark fantasy style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, bright, sunny"
+  },
+  "dark-moody-atmosphere": {
+   "name": "Dark Moody Atmosphere",
+   "set": "diva",
+   "template": "Dark Moody Atmosphere, {prompt}, dramatic, mysterious, dark moody atmosphere",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, vibrant, colorful, bright"
+  },
+  "dmt-art-style": {
+   "name": "DMT Art Style",
+   "set": "diva",
+   "template": "DMT Art Style, {prompt}, bright colors, surreal visuals, swirling patterns, DMT art style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "doodle-art": {
+   "name": "Doodle Art",
+   "set": "diva",
+   "template": "Doodle Art Style, {prompt}, drawing, freeform, swirling patterns, doodle art style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "double-exposure": {
+   "name": "Double Exposure",
+   "set": "diva",
+   "template": "Double Exposure Style, {prompt}, double image ghost effect, image combination, double exposure style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "dripping-paint-splatter-art": {
+   "name": "Dripping Paint Splatter Art",
+   "set": "diva",
+   "template": "Dripping Paint Splatter Art, {prompt}, dramatic, paint drips, splatters, dripping paint",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "expressionism": {
+   "name": "Expressionism",
+   "set": "diva",
+   "template": "Expressionism Art Style, {prompt}, movement, contrast, emotional, exaggerated forms, expressionism art style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "faded-polaroid-photo": {
+   "name": "Faded Polaroid Photo",
+   "set": "diva",
+   "template": "Faded Polaroid Photo, {prompt}, analog, old faded photo, old polaroid",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, vibrant, colorful"
+  },
+  "fauvism": {
+   "name": "Fauvism",
+   "set": "diva",
+   "template": "Fauvism Art, {prompt}, painterly, bold colors, textured brushwork, fauvism art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "flat-2d-art": {
+   "name": "Flat 2D Art",
+   "set": "diva",
+   "template": "Flat 2D Art, {prompt}, simple flat color, 2-dimensional, Flat 2D Art Style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, 3D, photo, realistic"
+  },
+  "fortnite-art-style": {
+   "name": "Fortnite Art Style",
+   "set": "diva",
+   "template": "Fortnite Art Style, {prompt}, 3D cartoon, colorful, Fortnite Art Style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, photo, realistic"
+  },
+  "futurism": {
+   "name": "Futurism",
+   "set": "diva",
+   "template": "Futurism Art Style, {prompt}, dynamic, dramatic, Futurism Art Style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "glitchcore": {
+   "name": "Glitchcore",
+   "set": "diva",
+   "template": "Glitchcore Art Style, {prompt}, dynamic, dramatic, distorted, vibrant colors, glitchcore art style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "glo-fi": {
+   "name": "Glo-fi",
+   "set": "diva",
+   "template": "Glo-fi Art Style, {prompt}, dynamic, dramatic, vibrant colors, glo-fi art style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "googie-art-style": {
+   "name": "Googie Art Style",
+   "set": "diva",
+   "template": "Googie Art Style, {prompt}, dynamic, dramatic, 1950's futurism, bold boomerang angles, Googie art style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "graffiti-art": {
+   "name": "Graffiti Art",
+   "set": "diva",
+   "template": "Graffiti Art Style, {prompt}, dynamic, dramatic, vibrant colors, graffiti art style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "harlem-renaissance-art": {
+   "name": "Harlem Renaissance Art",
+   "set": "diva",
+   "template": "Harlem Renaissance Art Style, {prompt}, dynamic, dramatic, 1920s African American culture, Harlem Renaissance art style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "high-fashion": {
+   "name": "High Fashion",
+   "set": "diva",
+   "template": "High Fashion, {prompt}, dynamic, dramatic, haute couture, elegant, ornate clothing, High Fashion",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "idyllic": {
+   "name": "Idyllic",
+   "set": "diva",
+   "template": "Idyllic, {prompt}, peaceful, happy, pleasant, happy, harmonious, picturesque, charming",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "impressionism": {
+   "name": "Impressionism",
+   "set": "diva",
+   "template": "Impressionism, {prompt}, painterly, small brushstrokes, visible brushstrokes, impressionistic style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "infographic-drawing": {
+   "name": "Infographic Drawing",
+   "set": "diva",
+   "template": "Infographic Drawing, {prompt}, diagram, infographic",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "ink-dripping-drawing": {
+   "name": "Ink Dripping Drawing",
+   "set": "diva",
+   "template": "Ink Dripping Drawing, {prompt}, ink drawing, dripping ink",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, colorful, vibrant"
+  },
+  "japanese-ink-drawing": {
+   "name": "Japanese Ink Drawing",
+   "set": "diva",
+   "template": "Japanese Ink Drawing, {prompt}, ink drawing, inkwash, Japanese Ink Drawing",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, colorful, vibrant"
+  },
+  "knolling-photography": {
+   "name": "Knolling Photography",
+   "set": "diva",
+   "template": "Knolling Photography, {prompt}, flat lay photography, object arrangment, knolling photography",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "light-cheery-atmosphere": {
+   "name": "Light Cheery Atmosphere",
+   "set": "diva",
+   "template": "Light Cheery Atmosphere, {prompt}, happy, joyful, cheerful, carefree, gleeful, lighthearted, pleasant atmosphere",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, monochromatic, dark, moody"
+  },
+  "logo-design": {
+   "name": "Logo Design",
+   "set": "diva",
+   "template": "Logo Design, {prompt}, dynamic graphic art, vector art, minimalist, professional logo design",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "luxurious-elegance": {
+   "name": "Luxurious Elegance",
+   "set": "diva",
+   "template": "Luxurious Elegance, {prompt}, extravagant, ornate, designer, opulent, picturesque, lavish",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "macro-photography": {
+   "name": "Macro Photography",
+   "set": "diva",
+   "template": "Macro Photography, {prompt}, close-up, macro 100mm, macro photography",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "mandola-art": {
+   "name": "Mandola Art",
+   "set": "diva",
+   "template": "Mandola art style, {prompt}, complex, circular design, mandola",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "marker-drawing": {
+   "name": "Marker Drawing",
+   "set": "diva",
+   "template": "Marker Drawing, {prompt}, bold marker lines, visibile paper texture, marker drawing",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, photograph, realistic"
+  },
+  "medievalism": {
+   "name": "Medievalism",
+   "set": "diva",
+   "template": "Medievalism, {prompt}, inspired by The Middle Ages, medieval art, elaborate patterns and decoration, Medievalism",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "minimalism": {
+   "name": "Minimalism",
+   "set": "diva",
+   "template": "Minimalism, {prompt}, abstract, simple geometic shapes, hard edges, sleek contours, Minimalism",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "neo-baroque": {
+   "name": "Neo-Baroque",
+   "set": "diva",
+   "template": "Neo-Baroque, {prompt}, ornate and elaborate, dynaimc, Neo-Baroque",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "neo-byzantine": {
+   "name": "Neo-Byzantine",
+   "set": "diva",
+   "template": "Neo-Byzantine, {prompt}, grand decorative religious style, Orthodox Christian inspired, Neo-Byzantine",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "neo-futurism": {
+   "name": "Neo-Futurism",
+   "set": "diva",
+   "template": "Neo-Futurism, {prompt}, high-tech, curves, spirals, flowing lines, idealistic future, Neo-Futurism",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "neo-impressionism": {
+   "name": "Neo-Impressionism",
+   "set": "diva",
+   "template": "Neo-Impressionism, {prompt}, tiny dabs of color, Pointillism, painterly, Neo-Impressionism",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, photograph, realistic"
+  },
+  "neo-rococo": {
+   "name": "Neo-Rococo",
+   "set": "diva",
+   "template": "Neo-Rococo, {prompt}, curved forms, naturalistic ornamentation, elaborate, decorative, gaudy, Neo-Rococo",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "neoclassicism": {
+   "name": "Neoclassicism",
+   "set": "diva",
+   "template": "Neoclassicism, {prompt}, ancient Rome and Greece inspired, idealic, sober colors, Neoclassicism",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "op-art": {
+   "name": "Op Art",
+   "set": "diva",
+   "template": "Op Art, {prompt}, optical illusion, abstract, geometric pattern, impression of movement, Op Art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "ornate-and-intricate": {
+   "name": "Ornate and Intricate",
+   "set": "diva",
+   "template": "Ornate and Intricate, {prompt}, decorative, highly detailed, elaborate, ornate, intricate",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "pencil-sketch-drawing": {
+   "name": "Pencil Sketch Drawing",
+   "set": "diva",
+   "template": "Pencil Sketch Drawing, {prompt}, black and white drawing, graphite drawing",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "pop-art-2": {
+   "name": "Pop Art 2",
+   "set": "diva",
+   "template": "Pop Art, {prompt}, vivid colors, flat color, 2D, strong lines, Pop Art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, photo, realistic"
+  },
+  "rococo": {
+   "name": "Rococo",
+   "set": "diva",
+   "template": "Rococo, {prompt}, flamboyant, pastel colors, curved lines, elaborate detail, Rococo",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "silhouette-art": {
+   "name": "Silhouette Art",
+   "set": "diva",
+   "template": "Silhouette Art, {prompt}, high contrast, well defined, Silhouette Art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "simple-vector-art": {
+   "name": "Simple Vector Art",
+   "set": "diva",
+   "template": "Simple Vector Art, {prompt}, 2D flat, simple shapes, minimalistic, professional graphic, flat color, high contrast, Simple Vector Art",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, 3D, photo, realistic"
+  },
+  "sketchup": {
+   "name": "Sketchup",
+   "set": "diva",
+   "template": "Sketchup, {prompt}, CAD, professional design, Sketchup",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, photo, photograph"
+  },
+  "steampunk-2": {
+   "name": "Steampunk 2",
+   "set": "diva",
+   "template": "Steampunk, {prompt}, retrofuturistic science fantasy, steam-powered tech, vintage industry, gears, neo-victorian, steampunk",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "surrealism": {
+   "name": "Surrealism",
+   "set": "diva",
+   "template": "Surrealism, {prompt}, expressive, dramatic, organic lines and forms, dreamlike and mysterious, Surrealism",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realistic"
+  },
+  "suprematism": {
+   "name": "Suprematism",
+   "set": "diva",
+   "template": "Suprematism, {prompt}, abstract, limited color palette, geometric forms, Suprematism",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realistic"
+  },
+  "terragen": {
+   "name": "Terragen",
+   "set": "diva",
+   "template": "Terragen, {prompt}, beautiful massive landscape, epic scenery, Terragen",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "tranquil-relaxing-atmosphere": {
+   "name": "Tranquil Relaxing Atmosphere",
+   "set": "diva",
+   "template": "Tranquil Relaxing Atmosphere, {prompt}, calming style, soothing colors, peaceful, idealic, Tranquil Relaxing Atmosphere",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, oversaturated"
+  },
+  "sticker-designs": {
+   "name": "Sticker Designs",
+   "set": "diva",
+   "template": "Vector Art Stickers, {prompt}, professional vector design, sticker designs, Sticker Sheet",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "vibrant-rim-light": {
+   "name": "Vibrant Rim Light",
+   "set": "diva",
+   "template": "Vibrant Rim Light, {prompt}, bright rim light, high contrast, bold edge light",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "volumetric-lighting": {
+   "name": "Volumetric Lighting",
+   "set": "diva",
+   "template": "Volumetric Lighting, {prompt}, light depth, dramatic atmospheric lighting, Volumetric Lighting",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast"
+  },
+  "watercolor-2": {
+   "name": "Watercolor 2",
+   "set": "diva",
+   "template": "Watercolor style painting, {prompt}, visible paper texture, colorwash, watercolor",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, photo, realistic"
+  },
+  "whimsical-and-playful": {
+   "name": "Whimsical and Playful",
+   "set": "diva",
+   "template": "Whimsical and Playful, {prompt}, imaginative, fantastical, bight colors, stylized, happy, Whimsical and Playful",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, drab, boring, moody"
+  },
+  "fooocus-enhance": {
+   "name": "Fooocus Enhance",
+   "set": "fooocus",
+   "avoid": "worst quality, low quality, normal quality, lowres, low details, oversaturated, undersaturated, overexposed, underexposed, grayscale, bw, bad photo, bad photography, bad art, watermark, signature, text font, username, error, logo, words, letters, digits, autograph, trademark, name, blur, blurry, grainy, morbid, ugly, asymmetrical, mutated malformed, mutilated, poorly lit, bad shadow, draft, cropped, out of frame, cut off, censored, jpeg artifacts, out of focus, glitch, duplicate, airbrushed, cartoon, anime, semi-realistic, cgi, render, blender, digital art, manga, amateur, 3D, 3D Game, 3D Game Scene, 3D Character, bad hands, bad anatomy, bad body, bad face, bad teeth, bad arms, bad legs, deformities"
+  },
+  "fooocus-semi-realistic": {
+   "name": "Fooocus Semi Realistic",
+   "set": "fooocus",
+   "avoid": "worst quality, low quality, normal quality, lowres, low details, oversaturated, undersaturated, overexposed, underexposed, bad photo, bad photography, bad art, watermark, signature, text font, username, error, logo, words, letters, digits, autograph, trademark, name, blur, blurry, grainy, morbid, ugly, asymmetrical, mutated malformed, mutilated, poorly lit, bad shadow, draft, cropped, out of frame, cut off, censored, jpeg artifacts, out of focus, glitch, duplicate, bad hands, bad anatomy, bad body, bad face, bad teeth, bad arms, bad legs, deformities"
+  },
+  "fooocus-sharp": {
+   "name": "Fooocus Sharp",
+   "set": "fooocus",
+   "template": "cinematic still {prompt} . emotional, harmonious, vignette, 4k epic detailed, shot on kodak, 35mm photo, sharp focus, high budget, cinemascope, moody, epic, gorgeous, film grain, grainy",
+   "avoid": "anime, cartoon, graphic, blur, blurry, bokeh, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured"
+  },
+  "fooocus-masterpiece": {
+   "name": "Fooocus Masterpiece",
+   "set": "fooocus",
+   "template": "masterpiece, best quality, ultra-detailed, {prompt}, illustration, disheveled hair, detailed eyes, perfect composition, moist skin, intricate details, earrings",
+   "avoid": "longbody, lowres, bad anatomy, bad hands, missing fingers, pubic hair, extra digit, fewer digits, cropped, worst quality, low quality"
+  },
+  "fooocus-photograph": {
+   "name": "Fooocus Photograph",
+   "set": "fooocus",
+   "template": "photograph {prompt}, 50mm . cinematic 4k epic detailed 4k epic detailed photograph shot on kodak detailed cinematic hbo dark moody, 35mm photo, grainy, vignette, vintage, Kodachrome, Lomography, stained, highly detailed, found footage",
+   "avoid": "Brad Pitt, bokeh, depth of field, blurry, cropped, regular face, saturated, contrast, deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, text, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
+  },
+  "fooocus-negative": {
+   "name": "Fooocus Negative",
+   "set": "fooocus",
+   "avoid": "deformed, bad anatomy, disfigured, poorly drawn face, mutated, extra limb, ugly, poorly drawn hands, missing limb, floating limbs, disconnected limbs, disconnected head, malformed hands, long neck, mutated hands and fingers, bad hands, missing fingers, cropped, worst quality, low quality, mutation, poorly drawn, huge calf, bad hands, fused hand, missing hand, disappearing arms, disappearing thigh, disappearing calf, disappearing legs, missing fingers, fused fingers, abnormal eye proportion, Abnormal hands, abnormal legs, abnormal feet, abnormal fingers, drawing, painting, crayon, sketch, graphite, impressionist, noisy, blurry, soft, deformed, ugly, anime, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch"
+  },
+  "fooocus-cinematic": {
+   "name": "Fooocus Cinematic",
+   "set": "fooocus",
+   "template": "cinematic still {prompt} . emotional, harmonious, vignette, highly detailed, high budget, bokeh, cinemascope, moody, epic, gorgeous, film grain, grainy",
+   "avoid": "anime, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured"
+  },
+  "fooocus-pony": {
+   "name": "Fooocus Pony",
+   "set": "fooocus",
+   "template": "score_9, score_8_up, score_7_up, {prompt}",
+   "avoid": "score_6, score_5, score_4"
+  },
+  "mk-chromolithography": {
+   "name": "MK Chromolithography",
+   "set": "marc_k3nt3l",
+   "template": "Chromolithograph {prompt}. Vibrant colors, intricate details, rich color saturation, meticulous registration, multi-layered printing, decorative elements, historical charm, artistic reproductions, commercial posters, nostalgic, ornate compositions.",
+   "avoid": "monochromatic, simple designs, limited color palette, imprecise registration, minimalistic, modern aesthetic, digital appearance."
+  },
+  "mk-cross-processing-print": {
+   "name": "MK Cross Processing Print",
+   "set": "marc_k3nt3l",
+   "template": "Cross processing print {prompt}. Experimental color shifts, unconventional tonalities, vibrant and surreal hues, heightened contrasts, unpredictable results, artistic unpredictability, retro and vintage feel, dynamic color interplay, abstract and dreamlike.",
+   "avoid": "predictable color tones, traditional processing, realistic color representation, subdued contrasts, standard photographic aesthetics."
+  },
+  "mk-dufaycolor-photograph": {
+   "name": "MK Dufaycolor Photograph",
+   "set": "marc_k3nt3l",
+   "template": "Dufaycolor photograph {prompt}. Vintage color palette, distinctive color rendering, soft and dreamy atmosphere, historical charm, unique color process, grainy texture, evocative mood, nostalgic aesthetic, hand-tinted appearance, artistic patina.",
+   "avoid": "modern color reproduction, hyperrealistic tones, sharp and clear details, digital precision, contemporary aesthetic."
+  },
+  "mk-herbarium": {
+   "name": "MK Herbarium",
+   "set": "marc_k3nt3l",
+   "template": "Herbarium drawing{prompt}. Botanical accuracy, old botanical book illustration, detailed illustrations, pressed plants, delicate and precise linework, scientific documentation, meticulous presentation, educational purpose, organic compositions, timeless aesthetic, naturalistic beauty.",
+   "avoid": "abstract representation, vibrant colors, artistic interpretation, chaotic compositions, fantastical elements, digital appearance."
+  },
+  "mk-punk-collage": {
+   "name": "MK Punk Collage",
+   "set": "marc_k3nt3l",
+   "template": "punk collage style {prompt} . mixed media, papercut, textured paper, overlapping, ripped posters, safety pins, chaotic layers, graffiti-style elements, anarchy symbols, vintage photos, cut-and-paste aesthetic, bold typography, distorted images, political messages, urban decay, distressed textures, newspaper clippings, spray paint, rebellious icons, DIY spirit, vivid colors, punk band logos, edgy and raw compositions",
+   "avoid": "conventional, blurry, noisy, low contrast"
+  },
+  "mk-mosaic": {
+   "name": "MK mosaic",
+   "set": "marc_k3nt3l",
+   "template": "mosaic style {prompt} . fragmented, assembled, colorful, highly detailed",
+   "avoid": "whole, unbroken, monochrome"
+  },
+  "mk-van-gogh": {
+   "name": "MK Van Gogh",
+   "set": "marc_k3nt3l",
+   "template": "Oil painting by Van Gogh {prompt} . Expressive, impasto, swirling brushwork, vibrant, brush strokes, Brushstroke-heavy, Textured, Impasto, Colorful, Dynamic, Bold, Distinctive, Vibrant, Whirling, Expressive, Dramatic, Swirling, Layered, Intense, Contrastive, Atmospheric, Luminous, Textural, Evocative, SpiraledVan Gogh style",
+   "avoid": "realistic, photorealistic, calm, straight lines, signature, frame, text, watermark"
+  },
+  "mk-coloring-book": {
+   "name": "MK Coloring Book",
+   "set": "marc_k3nt3l",
+   "template": "centered black and white high contrast line drawing, coloring book style, {prompt} . monochrome, blank white background",
+   "avoid": "greyscale, gradients, shadows, shadow, colored, Red, Blue, Yellow, Green, Orange, Purple, Pink, Brown, Gray, Beige, Turquoise, Lavender, Cyan, Magenta, Olive, Indigo, black background"
+  },
+  "mk-singer-sargent": {
+   "name": "MK Singer Sargent",
+   "set": "marc_k3nt3l",
+   "template": "Oil painting by John Singer Sargent {prompt}. Elegant, refined, masterful technique, realistic portrayal, subtle play of light, captivating expression, rich details, harmonious colors, skillful composition, brush strokes, chiaroscuro.",
+   "avoid": "realistic, photorealistic, abstract, overly stylized, excessive contrasts, distorted, bright colors, disorder."
+  },
+  "mk-pollock": {
+   "name": "MK Pollock",
+   "set": "marc_k3nt3l",
+   "template": "Oil painting by Jackson Pollock {prompt}. Abstract expressionism, drip painting, chaotic composition, energetic, spontaneous, unconventional technique, dynamic, bold, distinctive, vibrant, intense, expressive, energetic, layered, non-representational, gestural.",
+   "avoid": "realistic, photorealistic, representational, calm, ordered composition, precise lines, detailed forms, subdued colors, quiet, static, traditional, figurative."
+  },
+  "mk-basquiat": {
+   "name": "MK Basquiat",
+   "set": "marc_k3nt3l",
+   "template": "Artwork by Jean-Michel Basquiat {prompt}. Neo-expressionism, street art influence, graffiti-inspired, raw, energetic, bold colors, dynamic composition, chaotic, layered, textural, expressive, spontaneous, distinctive, symbolic, energetic brushstrokes.",
+   "avoid": "realistic, photorealistic, calm, precise lines, conventional composition, subdued"
+  },
+  "mk-andy-warhol": {
+   "name": "MK Andy Warhol",
+   "set": "marc_k3nt3l",
+   "template": "Artwork in the style of Andy Warhol {prompt}. Pop art, vibrant colors, bold compositions, repetition of iconic imagery, celebrity culture, commercial aesthetics, mass production influence, stylized simplicity, cultural commentary, graphical elements, distinctive portraits.",
+   "avoid": "subdued colors, realistic, lack of repetition, minimalistic."
+  },
+  "mk-halftone-print": {
+   "name": "MK Halftone print",
+   "set": "marc_k3nt3l",
+   "template": "Halftone print of {prompt}. Dot matrix pattern, grayscale tones, vintage aesthetic, newspaper print vibe, stylized dots, visual texture, black and white contrasts, retro appearance, artistic pointillism, pop culture, Roy Lichtenstein style.",
+   "avoid": "smooth gradients, continuous tones, vibrant colors."
+  },
+  "mk-gond-painting": {
+   "name": "MK Gond Painting",
+   "set": "marc_k3nt3l",
+   "template": "Gond painting {prompt}. Intricate patterns, vibrant colors, detailed motifs, nature-inspired themes, tribal folklore, fine lines, intricate detailing, storytelling compositions, mystical and folkloric, cultural richness.",
+   "avoid": "monochromatic, abstract shapes, minimalistic."
+  },
+  "mk-albumen-print": {
+   "name": "MK Albumen Print",
+   "set": "marc_k3nt3l",
+   "template": "Albumen print {prompt}. Sepia tones, fine details, subtle tonal gradations, delicate highlights, vintage aesthetic, soft and muted atmosphere, historical charm, rich textures, meticulous craftsmanship, classic photographic technique, vignetting.",
+   "avoid": "vibrant colors, high contrast, modern, digital appearance, sharp details, contemporary style."
+  },
+  "mk-aquatint-print": {
+   "name": "MK Aquatint Print",
+   "set": "marc_k3nt3l",
+   "template": "Aquatint print {prompt}. Soft tonal gradations, atmospheric effects, velvety textures, rich contrasts, fine details, etching process, delicate lines, nuanced shading, expressive and moody atmosphere, artistic depth.",
+   "avoid": "sharp contrasts, bold lines, minimalistic."
+  },
+  "mk-anthotype-print": {
+   "name": "MK Anthotype Print",
+   "set": "marc_k3nt3l",
+   "template": "Anthotype print {prompt}. Monochrome dye, soft and muted colors, organic textures, ephemeral and delicate appearance, low details, watercolor canvas, low contrast, overexposed, silhouette, textured paper.",
+   "avoid": "vibrant synthetic dyes, bold and saturated colors."
+  },
+  "mk-inuit-carving": {
+   "name": "MK Inuit Carving",
+   "set": "marc_k3nt3l",
+   "template": "A sculpture made of ivory, {prompt} made of . Sculptures, Inuit art style, intricate carvings, natural materials, storytelling motifs, arctic wildlife themes, symbolic representations, cultural traditions, earthy tones, harmonious compositions, spiritual and mythological elements.",
+   "avoid": "abstract, vibrant colors."
+  },
+  "mk-bromoil-print": {
+   "name": "MK Bromoil Print",
+   "set": "marc_k3nt3l",
+   "template": "Bromoil print {prompt}. Painterly effects, sepia tones, textured surfaces, rich contrasts, expressive brushwork, tonal variations, vintage aesthetic, atmospheric mood, handmade quality, artistic experimentation, darkroom craftsmanship, vignetting.",
+   "avoid": "smooth surfaces, minimal brushwork, contemporary digital appearance."
+  },
+  "mk-calotype-print": {
+   "name": "MK Calotype Print",
+   "set": "marc_k3nt3l",
+   "template": "Calotype print {prompt}. Soft focus, subtle tonal range, paper negative process, fine details, vintage aesthetic, artistic experimentation, atmospheric mood, early photographic charm, handmade quality, vignetting.",
+   "avoid": "sharp focus, bold contrasts, modern aesthetic, digital photography."
+  },
+  "mk-color-sketchnote": {
+   "name": "MK Color Sketchnote",
+   "set": "marc_k3nt3l",
+   "template": "Color sketchnote {prompt}. Hand-drawn elements, vibrant colors, visual hierarchy, playful illustrations, varied typography, graphic icons, organic and dynamic layout, personalized touches, creative expression, engaging storytelling.",
+   "avoid": "monochromatic, geometric layout."
+  },
+  "mk-cibulak-porcelain": {
+   "name": "MK Cibulak Porcelain",
+   "set": "marc_k3nt3l",
+   "template": "A sculpture made of blue pattern porcelain of {prompt}. Classic design, blue and white color scheme, intricate detailing, floral motifs, onion-shaped elements, historical charm, rococo, white ware, cobalt blue, underglaze pattern, fine craftsmanship, traditional elegance, delicate patterns, vintage aesthetic, Meissen, Blue Onion pattern, Cibulak.",
+   "avoid": "tea, teapot, cup, teacup, bright colors, bold and modern design, absence of intricate detailing, lack of floral motifs, non-traditional shapes."
+  },
+  "mk-alcohol-ink-art": {
+   "name": "MK Alcohol Ink Art",
+   "set": "marc_k3nt3l",
+   "template": "Alcohol ink art {prompt}. Fluid and vibrant colors, unpredictable patterns, organic textures, translucent layers, abstract compositions, ethereal and dreamy effects, free-flowing movement, expressive brushstrokes, contemporary aesthetic, wet textured paper.",
+   "avoid": "monochromatic, controlled patterns."
+  },
+  "mk-one-line-art": {
+   "name": "MK One Line Art",
+   "set": "marc_k3nt3l",
+   "template": "One line art {prompt}. Continuous and unbroken black line, minimalistic, simplicity, economical use of space, flowing and dynamic, symbolic representations, contemporary aesthetic, evocative and abstract, white background.",
+   "avoid": "disjointed lines, complexity, complex detailing."
+  },
+  "mk-blacklight-paint": {
+   "name": "MK Blacklight Paint",
+   "set": "marc_k3nt3l",
+   "template": "Blacklight paint {prompt}. Fluorescent pigments, vibrant and surreal colors, ethereal glow, otherworldly effects, dynamic and psychedelic compositions, neon aesthetics, transformative in ultraviolet light, contemporary and experimental.",
+   "avoid": "muted colors, traditional and realistic compositions."
+  },
+  "mk-carnival-glass": {
+   "name": "MK Carnival Glass",
+   "set": "marc_k3nt3l",
+   "template": "A sculpture made of Carnival glass, {prompt}. Iridescent surfaces, vibrant colors, intricate patterns, opalescent hues, reflective and prismatic effects, Art Nouveau and Art Deco influences, vintage charm, intricate detailing, lustrous and luminous appearance, Carnival Glass style.",
+   "avoid": "non-iridescent surfaces, muted colors, absence of intricate patterns, lack of opalescent hues, modern and minimalist aesthetic."
+  },
+  "mk-cyanotype-print": {
+   "name": "MK Cyanotype Print",
+   "set": "marc_k3nt3l",
+   "template": "Cyanotype print {prompt}. Prussian blue tones, distinctive coloration, high contrast, blueprint aesthetics, atmospheric mood, sun-exposed paper, silhouette effects, delicate details, historical charm, handmade and experimental quality.",
+   "avoid": "vibrant colors, low contrast, modern and polished appearance."
+  },
+  "mk-cross-stitching": {
+   "name": "MK Cross-Stitching",
+   "set": "marc_k3nt3l",
+   "template": "Cross-stitching {prompt}. Intricate patterns, embroidery thread, sewing, fine details, precise stitches, textile artistry, symmetrical designs, varied color palette, traditional and contemporary motifs, handmade and crafted, canvas, nostalgic charm.",
+   "avoid": "paper, paint, ink, photography."
+  },
+  "mk-encaustic-paint": {
+   "name": "MK Encaustic Paint",
+   "set": "marc_k3nt3l",
+   "template": "Encaustic paint {prompt}. Textured surfaces, translucent layers, luminous quality, wax medium, rich color saturation, fluid and organic shapes, contemporary and historical influences, mixed media elements, atmospheric depth.",
+   "avoid": "flat surfaces, opaque layers, lack of wax medium, muted color palette, absence of textured surfaces, non-mixed media."
+  },
+  "mk-embroidery": {
+   "name": "MK Embroidery",
+   "set": "marc_k3nt3l",
+   "template": "Embroidery {prompt}. Intricate stitching, embroidery thread, fine details, varied thread textures, textile artistry, embellished surfaces, diverse color palette, traditional and contemporary motifs, handmade and crafted, tactile and ornate.",
+   "avoid": "minimalist, monochromatic."
+  },
+  "mk-gyotaku": {
+   "name": "MK Gyotaku",
+   "set": "marc_k3nt3l",
+   "template": "Gyotaku {prompt}. Fish impressions, realistic details, ink rubbings, textured surfaces, traditional Japanese art form, nature-inspired compositions, artistic representation of marine life, black and white contrasts, cultural significance.",
+   "avoid": "photography."
+  },
+  "mk-luminogram": {
+   "name": "MK Luminogram",
+   "set": "marc_k3nt3l",
+   "template": "Luminogram {prompt}. Photogram technique, ethereal and abstract effects, light and shadow interplay, luminous quality, experimental process, direct light exposure, unique and unpredictable results, artistic experimentation."
+  },
+  "mk-lite-brite-art": {
+   "name": "MK Lite Brite Art",
+   "set": "marc_k3nt3l",
+   "template": "Lite Brite art {prompt}. Luminous and colorful designs, pixelated compositions, retro aesthetic, glowing effects, creative patterns, interactive and playful, nostalgic charm, vibrant and dynamic arrangements.",
+   "avoid": "monochromatic."
+  },
+  "mk-mokume-gane": {
+   "name": "MK Mokume-gane",
+   "set": "marc_k3nt3l",
+   "template": "Mokume-gane {prompt}. Wood-grain patterns, mixed metal layers, intricate and organic designs, traditional Japanese metalwork, harmonious color combinations, artisanal craftsmanship, unique and layered textures, cultural and historical significance.",
+   "avoid": "uniform metal surfaces."
+  },
+  "pebble-art": {
+   "name": "Pebble Art",
+   "set": "marc_k3nt3l",
+   "template": "a sculpture made of peebles, {prompt}. Pebble art style, natural materials, textured surfaces, balanced compositions, organic forms, harmonious arrangements, tactile and 3D effects, beach-inspired aesthetic, creative storytelling, artisanal craftsmanship.",
+   "avoid": "non-natural materials, lack of textured surfaces, imbalanced compositions, absence of organic forms, non-tactile appearance."
+  },
+  "mk-palekh": {
+   "name": "MK Palekh",
+   "set": "marc_k3nt3l",
+   "template": "Palekh art {prompt}. Miniature paintings, intricate details, vivid colors, folkloric themes, lacquer finish, storytelling compositions, symbolic elements, Russian folklore influence, cultural and historical significance.",
+   "avoid": "large-scale paintings."
+  },
+  "mk-suminagashi": {
+   "name": "MK Suminagashi",
+   "set": "marc_k3nt3l",
+   "template": "Suminagashi {prompt}. Floating ink patterns, marbled effects, delicate and ethereal designs, water-based ink, fluid and unpredictable compositions, meditative process, monochromatic or subtle color palette, Japanese artistic tradition.",
+   "avoid": "vibrant and bold color palette."
+  },
+  "mk-scrimshaw": {
+   "name": "MK Scrimshaw",
+   "set": "marc_k3nt3l",
+   "template": "A Scrimshaw engraving of {prompt}. Intricate engravings on a spermwhale's teeth, marine motifs, detailed scenes, nautical themes, black and white contrasts, historical craftsmanship, artisanal carving, storytelling compositions, maritime heritage.",
+   "avoid": "colorful, modern."
+  },
+  "mk-shibori": {
+   "name": "MK Shibori",
+   "set": "marc_k3nt3l",
+   "template": "Shibori {prompt}. Textured fabric, intricate patterns, resist-dyeing technique, indigo or vibrant colors, organic and flowing designs, Japanese textile art, cultural tradition, tactile and visual interest.",
+   "avoid": "monochromatic."
+  },
+  "mk-vitreous-enamel": {
+   "name": "MK Vitreous Enamel",
+   "set": "marc_k3nt3l",
+   "template": "A sculpture made of Vitreous enamel {prompt}. Smooth and glossy surfaces, vibrant colors, glass-like finish, durable and resilient, intricate detailing, traditional and contemporary applications, artistic craftsmanship, jewelry and decorative objects, , Vitreous enamel, colored glass.",
+   "avoid": "rough surfaces, muted colors."
+  },
+  "mk-ukiyo-e": {
+   "name": "MK Ukiyo-e",
+   "set": "marc_k3nt3l",
+   "template": "Ukiyo-e {prompt}. Woodblock prints, vibrant colors, intricate details, depictions of landscapes, kabuki actors, beautiful women, cultural scenes, traditional Japanese art, artistic craftsmanship, historical significance.",
+   "avoid": "absence of woodblock prints, muted colors, lack of intricate details, non-traditional Japanese themes, absence of cultural scenes."
+  },
+  "mk-vintage-airline-poster": {
+   "name": "MK vintage-airline-poster",
+   "set": "marc_k3nt3l",
+   "template": "vintage airline poster {prompt} . classic aviation fonts, pastel colors, elegant aircraft illustrations, scenic destinations, distressed textures, retro travel allure",
+   "avoid": "modern fonts, bold colors, hyper-realistic, sleek design"
+  },
+  "mk-vintage-travel-poster": {
+   "name": "MK vintage-travel-poster",
+   "set": "marc_k3nt3l",
+   "template": "vintage travel poster {prompt} . retro fonts, muted colors, scenic illustrations, iconic landmarks, distressed textures, nostalgic vibes",
+   "avoid": "modern fonts, vibrant colors, hyper-realistic, sleek design"
+  },
+  "mk-bauhaus-style": {
+   "name": "MK bauhaus-style",
+   "set": "marc_k3nt3l",
+   "template": "Bauhaus-inspired {prompt} . minimalism, geometric precision, primary colors, sans-serif typography, asymmetry, functional design",
+   "avoid": "ornate, intricate, excessive detail, complex patterns, serif typography"
+  },
+  "mk-afrofuturism": {
+   "name": "MK afrofuturism",
+   "set": "marc_k3nt3l",
+   "template": "Afrofuturism illustration {prompt} . vibrant colors, futuristic elements, cultural symbolism, cosmic imagery, dynamic patterns, empowering narratives",
+   "avoid": "monochromatic"
+  },
+  "mk-atompunk": {
+   "name": "MK atompunk",
+   "set": "marc_k3nt3l",
+   "template": "Atompunk illustation, {prompt} . retro-futuristic, atomic age aesthetics, sleek lines, metallic textures, futuristic technology, optimism, energy",
+   "avoid": "organic, natural textures, rustic, dystopian"
+  },
+  "mk-constructivism": {
+   "name": "MK constructivism",
+   "set": "marc_k3nt3l",
+   "template": "Constructivism {prompt} . geometric abstraction, bold colors, industrial aesthetics, dynamic compositions, utilitarian design, revolutionary spirit",
+   "avoid": "organic shapes, muted colors, ornate elements, traditional"
+  },
+  "mk-chicano-art": {
+   "name": "MK chicano-art",
+   "set": "marc_k3nt3l",
+   "template": "Chicano art {prompt} . bold colors, cultural symbolism, muralism, lowrider aesthetics, barrio life, political messages, social activism, Mexico",
+   "avoid": "monochromatic, minimalist, mainstream aesthetics"
+  },
+  "mk-de-stijl": {
+   "name": "MK de-stijl",
+   "set": "marc_k3nt3l",
+   "template": "De Stijl Art {prompt} . neoplasticism, primary colors, geometric abstraction, horizontal and vertical lines, simplicity, harmony, utopian ideals",
+   "avoid": "complex patterns, muted colors, ornate elements, asymmetry"
+  },
+  "mk-dayak-art": {
+   "name": "MK dayak-art",
+   "set": "marc_k3nt3l",
+   "template": "Dayak art sculpture of {prompt} . intricate patterns, nature-inspired motifs, vibrant colors, traditional craftsmanship, cultural symbolism, storytelling",
+   "avoid": "minimalist, monochromatic, modern"
+  },
+  "mk-fayum-portrait": {
+   "name": "MK fayum-portrait",
+   "set": "marc_k3nt3l",
+   "template": "Fayum portrait {prompt} . encaustic painting, realistic facial features, warm earth tones, serene expressions, ancient Egyptian influences",
+   "avoid": "abstract, vibrant colors, exaggerated features, modern"
+  },
+  "mk-illuminated-manuscript": {
+   "name": "MK illuminated-manuscript",
+   "set": "marc_k3nt3l",
+   "template": "Illuminated manuscript {prompt} . intricate calligraphy, rich colors, detailed illustrations, gold leaf accents, ornate borders, religious, historical, medieval",
+   "avoid": "modern typography, minimalist design, monochromatic, abstract themes"
+  },
+  "mk-kalighat-painting": {
+   "name": "MK kalighat-painting",
+   "set": "marc_k3nt3l",
+   "template": "Kalighat painting {prompt} . bold lines, vibrant colors, narrative storytelling, cultural motifs, flat compositions, expressive characters",
+   "avoid": "subdued colors, intricate details, realistic portrayal, modern aesthetics"
+  },
+  "mk-madhubani-painting": {
+   "name": "MK madhubani-painting",
+   "set": "marc_k3nt3l",
+   "template": "Madhubani painting {prompt} . intricate patterns, vibrant colors, nature-inspired motifs, cultural storytelling, symmetry, folk art aesthetics",
+   "avoid": "abstract, muted colors, minimalistic design, modern aesthetics"
+  },
+  "mk-pictorialism": {
+   "name": "MK pictorialism",
+   "set": "marc_k3nt3l",
+   "template": "Pictorialism illustration{prompt} . soft focus, atmospheric effects, artistic interpretation, tonality, muted colors, evocative storytelling",
+   "avoid": "sharp focus, high contrast, realistic depiction, vivid colors"
+  },
+  "mk-pichwai-painting": {
+   "name": "MK pichwai-painting",
+   "set": "marc_k3nt3l",
+   "template": "Pichwai painting {prompt} . intricate detailing, vibrant colors, religious themes, nature motifs, devotional storytelling, gold leaf accents",
+   "avoid": "minimalist, subdued colors, abstract design"
+  },
+  "mk-patachitra-painting": {
+   "name": "MK patachitra-painting",
+   "set": "marc_k3nt3l",
+   "template": "Patachitra painting {prompt} . bold outlines, vibrant colors, intricate detailing, mythological themes, storytelling, traditional craftsmanship",
+   "avoid": "subdued colors, minimalistic, abstract, modern aesthetics"
+  },
+  "mk-samoan-art-inspired": {
+   "name": "MK samoan-art-inspired",
+   "set": "marc_k3nt3l",
+   "template": "Samoan art-inspired wooden sculpture {prompt} . traditional motifs, natural elements, bold colors, cultural symbolism, storytelling, craftsmanship",
+   "avoid": "modern aesthetics, minimalist, abstract"
+  },
+  "mk-tlingit-art": {
+   "name": "MK tlingit-art",
+   "set": "marc_k3nt3l",
+   "template": "Tlingit art {prompt} . formline design, natural elements, animal motifs, bold colors, cultural storytelling, traditional craftsmanship, Alaska traditional art, totem"
+  },
+  "mk-adnate-style": {
+   "name": "MK adnate-style",
+   "set": "marc_k3nt3l",
+   "template": "Painting by Adnate {prompt} . realistic portraits, street art, large-scale murals, subdued color palette, social narratives",
+   "avoid": "abstract, vibrant colors, small-scale art"
+  },
+  "mk-ron-english-style": {
+   "name": "MK ron-english-style",
+   "set": "marc_k3nt3l",
+   "template": "Painting by Ron English {prompt} . pop-surrealism, cultural subversion, iconic mash-ups, vibrant and bold colors, satirical commentary",
+   "avoid": "traditional, monochromatic"
+  },
+  "mk-shepard-fairey-style": {
+   "name": "MK shepard-fairey-style",
+   "set": "marc_k3nt3l",
+   "template": "Painting by Shepard Fairey {prompt} . street art, political activism, iconic stencils, bold typography, high contrast, red, black, and white color palette",
+   "avoid": "traditional, muted colors"
+  },
+  "mre-cinematic-dynamic": {
+   "name": "mre-cinematic-dynamic",
+   "set": "mre",
+   "template": "epic cinematic shot of dynamic {prompt} in motion. main subject of high budget action movie. raw photo, motion blur. best quality, high resolution",
+   "avoid": "static, still, motionless, sluggish. drawing, painting, illustration, rendered. low budget. low quality, low resolution"
+  },
+  "mre-spontaneous-picture": {
+   "name": "mre-spontaneous-picture",
+   "set": "mre",
+   "template": "spontaneous picture of {prompt}, taken by talented amateur. best quality, high resolution. magical moment, natural look. simple but good looking",
+   "avoid": "overthinked. low quality, low resolution"
+  },
+  "mre-artistic-vision": {
+   "name": "mre-artistic-vision",
+   "set": "mre",
+   "template": "powerful artistic vision of {prompt}. breathtaking masterpiece made by great artist. best quality, high resolution",
+   "avoid": "insignificant, flawed, made by bad artist. low quality, low resolution"
+  },
+  "mre-dark-dream": {
+   "name": "mre-dark-dream",
+   "set": "mre",
+   "template": "dark and unsettling dream showing {prompt}. best quality, high resolution. created by genius but depressed mad artist. grim beauty",
+   "avoid": "naive, cheerful. comfortable, casual, boring, cliche. low quality, low resolution"
+  },
+  "mre-gloomy-art": {
+   "name": "mre-gloomy-art",
+   "set": "mre",
+   "template": "astonishing gloomy art made mainly of shadows and lighting, forming {prompt}. masterful usage of lighting, shadows and chiaroscuro. made by black-hearted artist, drawing from darkness. best quality, high resolution",
+   "avoid": "low quality, low resolution"
+  },
+  "mre-bad-dream": {
+   "name": "mre-bad-dream",
+   "set": "mre",
+   "template": "picture from really bad dream about terrifying {prompt}, true horror. bone-chilling vision. mad world that shouldn't exist. best quality, high resolution",
+   "avoid": "nice dream, pleasant experience. low quality, low resolution"
+  },
+  "mre-underground": {
+   "name": "mre-underground",
+   "set": "mre",
+   "template": "uncanny caliginous vision of {prompt}, created by remarkable underground artist. best quality, high resolution. raw and brutal art, careless but impressive style. inspired by darkness and chaos",
+   "avoid": "photography, mainstream, civilized. low quality, low resolution"
+  },
+  "mre-surreal-painting": {
+   "name": "mre-surreal-painting",
+   "set": "mre",
+   "template": "surreal painting representing strange vision of {prompt}. harmonious madness, synergy with chance. unique artstyle, mindbending art, magical surrealism. best quality, high resolution",
+   "avoid": "photography, illustration, drawing. realistic, possible. logical, sane. low quality, low resolution"
+  },
+  "mre-dynamic-illustration": {
+   "name": "mre-dynamic-illustration",
+   "set": "mre",
+   "template": "insanely dynamic illustration of {prompt}. best quality, high resolution. crazy artstyle, careless brushstrokes, emotional and fun",
+   "avoid": "photography, realistic. static, still, slow, boring. low quality, low resolution"
+  },
+  "mre-undead-art": {
+   "name": "mre-undead-art",
+   "set": "mre",
+   "template": "long forgotten art created by undead artist illustrating {prompt}, tribute to the death and decay. miserable art of the damned. wretched and decaying world. best quality, high resolution",
+   "avoid": "alive, playful, living. low quality, low resolution"
+  },
+  "mre-elemental-art": {
+   "name": "mre-elemental-art",
+   "set": "mre",
+   "template": "art illustrating insane amounts of raging elemental energy turning into {prompt}, avatar of elements. magical surrealism, wizardry. best quality, high resolution",
+   "avoid": "photography, realistic, real. low quality, low resolution"
+  },
+  "mre-space-art": {
+   "name": "mre-space-art",
+   "set": "mre",
+   "template": "winner of inter-galactic art contest illustrating {prompt}, symbol of the interstellar singularity. best quality, high resolution. artstyle previously unseen in the whole galaxy",
+   "avoid": "created by human race, low quality, low resolution"
+  },
+  "mre-ancient-illustration": {
+   "name": "mre-ancient-illustration",
+   "set": "mre",
+   "template": "sublime ancient illustration of {prompt}, predating human civilization. crude and simple, but also surprisingly beautiful artwork, made by genius primeval artist. best quality, high resolution",
+   "avoid": "low quality, low resolution"
+  },
+  "mre-brave-art": {
+   "name": "mre-brave-art",
+   "set": "mre",
+   "template": "brave, shocking, and brutally true art showing {prompt}. inspired by courage and unlimited creativity. truth found in chaos. best quality, high resolution",
+   "avoid": "low quality, low resolution"
+  },
+  "mre-heroic-fantasy": {
+   "name": "mre-heroic-fantasy",
+   "set": "mre",
+   "template": "heroic fantasy painting of {prompt}, in the dangerous fantasy world. airbrush over oil on canvas. best quality, high resolution",
+   "avoid": "low quality, low resolution"
+  },
+  "mre-dark-cyberpunk": {
+   "name": "mre-dark-cyberpunk",
+   "set": "mre",
+   "template": "dark cyberpunk illustration of brutal {prompt} in a world without hope, ruled by ruthless criminal corporations. best quality, high resolution",
+   "avoid": "low quality, low resolution"
+  },
+  "mre-lyrical-geometry": {
+   "name": "mre-lyrical-geometry",
+   "set": "mre",
+   "template": "geometric and lyrical abstraction painting presenting {prompt}. oil on metal. best quality, high resolution",
+   "avoid": "photography, realistic, drawing, rendered. low quality, low resolution"
+  },
+  "mre-sumi-e-symbolic": {
+   "name": "mre-sumi-e-symbolic",
+   "set": "mre",
+   "template": "big long brushstrokes of deep black sumi-e turning into symbolic painting of {prompt}. master level raw art. best quality, high resolution",
+   "avoid": "photography, rendered. low quality, low resolution"
+  },
+  "mre-sumi-e-detailed": {
+   "name": "mre-sumi-e-detailed",
+   "set": "mre",
+   "template": "highly detailed black sumi-e painting of {prompt}. in-depth study of perfection, created by a master. best quality, high resolution",
+   "avoid": "low quality, low resolution"
+  },
+  "mre-manga": {
+   "name": "mre-manga",
+   "set": "mre",
+   "template": "manga artwork presenting {prompt}. created by japanese manga artist. highly emotional. best quality, high resolution",
+   "avoid": "low quality, low resolution"
+  },
+  "mre-anime": {
+   "name": "mre-anime",
+   "set": "mre",
+   "template": "anime artwork illustrating {prompt}. created by japanese anime studio. highly emotional. best quality, high resolution",
+   "avoid": "low quality, low resolution"
+  },
+  "mre-comic": {
+   "name": "mre-comic",
+   "set": "mre",
+   "template": "breathtaking illustration from adult comic book presenting {prompt}. fabulous artwork. best quality, high resolution",
+   "avoid": "deformed, ugly, low quality, low resolution"
+  },
+  "sai-3d-model": {
+   "name": "sai-3d-model",
+   "set": "sai",
+   "template": "professional 3d model {prompt} . octane render, highly detailed, volumetric, dramatic lighting",
+   "avoid": "ugly, deformed, noisy, low poly, blurry, painting"
+  },
+  "sai-analog-film": {
+   "name": "sai-analog film",
+   "set": "sai",
+   "template": "analog film photo {prompt} . faded film, desaturated, 35mm photo, grainy, vignette, vintage, Kodachrome, Lomography, stained, highly detailed, found footage",
+   "avoid": "painting, drawing, illustration, glitch, deformed, mutated, cross-eyed, ugly, disfigured"
+  },
+  "sai-anime": {
+   "name": "sai-anime",
+   "set": "sai",
+   "template": "anime artwork {prompt} . anime style, key visual, vibrant, studio anime, highly detailed",
+   "avoid": "photo, deformed, black and white, realism, disfigured, low contrast"
+  },
+  "sai-cinematic": {
+   "name": "sai-cinematic",
+   "set": "sai",
+   "template": "cinematic film still {prompt} . shallow depth of field, vignette, highly detailed, high budget, bokeh, cinemascope, moody, epic, gorgeous, film grain, grainy",
+   "avoid": "anime, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured"
+  },
+  "sai-comic-book": {
+   "name": "sai-comic book",
+   "set": "sai",
+   "template": "comic {prompt} . graphic illustration, comic art, graphic novel art, vibrant, highly detailed",
+   "avoid": "photograph, deformed, glitch, noisy, realistic, stock photo"
+  },
+  "sai-craft-clay": {
+   "name": "sai-craft clay",
+   "set": "sai",
+   "template": "play-doh style {prompt} . sculpture, clay art, centered composition, Claymation",
+   "avoid": "sloppy, messy, grainy, highly detailed, ultra textured, photo"
+  },
+  "sai-digital-art": {
+   "name": "sai-digital art",
+   "set": "sai",
+   "template": "concept art {prompt} . digital artwork, illustrative, painterly, matte painting, highly detailed",
+   "avoid": "photo, photorealistic, realism, ugly"
+  },
+  "sai-enhance": {
+   "name": "sai-enhance",
+   "set": "sai",
+   "template": "breathtaking {prompt} . award-winning, professional, highly detailed",
+   "avoid": "ugly, deformed, noisy, blurry, distorted, grainy"
+  },
+  "sai-fantasy-art": {
+   "name": "sai-fantasy art",
+   "set": "sai",
+   "template": "ethereal fantasy concept art of {prompt} . magnificent, celestial, ethereal, painterly, epic, majestic, magical, fantasy art, cover art, dreamy",
+   "avoid": "photographic, realistic, realism, 35mm film, dslr, cropped, frame, text, deformed, glitch, noise, noisy, off-center, deformed, cross-eyed, closed eyes, bad anatomy, ugly, disfigured, sloppy, duplicate, mutated, black and white"
+  },
+  "sai-isometric": {
+   "name": "sai-isometric",
+   "set": "sai",
+   "template": "isometric style {prompt} . vibrant, beautiful, crisp, detailed, ultra detailed, intricate",
+   "avoid": "deformed, mutated, ugly, disfigured, blur, blurry, noise, noisy, realistic, photographic"
+  },
+  "sai-line-art": {
+   "name": "sai-line art",
+   "set": "sai",
+   "template": "line art drawing {prompt} . professional, sleek, modern, minimalist, graphic, line art, vector graphics",
+   "avoid": "anime, photorealistic, 35mm film, deformed, glitch, blurry, noisy, off-center, deformed, cross-eyed, closed eyes, bad anatomy, ugly, disfigured, mutated, realism, realistic, impressionism, expressionism, oil, acrylic"
+  },
+  "sai-lowpoly": {
+   "name": "sai-lowpoly",
+   "set": "sai",
+   "template": "low-poly style {prompt} . low-poly game art, polygon mesh, jagged, blocky, wireframe edges, centered composition",
+   "avoid": "noisy, sloppy, messy, grainy, highly detailed, ultra textured, photo"
+  },
+  "sai-neonpunk": {
+   "name": "sai-neonpunk",
+   "set": "sai",
+   "template": "neonpunk style {prompt} . cyberpunk, vaporwave, neon, vibes, vibrant, stunningly beautiful, crisp, detailed, sleek, ultramodern, magenta highlights, dark purple shadows, high contrast, cinematic, ultra detailed, intricate, professional",
+   "avoid": "painting, drawing, illustration, glitch, deformed, mutated, cross-eyed, ugly, disfigured"
+  },
+  "sai-origami": {
+   "name": "sai-origami",
+   "set": "sai",
+   "template": "origami style {prompt} . paper art, pleated paper, folded, origami art, pleats, cut and fold, centered composition",
+   "avoid": "noisy, sloppy, messy, grainy, highly detailed, ultra textured, photo"
+  },
+  "sai-photographic": {
+   "name": "sai-photographic",
+   "set": "sai",
+   "template": "cinematic photo {prompt} . 35mm photograph, film, bokeh, professional, 4k, highly detailed",
+   "avoid": "drawing, painting, crayon, sketch, graphite, impressionist, noisy, blurry, soft, deformed, ugly"
+  },
+  "sai-pixel-art": {
+   "name": "sai-pixel art",
+   "set": "sai",
+   "template": "pixel-art {prompt} . low-res, blocky, pixel art style, 8-bit graphics",
+   "avoid": "sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realistic"
+  },
+  "sai-texture": {
+   "name": "sai-texture",
+   "set": "sai",
+   "template": "texture {prompt} top down close-up",
+   "avoid": "ugly, deformed, noisy, blurry"
+  },
+  "ads-advertising": {
+   "name": "ads-advertising",
+   "set": "twri",
+   "template": "advertising poster style {prompt} . Professional, modern, product-focused, commercial, eye-catching, highly detailed",
+   "avoid": "noisy, blurry, amateurish, sloppy, unattractive"
+  },
+  "ads-automotive": {
+   "name": "ads-automotive",
+   "set": "twri",
+   "template": "automotive advertisement style {prompt} . sleek, dynamic, professional, commercial, vehicle-focused, high-resolution, highly detailed",
+   "avoid": "noisy, blurry, unattractive, sloppy, unprofessional"
+  },
+  "ads-corporate": {
+   "name": "ads-corporate",
+   "set": "twri",
+   "template": "corporate branding style {prompt} . professional, clean, modern, sleek, minimalist, business-oriented, highly detailed",
+   "avoid": "noisy, blurry, grungy, sloppy, cluttered, disorganized"
+  },
+  "ads-fashion-editorial": {
+   "name": "ads-fashion editorial",
+   "set": "twri",
+   "template": "fashion editorial style {prompt} . high fashion, trendy, stylish, editorial, magazine style, professional, highly detailed",
+   "avoid": "outdated, blurry, noisy, unattractive, sloppy"
+  },
+  "ads-food-photography": {
+   "name": "ads-food photography",
+   "set": "twri",
+   "template": "food photography style {prompt} . appetizing, professional, culinary, high-resolution, commercial, highly detailed",
+   "avoid": "unappetizing, sloppy, unprofessional, noisy, blurry"
+  },
+  "ads-gourmet-food-photography": {
+   "name": "ads-gourmet food photography",
+   "set": "twri",
+   "template": "gourmet food photo of {prompt} . soft natural lighting, macro details, vibrant colors, fresh ingredients, glistening textures, bokeh background, styled plating, wooden tabletop, garnished, tantalizing, editorial quality",
+   "avoid": "cartoon, anime, sketch, grayscale, dull, overexposed, cluttered, messy plate, deformed"
+  },
+  "ads-luxury": {
+   "name": "ads-luxury",
+   "set": "twri",
+   "template": "luxury product style {prompt} . elegant, sophisticated, high-end, luxurious, professional, highly detailed",
+   "avoid": "cheap, noisy, blurry, unattractive, amateurish"
+  },
+  "ads-real-estate": {
+   "name": "ads-real estate",
+   "set": "twri",
+   "template": "real estate photography style {prompt} . professional, inviting, well-lit, high-resolution, property-focused, commercial, highly detailed",
+   "avoid": "dark, blurry, unappealing, noisy, unprofessional"
+  },
+  "ads-retail": {
+   "name": "ads-retail",
+   "set": "twri",
+   "template": "retail packaging style {prompt} . vibrant, enticing, commercial, product-focused, eye-catching, professional, highly detailed",
+   "avoid": "noisy, blurry, amateurish, sloppy, unattractive"
+  },
+  "artstyle-abstract": {
+   "name": "artstyle-abstract",
+   "set": "twri",
+   "template": "abstract style {prompt} . non-representational, colors and shapes, expression of feelings, imaginative, highly detailed",
+   "avoid": "realistic, photographic, figurative, concrete"
+  },
+  "artstyle-abstract-expressionism": {
+   "name": "artstyle-abstract expressionism",
+   "set": "twri",
+   "template": "abstract expressionist painting {prompt} . energetic brushwork, bold colors, abstract forms, expressive, emotional",
+   "avoid": "realistic, photorealistic, low contrast, plain, simple, monochrome"
+  },
+  "artstyle-art-deco": {
+   "name": "artstyle-art deco",
+   "set": "twri",
+   "template": "art deco style {prompt} . geometric shapes, bold colors, luxurious, elegant, decorative, symmetrical, ornate, detailed",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, modernist, minimalist"
+  },
+  "artstyle-art-nouveau": {
+   "name": "artstyle-art nouveau",
+   "set": "twri",
+   "template": "art nouveau style {prompt} . elegant, decorative, curvilinear forms, nature-inspired, ornate, detailed",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, modernist, minimalist"
+  },
+  "artstyle-constructivist": {
+   "name": "artstyle-constructivist",
+   "set": "twri",
+   "template": "constructivist style {prompt} . geometric shapes, bold colors, dynamic composition, propaganda art style",
+   "avoid": "realistic, photorealistic, low contrast, plain, simple, abstract expressionism"
+  },
+  "artstyle-cubist": {
+   "name": "artstyle-cubist",
+   "set": "twri",
+   "template": "cubist artwork {prompt} . geometric shapes, abstract, innovative, revolutionary",
+   "avoid": "anime, photorealistic, 35mm film, deformed, glitch, low contrast, noisy"
+  },
+  "artstyle-expressionist": {
+   "name": "artstyle-expressionist",
+   "set": "twri",
+   "template": "expressionist {prompt} . raw, emotional, dynamic, distortion for emotional effect, vibrant, use of unusual colors, detailed",
+   "avoid": "realism, symmetry, quiet, calm, photo"
+  },
+  "artstyle-graffiti": {
+   "name": "artstyle-graffiti",
+   "set": "twri",
+   "template": "graffiti style {prompt} . street art, vibrant, urban, detailed, tag, mural",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic"
+  },
+  "artstyle-hyperrealism": {
+   "name": "artstyle-hyperrealism",
+   "set": "twri",
+   "template": "hyperrealistic art {prompt} . extremely high-resolution details, photographic, realism pushed to extreme, fine texture, incredibly lifelike",
+   "avoid": "simplified, abstract, unrealistic, impressionistic, low resolution"
+  },
+  "artstyle-impressionist": {
+   "name": "artstyle-impressionist",
+   "set": "twri",
+   "template": "impressionist painting {prompt} . loose brushwork, vibrant color, light and shadow play, captures feeling over form",
+   "avoid": "anime, photorealistic, 35mm film, deformed, glitch, low contrast, noisy"
+  },
+  "artstyle-pointillism": {
+   "name": "artstyle-pointillism",
+   "set": "twri",
+   "template": "pointillism style {prompt} . composed entirely of small, distinct dots of color, vibrant, highly detailed",
+   "avoid": "line drawing, smooth shading, large color fields, simplistic"
+  },
+  "artstyle-pop-art": {
+   "name": "artstyle-pop art",
+   "set": "twri",
+   "template": "pop Art style {prompt} . bright colors, bold outlines, popular culture themes, ironic or kitsch",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, minimalist"
+  },
+  "artstyle-psychedelic": {
+   "name": "artstyle-psychedelic",
+   "set": "twri",
+   "template": "psychedelic style {prompt} . vibrant colors, swirling patterns, abstract forms, surreal, trippy",
+   "avoid": "monochrome, black and white, low contrast, realistic, photorealistic, plain, simple"
+  },
+  "artstyle-renaissance": {
+   "name": "artstyle-renaissance",
+   "set": "twri",
+   "template": "renaissance style {prompt} . realistic, perspective, light and shadow, religious or mythological themes, highly detailed",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, modernist, minimalist, abstract"
+  },
+  "artstyle-steampunk": {
+   "name": "artstyle-steampunk",
+   "set": "twri",
+   "template": "steampunk style {prompt} . antique, mechanical, brass and copper tones, gears, intricate, detailed",
+   "avoid": "deformed, glitch, noisy, low contrast, anime, photorealistic"
+  },
+  "artstyle-surrealist": {
+   "name": "artstyle-surrealist",
+   "set": "twri",
+   "template": "surrealist art {prompt} . dreamlike, mysterious, provocative, symbolic, intricate, detailed",
+   "avoid": "anime, photorealistic, realistic, deformed, glitch, noisy, low contrast"
+  },
+  "artstyle-typography": {
+   "name": "artstyle-typography",
+   "set": "twri",
+   "template": "typographic art {prompt} . stylized, intricate, detailed, artistic, text-based",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic"
+  },
+  "artstyle-watercolor": {
+   "name": "artstyle-watercolor",
+   "set": "twri",
+   "template": "watercolor painting {prompt} . vibrant, beautiful, painterly, detailed, textural, artistic",
+   "avoid": "anime, photorealistic, 35mm film, deformed, glitch, low contrast, noisy"
+  },
+  "futuristic-biomechanical": {
+   "name": "futuristic-biomechanical",
+   "set": "twri",
+   "template": "biomechanical style {prompt} . blend of organic and mechanical elements, futuristic, cybernetic, detailed, intricate",
+   "avoid": "natural, rustic, primitive, organic, simplistic"
+  },
+  "futuristic-biomechanical-cyberpunk": {
+   "name": "futuristic-biomechanical cyberpunk",
+   "set": "twri",
+   "template": "biomechanical cyberpunk {prompt} . cybernetics, human-machine fusion, dystopian, organic meets artificial, dark, intricate, highly detailed",
+   "avoid": "natural, colorful, deformed, sketch, low contrast, watercolor"
+  },
+  "futuristic-cybernetic": {
+   "name": "futuristic-cybernetic",
+   "set": "twri",
+   "template": "cybernetic style {prompt} . futuristic, technological, cybernetic enhancements, robotics, artificial intelligence themes",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, historical, medieval"
+  },
+  "futuristic-cybernetic-robot": {
+   "name": "futuristic-cybernetic robot",
+   "set": "twri",
+   "template": "cybernetic robot {prompt} . android, AI, machine, metal, wires, tech, futuristic, highly detailed",
+   "avoid": "organic, natural, human, sketch, watercolor, low contrast"
+  },
+  "futuristic-cyberpunk-cityscape": {
+   "name": "futuristic-cyberpunk cityscape",
+   "set": "twri",
+   "template": "cyberpunk cityscape {prompt} . neon lights, dark alleys, skyscrapers, futuristic, vibrant colors, high contrast, highly detailed",
+   "avoid": "natural, rural, deformed, low contrast, black and white, sketch, watercolor"
+  },
+  "futuristic-futuristic": {
+   "name": "futuristic-futuristic",
+   "set": "twri",
+   "template": "futuristic style {prompt} . sleek, modern, ultramodern, high tech, detailed",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, vintage, antique"
+  },
+  "futuristic-retro-cyberpunk": {
+   "name": "futuristic-retro cyberpunk",
+   "set": "twri",
+   "template": "retro cyberpunk {prompt} . 80's inspired, synthwave, neon, vibrant, detailed, retro futurism",
+   "avoid": "modern, desaturated, black and white, realism, low contrast"
+  },
+  "futuristic-retro-futurism": {
+   "name": "futuristic-retro futurism",
+   "set": "twri",
+   "template": "retro-futuristic {prompt} . vintage sci-fi, 50s and 60s style, atomic age, vibrant, highly detailed",
+   "avoid": "contemporary, realistic, rustic, primitive"
+  },
+  "futuristic-sci-fi": {
+   "name": "futuristic-sci-fi",
+   "set": "twri",
+   "template": "sci-fi style {prompt} . futuristic, technological, alien worlds, space themes, advanced civilizations",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, historical, medieval"
+  },
+  "futuristic-vaporwave": {
+   "name": "futuristic-vaporwave",
+   "set": "twri",
+   "template": "vaporwave style {prompt} . retro aesthetic, cyberpunk, vibrant, neon colors, vintage 80s and 90s style, highly detailed",
+   "avoid": "monochrome, muted colors, realism, rustic, minimalist, dark"
+  },
+  "game-bubble-bobble": {
+   "name": "game-bubble bobble",
+   "set": "twri",
+   "template": "Bubble Bobble style {prompt} . 8-bit, cute, pixelated, fantasy, vibrant, reminiscent of Bubble Bobble game",
+   "avoid": "realistic, modern, photorealistic, violent, horror"
+  },
+  "game-cyberpunk-game": {
+   "name": "game-cyberpunk game",
+   "set": "twri",
+   "template": "cyberpunk game style {prompt} . neon, dystopian, futuristic, digital, vibrant, detailed, high contrast, reminiscent of cyberpunk genre video games",
+   "avoid": "historical, natural, rustic, low detailed"
+  },
+  "game-fighting-game": {
+   "name": "game-fighting game",
+   "set": "twri",
+   "template": "fighting game style {prompt} . dynamic, vibrant, action-packed, detailed character design, reminiscent of fighting video games",
+   "avoid": "peaceful, calm, minimalist, photorealistic"
+  },
+  "game-gta": {
+   "name": "game-gta",
+   "set": "twri",
+   "template": "GTA-style artwork {prompt} . satirical, exaggerated, pop art style, vibrant colors, iconic characters, action-packed",
+   "avoid": "realistic, black and white, low contrast, impressionist, cubist, noisy, blurry, deformed"
+  },
+  "game-mario": {
+   "name": "game-mario",
+   "set": "twri",
+   "template": "Super Mario style {prompt} . vibrant, cute, cartoony, fantasy, playful, reminiscent of Super Mario series",
+   "avoid": "realistic, modern, horror, dystopian, violent"
+  },
+  "game-minecraft": {
+   "name": "game-minecraft",
+   "set": "twri",
+   "template": "Minecraft style {prompt} . blocky, pixelated, vibrant colors, recognizable characters and objects, game assets",
+   "avoid": "smooth, realistic, detailed, photorealistic, noise, blurry, deformed"
+  },
+  "game-pokemon": {
+   "name": "game-pokemon",
+   "set": "twri",
+   "template": "Pokémon style {prompt} . vibrant, cute, anime, fantasy, reminiscent of Pokémon series",
+   "avoid": "realistic, modern, horror, dystopian, violent"
+  },
+  "game-retro-arcade": {
+   "name": "game-retro arcade",
+   "set": "twri",
+   "template": "retro arcade style {prompt} . 8-bit, pixelated, vibrant, classic video game, old school gaming, reminiscent of 80s and 90s arcade games",
+   "avoid": "modern, ultra-high resolution, photorealistic, 3D"
+  },
+  "game-retro-game": {
+   "name": "game-retro game",
+   "set": "twri",
+   "template": "retro game art {prompt} . 16-bit, vibrant colors, pixelated, nostalgic, charming, fun",
+   "avoid": "realistic, photorealistic, 35mm film, deformed, glitch, low contrast, noisy"
+  },
+  "game-rpg-fantasy-game": {
+   "name": "game-rpg fantasy game",
+   "set": "twri",
+   "template": "role-playing game RPG style fantasy {prompt} . detailed, vibrant, immersive, reminiscent of high fantasy RPG games",
+   "avoid": "sci-fi, modern, urban, futuristic, low detailed"
+  },
+  "game-strategy-game": {
+   "name": "game-strategy game",
+   "set": "twri",
+   "template": "strategy game style {prompt} . overhead view, detailed map, units, reminiscent of real-time strategy video games",
+   "avoid": "first-person view, modern, photorealistic"
+  },
+  "game-streetfighter": {
+   "name": "game-streetfighter",
+   "set": "twri",
+   "template": "Street Fighter style {prompt} . vibrant, dynamic, arcade, 2D fighting game, highly detailed, reminiscent of Street Fighter series",
+   "avoid": "3D, realistic, modern, photorealistic, turn-based strategy"
+  },
+  "game-zelda": {
+   "name": "game-zelda",
+   "set": "twri",
+   "template": "Legend of Zelda style {prompt} . vibrant, fantasy, detailed, epic, heroic, reminiscent of The Legend of Zelda series",
+   "avoid": "sci-fi, modern, realistic, horror"
+  },
+  "misc-architectural": {
+   "name": "misc-architectural",
+   "set": "twri",
+   "template": "architectural style {prompt} . clean lines, geometric shapes, minimalist, modern, architectural drawing, highly detailed",
+   "avoid": "curved lines, ornate, baroque, abstract, grunge"
+  },
+  "misc-disco": {
+   "name": "misc-disco",
+   "set": "twri",
+   "template": "disco-themed {prompt} . vibrant, groovy, retro 70s style, shiny disco balls, neon lights, dance floor, highly detailed",
+   "avoid": "minimalist, rustic, monochrome, contemporary, simplistic"
+  },
+  "misc-dreamscape": {
+   "name": "misc-dreamscape",
+   "set": "twri",
+   "template": "dreamscape {prompt} . surreal, ethereal, dreamy, mysterious, fantasy, highly detailed",
+   "avoid": "realistic, concrete, ordinary, mundane"
+  },
+  "misc-dystopian": {
+   "name": "misc-dystopian",
+   "set": "twri",
+   "template": "dystopian style {prompt} . bleak, post-apocalyptic, somber, dramatic, highly detailed",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, cheerful, optimistic, vibrant, colorful"
+  },
+  "misc-fairy-tale": {
+   "name": "misc-fairy tale",
+   "set": "twri",
+   "template": "fairy tale {prompt} . magical, fantastical, enchanting, storybook style, highly detailed",
+   "avoid": "realistic, modern, ordinary, mundane"
+  },
+  "misc-gothic": {
+   "name": "misc-gothic",
+   "set": "twri",
+   "template": "gothic style {prompt} . dark, mysterious, haunting, dramatic, ornate, detailed",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, cheerful, optimistic"
+  },
+  "misc-grunge": {
+   "name": "misc-grunge",
+   "set": "twri",
+   "template": "grunge style {prompt} . textured, distressed, vintage, edgy, punk rock vibe, dirty, noisy",
+   "avoid": "smooth, clean, minimalist, sleek, modern, photorealistic"
+  },
+  "misc-horror": {
+   "name": "misc-horror",
+   "set": "twri",
+   "template": "horror-themed {prompt} . eerie, unsettling, dark, spooky, suspenseful, grim, highly detailed",
+   "avoid": "cheerful, bright, vibrant, light-hearted, cute"
+  },
+  "misc-kawaii": {
+   "name": "misc-kawaii",
+   "set": "twri",
+   "template": "kawaii style {prompt} . cute, adorable, brightly colored, cheerful, anime influence, highly detailed",
+   "avoid": "dark, scary, realistic, monochrome, abstract"
+  },
+  "misc-lovecraftian": {
+   "name": "misc-lovecraftian",
+   "set": "twri",
+   "template": "lovecraftian horror {prompt} . eldritch, cosmic horror, unknown, mysterious, surreal, highly detailed",
+   "avoid": "light-hearted, mundane, familiar, simplistic, realistic"
+  },
+  "misc-macabre": {
+   "name": "misc-macabre",
+   "set": "twri",
+   "template": "macabre style {prompt} . dark, gothic, grim, haunting, highly detailed",
+   "avoid": "bright, cheerful, light-hearted, cartoonish, cute"
+  },
+  "misc-manga": {
+   "name": "misc-manga",
+   "set": "twri",
+   "template": "manga style {prompt} . vibrant, high-energy, detailed, iconic, Japanese comic style",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, Western comic style"
+  },
+  "misc-metropolis": {
+   "name": "misc-metropolis",
+   "set": "twri",
+   "template": "metropolis-themed {prompt} . urban, cityscape, skyscrapers, modern, futuristic, highly detailed",
+   "avoid": "rural, natural, rustic, historical, simple"
+  },
+  "misc-minimalist": {
+   "name": "misc-minimalist",
+   "set": "twri",
+   "template": "minimalist style {prompt} . simple, clean, uncluttered, modern, elegant",
+   "avoid": "ornate, complicated, highly detailed, cluttered, disordered, messy, noisy"
+  },
+  "misc-monochrome": {
+   "name": "misc-monochrome",
+   "set": "twri",
+   "template": "monochrome {prompt} . black and white, contrast, tone, texture, detailed",
+   "avoid": "colorful, vibrant, noisy, blurry, deformed"
+  },
+  "misc-nautical": {
+   "name": "misc-nautical",
+   "set": "twri",
+   "template": "nautical-themed {prompt} . sea, ocean, ships, maritime, beach, marine life, highly detailed",
+   "avoid": "landlocked, desert, mountains, urban, rustic"
+  },
+  "misc-space": {
+   "name": "misc-space",
+   "set": "twri",
+   "template": "space-themed {prompt} . cosmic, celestial, stars, galaxies, nebulas, planets, science fiction, highly detailed",
+   "avoid": "earthly, mundane, ground-based, realism"
+  },
+  "misc-stained-glass": {
+   "name": "misc-stained glass",
+   "set": "twri",
+   "template": "stained glass style {prompt} . vibrant, beautiful, translucent, intricate, detailed",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic"
+  },
+  "misc-techwear-fashion": {
+   "name": "misc-techwear fashion",
+   "set": "twri",
+   "template": "techwear fashion {prompt} . futuristic, cyberpunk, urban, tactical, sleek, dark, highly detailed",
+   "avoid": "vintage, rural, colorful, low contrast, realism, sketch, watercolor"
+  },
+  "misc-tribal": {
+   "name": "misc-tribal",
+   "set": "twri",
+   "template": "tribal style {prompt} . indigenous, ethnic, traditional patterns, bold, natural colors, highly detailed",
+   "avoid": "modern, futuristic, minimalist, pastel"
+  },
+  "misc-zentangle": {
+   "name": "misc-zentangle",
+   "set": "twri",
+   "template": "zentangle {prompt} . intricate, abstract, monochrome, patterns, meditative, highly detailed",
+   "avoid": "colorful, representative, simplistic, large fields of color"
+  },
+  "papercraft-collage": {
+   "name": "papercraft-collage",
+   "set": "twri",
+   "template": "collage style {prompt} . mixed media, layered, textural, detailed, artistic",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic"
+  },
+  "papercraft-flat-papercut": {
+   "name": "papercraft-flat papercut",
+   "set": "twri",
+   "template": "flat papercut style {prompt} . silhouette, clean cuts, paper, sharp edges, minimalist, color block",
+   "avoid": "3D, high detail, noise, grainy, blurry, painting, drawing, photo, disfigured"
+  },
+  "papercraft-kirigami": {
+   "name": "papercraft-kirigami",
+   "set": "twri",
+   "template": "kirigami representation of {prompt} . 3D, paper folding, paper cutting, Japanese, intricate, symmetrical, precision, clean lines",
+   "avoid": "painting, drawing, 2D, noisy, blurry, deformed"
+  },
+  "papercraft-paper-mache": {
+   "name": "papercraft-paper mache",
+   "set": "twri",
+   "template": "paper mache representation of {prompt} . 3D, sculptural, textured, handmade, vibrant, fun",
+   "avoid": "2D, flat, photo, sketch, digital art, deformed, noisy, blurry"
+  },
+  "papercraft-paper-quilling": {
+   "name": "papercraft-paper quilling",
+   "set": "twri",
+   "template": "paper quilling art of {prompt} . intricate, delicate, curling, rolling, shaping, coiling, loops, 3D, dimensional, ornamental",
+   "avoid": "photo, painting, drawing, 2D, flat, deformed, noisy, blurry"
+  },
+  "papercraft-papercut-collage": {
+   "name": "papercraft-papercut collage",
+   "set": "twri",
+   "template": "papercut collage of {prompt} . mixed media, textured paper, overlapping, asymmetrical, abstract, vibrant",
+   "avoid": "photo, 3D, realistic, drawing, painting, high detail, disfigured"
+  },
+  "papercraft-papercut-shadow-box": {
+   "name": "papercraft-papercut shadow box",
+   "set": "twri",
+   "template": "3D papercut shadow box of {prompt} . layered, dimensional, depth, silhouette, shadow, papercut, handmade, high contrast",
+   "avoid": "painting, drawing, photo, 2D, flat, high detail, blurry, noisy, disfigured"
+  },
+  "papercraft-stacked-papercut": {
+   "name": "papercraft-stacked papercut",
+   "set": "twri",
+   "template": "stacked papercut art of {prompt} . 3D, layered, dimensional, depth, precision cut, stacked layers, papercut, high contrast",
+   "avoid": "2D, flat, noisy, blurry, painting, drawing, photo, deformed"
+  },
+  "papercraft-thick-layered-papercut": {
+   "name": "papercraft-thick layered papercut",
+   "set": "twri",
+   "template": "thick layered papercut art of {prompt} . deep 3D, volumetric, dimensional, depth, thick paper, high stack, heavy texture, tangible layers",
+   "avoid": "2D, flat, thin paper, low stack, smooth texture, painting, drawing, photo, deformed"
+  },
+  "photo-alien": {
+   "name": "photo-alien",
+   "set": "twri",
+   "template": "alien-themed {prompt} . extraterrestrial, cosmic, otherworldly, mysterious, sci-fi, highly detailed",
+   "avoid": "earthly, mundane, common, realistic, simple"
+  },
+  "photo-film-noir": {
+   "name": "photo-film noir",
+   "set": "twri",
+   "template": "film noir style {prompt} . monochrome, high contrast, dramatic shadows, 1940s style, mysterious, cinematic",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, vibrant, colorful"
+  },
+  "photo-glamour": {
+   "name": "photo-glamour",
+   "set": "twri",
+   "template": "glamorous photo {prompt} . high fashion, luxurious, extravagant, stylish, sensual, opulent, elegance, stunning beauty, professional, high contrast, detailed",
+   "avoid": "ugly, deformed, noisy, blurry, distorted, grainy, sketch, low contrast, dull, plain, modest"
+  },
+  "photo-hdr": {
+   "name": "photo-hdr",
+   "set": "twri",
+   "template": "HDR photo of {prompt} . High dynamic range, vivid, rich details, clear shadows and highlights, realistic, intense, enhanced contrast, highly detailed",
+   "avoid": "flat, low contrast, oversaturated, underexposed, overexposed, blurred, noisy"
+  },
+  "photo-iphone-photographic": {
+   "name": "photo-iphone photographic",
+   "set": "twri",
+   "template": "iphone photo {prompt} . large depth of field, deep depth of field, highly detailed",
+   "avoid": "drawing, painting, crayon, sketch, graphite, impressionist, noisy, blurry, soft, deformed, ugly, shallow depth of field, bokeh"
+  },
+  "photo-long-exposure": {
+   "name": "photo-long exposure",
+   "set": "twri",
+   "template": "long exposure photo of {prompt} . Blurred motion, streaks of light, surreal, dreamy, ghosting effect, highly detailed",
+   "avoid": "static, noisy, deformed, shaky, abrupt, flat, low contrast"
+  },
+  "photo-neon-noir": {
+   "name": "photo-neon noir",
+   "set": "twri",
+   "template": "neon noir {prompt} . cyberpunk, dark, rainy streets, neon signs, high contrast, low light, vibrant, highly detailed",
+   "avoid": "bright, sunny, daytime, low contrast, black and white, sketch, watercolor"
+  },
+  "photo-silhouette": {
+   "name": "photo-silhouette",
+   "set": "twri",
+   "template": "silhouette style {prompt} . high contrast, minimalistic, black and white, stark, dramatic",
+   "avoid": "ugly, deformed, noisy, blurry, low contrast, color, realism, photorealistic"
+  },
+  "photo-tilt-shift": {
+   "name": "photo-tilt-shift",
+   "set": "twri",
+   "template": "tilt-shift photo of {prompt} . selective focus, miniature effect, blurred background, highly detailed, vibrant, perspective control",
+   "avoid": "blurry, noisy, deformed, flat, low contrast, unrealistic, oversaturated, underexposed"
+  }
+ }
+}

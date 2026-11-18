@@ -1,0 +1,244 @@
+{
+ "id": "manga",
+ "name": "Mangaka",
+ "icon": "book",
+ "order": 3,
+ "tip": "manga and comic pages: story, panels, lettering",
+ "about": "A manga or comic page from one sentence: the story broken into panels the way a mangaka does (an establishing shot, changing shot sizes, a beat that lands), every panel drawn, the page laid out with inked borders and gutters, and what is said set as real type in balloons - an editable page, never misspelt lettering drawn by a picture model.",
+ "card": true,
+ "needs": [],
+ "playbook": "studio-manga",
+ "ready": true,
+ "tools": [],
+ "subject": "the story of this page in one sentence of at most 24 words: who, where, what happens - no style words",
+ "settings": [
+  {
+   "key": "length",
+   "label": "Length",
+   "kind": "select",
+   "default": "One page",
+   "options": [
+    "One page",
+    "A chapter",
+    "A series"
+   ],
+   "tip": "One page: the page's fixed steps. A chapter or a series: AMAL plans the whole of it first (the story, the cast's sheets, every chapter), then makes it page by page with the same characters, showing each page and checking in between chapters. A request for chapters or volumes is a series by itself",
+   "show": "tiles"
+  },
+  {
+   "key": "reading",
+   "label": "Reading direction",
+   "kind": "select",
+   "default": "Right to left (manga)",
+   "options": [
+    "Right to left (manga)",
+    "Left to right (comic)"
+   ],
+   "tip": "which way the panels and balloons are read"
+  },
+  {
+   "key": "style",
+   "label": "Drawing style",
+   "kind": "select",
+   "default": "manga-ink",
+   "options": [
+    "manga-ink",
+    "manga-colour",
+    "comic",
+    "sai-comic-book",
+    "watercolor",
+    "pixel-art"
+   ],
+   "tip": "manga-ink: black and white with screentone; manga-colour: inked and cel-shaded; comic: western inks and colour",
+   "show": "tiles"
+  },
+  {
+   "key": "panels",
+   "label": "Panels on the page",
+   "kind": "number",
+   "default": 5,
+   "min": 3,
+   "max": 8
+  },
+  {
+   "key": "consistency",
+   "label": "Same characters every panel",
+   "kind": "select",
+   "default": "Character sheets",
+   "options": [
+    "Character sheets",
+    "Off"
+   ],
+   "tip": "Character sheets: each character is drawn once as a reference sheet (front, side, back) and every panel is drawn to match it - the same face, hair, clothes and colours throughout. Off: each panel from words alone (faster, they drift)",
+   "show": "tiles"
+  },
+  {
+   "key": "upscale",
+   "label": "Upscale for print",
+   "kind": "select",
+   "default": "2x",
+   "options": [
+    "Off",
+    "2x",
+    "4x"
+   ],
+   "tip": "every panel made 2 or 4 times larger with Real-ESRGAN's anime model before the page is laid out - clean, sharp ink lines at print size (a page at 2x is about 300 dpi on B5)",
+   "show": "tiles"
+  }
+ ],
+ "recipe": [
+  {
+   "title": "Story and panels",
+   "do": "write",
+   "keep": "story",
+   "does": "the page written like a mangaka's storyboard: who is in it, and panel by panel what is seen and what is said",
+   "args": {
+    "to": "story.json",
+    "must": [
+     "panels"
+    ],
+    "brief": "You are a mangaka writing the storyboard (the name) of ONE page with {panels} panels. First the cast: each character's look in at most 14 words (age, build, hair, clothes, colours) - those exact words are repeated wherever the character is drawn. Then the panels in reading order. The page opens with an establishing shot marked wide, changes shot size from panel to panel (long shot, medium, close-up, extreme close-up on eyes or hands, low or high angle), and ends on a beat that makes the reader turn the page; at most two panels are wide. Each panel's `draw` is for a picture model that reads only the start of a prompt and remembers nothing: at most 40 words, the shot size and angle first (a close-up is still a drawn panel, never a photograph), then each character in it WITH their look words, what they do, their expression, the setting - no words, letters, balloons, sound effects, panel borders or frames in the picture - one single image, with empty sky, wall or ground in one upper corner where a balloon can sit. `says` is what is lettered on the panel: at most 2 per panel, each at most 12 words, kind speech, thought, shout, caption (narration box) or sfx (a sound, one word); silent panels have none.",
+    "shape": {
+     "title": "the page's title",
+     "characters": [
+      {
+       "name": "",
+       "look": "their look in at most 14 words"
+      }
+     ],
+     "panels": [
+      {
+       "draw": "the picture of this panel",
+       "size": "wide or normal",
+       "aspect": "21:9 for a wide panel, 4:3 for the others",
+       "says": [
+        {
+         "text": "what is lettered",
+         "kind": "speech"
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "title": "Character sheets",
+   "do": "image",
+   "when": "story_characters,consistency=Character sheets",
+   "each": "story_characters",
+   "keep": "sheets",
+   "does": "each character drawn once as a reference sheet - every panel is drawn to match it",
+   "args": {
+    "prompt": "{item_name}, {item_look}. Character reference sheet: the same character three times side by side - full body front view, side view and back view, neutral standing pose, plain white background",
+    "style": "{style}",
+    "aspect": "16:9",
+    "name": "sheet_{n}",
+    "count": 1,
+    "exact": true,
+    "seed": "{seed}"
+   }
+  },
+  {
+   "title": "Every panel drawn",
+   "do": "image",
+   "when": "story_panels",
+   "each": "story_panels",
+   "keep": "drawn",
+   "does": "each panel drawn in the page's style, matching the character sheets",
+   "args": {
+    "prompt": "{item_draw}",
+    "style": "{style}",
+    "aspect": "{item_aspect}",
+    "name": "panel_{n}",
+    "count": 1,
+    "exact": true,
+    "seed": "{seed}",
+    "refs": "{sheets}"
+   }
+  },
+  {
+   "title": "The page: layout and lettering",
+   "do": "manga_page",
+   "when": "drawn",
+   "keep": "page",
+   "ext": ".png",
+   "check": "file:renders/{name}_page.png",
+   "does": "the panels laid out in rows with inked borders and gutters, the balloons set as real type in reading order",
+   "args": {
+    "name": "{name}_page",
+    "panels": "{story_panels}",
+    "pictures": "{drawn}",
+    "reading": "{reading}",
+    "upscale": "{upscale}"
+   }
+  },
+  {
+   "title": "Read the page",
+   "do": "look",
+   "args": {
+    "path": "renders/{name}_page.png",
+    "brief": "a finished comic page telling: {subject}. The panels read in order, each drawn clearly, the lettering is readable and no balloon hides a face"
+   },
+   "min_score": 7,
+   "does": "a vision check of the finished page"
+  },
+  {
+   "title": "Done",
+   "do": "finish",
+   "args": {
+    "files": [
+     "renders/{name}_page.png",
+     "renders/{name}_page.svg"
+    ],
+    "summary": "{name}_page.png: the finished page. {name}_page.svg is the same page with every balloon as live text, for editing."
+   }
+  }
+ ],
+ "ask": "What happens on the page?",
+ "templates": [
+  {
+   "name": "Action page",
+   "icon": "bolt",
+   "tip": "a fight or a chase: big wide panels, speed, a sound effect",
+   "prompt": "a rogue leaps between rooftops chased by the city guard",
+   "sets": {
+    "panels": 5,
+    "style": "manga-ink"
+   }
+  },
+  {
+   "name": "Quiet moment",
+   "icon": "note",
+   "tip": "two characters talk; close-ups and a silent last panel",
+   "prompt": "an old wizard teaches his apprentice to light a candle",
+   "sets": {
+    "panels": 4,
+    "style": "watercolor"
+   }
+  },
+  {
+   "name": "Comedy strip",
+   "icon": "msg",
+   "tip": "set-up, build, twist, punchline",
+   "prompt": "the party's barbarian tries to pay for ale with a live chicken",
+   "sets": {
+    "panels": 4,
+    "style": "comic",
+    "reading": "Left to right (comic)"
+   }
+  },
+  {
+   "name": "Big reveal",
+   "icon": "eye",
+   "tip": "the page builds to one large final panel",
+   "prompt": "the treasure chest the heroes open turns out to be a mimic",
+   "sets": {
+    "panels": 6,
+    "style": "manga-colour"
+   }
+  }
+ ],
+ "projects": true,
+ "recipe_when": "length=One page,project!=true"
+}

@@ -1,0 +1,59 @@
+{
+  "budget_min": 120,
+ "id": "farm",
+ "name": "Farm",
+ "icon": "server",
+ "order": 5,
+ "tip": "heavy work on the PC: renders, batches, any long command",
+ "about": "Send heavy work to the machine with the GPU: Blender renders, ComfyUI batches, long commands. Results come back to the Library on every machine.",
+ "card": true,
+ "needs": [
+  "gpu"
+ ],
+ "playbook": "studio-farm",
+ "settings": [
+  {
+   "key": "engine",
+   "label": "Render engine",
+   "kind": "select",
+   "default": "EEVEE",
+   "options": [
+    "EEVEE",
+    "CYCLES"
+   ],
+   "tip": "EEVEE is fast; Cycles is path-traced and slower"
+  },
+  {
+   "key": "samples",
+   "label": "Cycles samples",
+   "kind": "number",
+   "default": 128,
+   "min": 8,
+   "max": 4096,
+   "step": 8
+  },
+  {
+   "key": "resolution",
+   "label": "Resolution",
+   "kind": "select",
+   "default": "1920x1080",
+   "options": [
+    "1280x720",
+    "1920x1080",
+    "2560x1440",
+    "3840x2160"
+   ]
+  },
+  {
+   "key": "format",
+   "label": "Output",
+   "kind": "select",
+   "default": "PNG frames",
+   "options": [
+    "PNG frames",
+    "MP4"
+   ]
+  }
+ ],
+ "ready": false
+}

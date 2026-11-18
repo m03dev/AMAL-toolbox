@@ -1,0 +1,314 @@
+{
+ "about": "Maya's own mesh tools (and Bonus Tools'), one node each in the flow editor. Each takes a model, runs one tool in Maya (mayapy, no window) and hands on an FBX. scripts/maya_mesh.py runs them; crates/amald/src/flow.rs makes the nodes from this list.",
+ "ops": [
+  {
+   "op": "cleanup",
+   "title": "Clean up mesh",
+   "about": "Maya's Mesh > Cleanup: non-manifold edges and vertices split, lamina and zero-area faces removed, close vertices merged - what image-to-3D meshes need before any other tool",
+   "widgets": [
+    {
+     "name": "merge",
+     "kind": "number",
+     "default": 0.01,
+     "min": 0,
+     "max": 1,
+     "step": 0.001,
+     "about": "merge vertices closer than this (cm)"
+    }
+   ]
+  },
+  {
+   "op": "floaters",
+   "title": "Remove floating bits",
+   "about": "Separates the mesh into its pieces and keeps the big ones: the small loose blobs image-to-3D leaves around a model go",
+   "widgets": [
+    {
+     "name": "keep",
+     "kind": "number",
+     "default": 0.02,
+     "min": 0,
+     "max": 1,
+     "step": 0.01,
+     "about": "a piece smaller than this share of the biggest one is removed"
+    }
+   ]
+  },
+  {
+   "op": "nsided_to_quads",
+   "title": "N-sided to quads",
+   "about": "Bonus Tools' Convert N-Sided Faces to Quads: faces with more than four sides are triangulated and joined into quads",
+   "widgets": [
+    {
+     "name": "angle",
+     "kind": "number",
+     "default": 30,
+     "min": 0,
+     "max": 180,
+     "step": 1,
+     "about": "largest angle between two triangles that may be joined"
+    }
+   ]
+  },
+  {
+   "op": "quads",
+   "title": "Triangles to quads",
+   "about": "Maya's Quadrangulate: pairs of triangles become quads where the result is clean",
+   "widgets": [
+    {
+     "name": "angle",
+     "kind": "number",
+     "default": 30,
+     "min": 0,
+     "max": 180,
+     "step": 1,
+     "about": "largest angle between two triangles that may be joined"
+    }
+   ]
+  },
+  {
+   "op": "triangulate",
+   "title": "Triangulate",
+   "about": "Every face becomes triangles (what game engines take in the end)",
+   "widgets": []
+  },
+  {
+   "op": "retopo",
+   "title": "Retopologize",
+   "about": "Maya's Retopologize: a new, even, all-quad mesh over the model at about this many faces (falls back to Reduce + Quadrangulate where Retopologize is not available); UVs are made fresh",
+   "widgets": [
+    {
+     "name": "faces",
+     "kind": "number",
+     "default": 8000,
+     "min": 200,
+     "max": 200000,
+     "step": 100
+    }
+   ]
+  },
+  {
+   "op": "reduce",
+   "title": "Reduce",
+   "about": "Maya's Reduce: fewer triangles, the shape kept, borders kept",
+   "widgets": [
+    {
+     "name": "triangles",
+     "kind": "number",
+     "default": 20000,
+     "min": 100,
+     "max": 500000,
+     "step": 100
+    }
+   ]
+  },
+  {
+   "op": "smooth",
+   "title": "Smooth",
+   "about": "Maya's Smooth: each face divided and rounded",
+   "widgets": [
+    {
+     "name": "divisions",
+     "kind": "number",
+     "default": 1,
+     "min": 1,
+     "max": 3,
+     "step": 1
+    }
+   ]
+  },
+  {
+   "op": "mirror",
+   "title": "Mirror half",
+   "about": "Maya's Mirror (cut): one half of the model mirrored onto the other across the middle, the seam merged",
+   "widgets": [
+    {
+     "name": "keep",
+     "kind": "combo",
+     "default": "+x",
+     "options": [
+      "+x",
+      "-x"
+     ],
+     "about": "the half that is kept"
+    },
+    {
+     "name": "merge",
+     "kind": "number",
+     "default": 0.01,
+     "min": 0,
+     "max": 1,
+     "step": 0.001
+    }
+   ]
+  },
+  {
+   "op": "merge",
+   "title": "Merge vertices",
+   "about": "Maya's Merge: vertices closer than the distance become one",
+   "widgets": [
+    {
+     "name": "distance",
+     "kind": "number",
+     "default": 0.01,
+     "min": 0,
+     "max": 10,
+     "step": 0.001
+    }
+   ]
+  },
+  {
+   "op": "fill_holes",
+   "title": "Fill holes",
+   "about": "Maya's Fill Hole: every open border is closed with a face",
+   "widgets": []
+  },
+  {
+   "op": "soften",
+   "title": "Soften edges",
+   "about": "Maya's Soften/Harden Edge: edges under the angle are soft, sharper ones hard",
+   "widgets": [
+    {
+     "name": "angle",
+     "kind": "number",
+     "default": 60,
+     "min": 0,
+     "max": 180,
+     "step": 1
+    }
+   ]
+  },
+  {
+   "op": "uvs",
+   "title": "Auto UVs",
+   "about": "Fresh UVs: Maya's automatic projection, Unfold3D's unfold and layout (a texture made for the old UVs needs baking again - the Game-ready clean-up does that)",
+   "widgets": [
+    {
+     "name": "resolution",
+     "kind": "combo",
+     "default": "2048",
+     "options": [
+      "1024",
+      "2048",
+      "4096"
+     ]
+    }
+   ]
+  },
+  {
+   "op": "floor",
+   "title": "Stand on the floor",
+   "about": "Transforms frozen, pivot at the feet, the model centred standing on the floor - and scaled to a height when one is given",
+   "widgets": [
+    {
+     "name": "height",
+     "kind": "number",
+     "default": 0,
+     "min": 0,
+     "max": 10000,
+     "step": 1,
+     "about": "height in cm (0 keeps its size)"
+    }
+   ]
+  },
+  {
+   "op": "conform_normals",
+   "title": "Conform normals",
+   "about": "Mesh Display > Conform: every face turned to face the same way as most of its neighbours (image-to-3D meshes often have patches flipped inside out)",
+   "widgets": []
+  },
+  {
+   "op": "reverse_normals",
+   "title": "Reverse normals",
+   "about": "Mesh Display > Reverse: every face turned to face the other way",
+   "widgets": []
+  },
+  {
+   "op": "harden",
+   "title": "Harden edges",
+   "about": "Edges sharper than the angle shade hard, the rest soft (Mesh Display > Soften/Harden by angle, normals unlocked first)",
+   "widgets": [
+    {
+     "name": "angle",
+     "kind": "number",
+     "default": 30,
+     "min": 0,
+     "max": 180,
+     "step": 1,
+     "about": "edges at a sharper angle than this shade hard (degrees)"
+    }
+   ]
+  },
+  {
+   "op": "remesh",
+   "title": "Remesh",
+   "about": "Mesh > Remesh: the surface rebuilt from even triangles about this size - a clean, even base for Retopologize or sculpting",
+   "widgets": [
+    {
+     "name": "size",
+     "kind": "number",
+     "default": 1.0,
+     "min": 0.05,
+     "max": 20,
+     "step": 0.05,
+     "about": "edge length of the new triangles (cm)"
+    }
+   ]
+  },
+  {
+   "op": "relax",
+   "title": "Relax",
+   "about": "Mesh > Average Vertices: lumps and noise smoothed out without adding faces",
+   "widgets": [
+    {
+     "name": "rounds",
+     "kind": "number",
+     "default": 3,
+     "min": 1,
+     "max": 50,
+     "step": 1,
+     "about": "how many rounds of averaging"
+    }
+   ]
+  },
+  {
+   "op": "bevel",
+   "title": "Bevel hard edges",
+   "about": "Edit Mesh > Bevel on the hard edges (sharper than the angle): rounded edges that catch the light, as game props use",
+   "widgets": [
+    {
+     "name": "width",
+     "kind": "number",
+     "default": 0.2,
+     "min": 0.01,
+     "max": 5,
+     "step": 0.01,
+     "about": "bevel width (cm)"
+    },
+    {
+     "name": "segments",
+     "kind": "number",
+     "default": 1,
+     "min": 1,
+     "max": 5,
+     "step": 1,
+     "about": "rows of faces across the bevel"
+    },
+    {
+     "name": "angle",
+     "kind": "number",
+     "default": 40,
+     "min": 1,
+     "max": 179,
+     "step": 1,
+     "about": "only edges sharper than this (degrees)"
+    }
+   ]
+  },
+  {
+   "op": "center_pivot",
+   "title": "Centre pivot",
+   "about": "Modify > Center Pivot and Freeze Transformations: the model's pivot at its middle, its transforms zeroed",
+   "widgets": []
+  }
+ ]
+}

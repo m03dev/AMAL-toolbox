@@ -1,0 +1,37 @@
+{
+ "id": "worker",
+ "name": "Worker",
+ "icon": "bolt",
+ "order": 7,
+ "mode": "worker",
+ "tip": "a background helper on its own free model: research, reports, chores",
+ "about": "A separate helper that runs on the fast free models, never the main brains, so it can work in the background beside everything else: research, reports, lists, chores.",
+ "needs": [],
+ "playbook": "studio-worker",
+ "settings": [
+  {
+   "key": "depth",
+   "label": "Research depth",
+   "kind": "select",
+   "default": "normal",
+   "options": [
+    "quick",
+    "normal",
+    "deep"
+   ],
+   "tip": "how many searches and pages before writing"
+  },
+  {
+   "key": "format",
+   "label": "Write as",
+   "kind": "select",
+   "default": "report",
+   "options": [
+    "report",
+    "bullet list",
+    "table"
+   ]
+  }
+ ],
+ "ready": true
+}

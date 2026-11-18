@@ -1,0 +1,854 @@
+{
+ "shows": [
+  "comfy"
+ ],
+ "budget_min": 90,
+ "id": "video",
+ "name": "Video",
+ "icon": "film",
+ "order": 2,
+ "tip": "short videos: narrated shorts, lists, stories, explainers, ads and cinematic clips",
+ "about": "Short videos from one sentence. A narrated short: a script built to keep the title's promise (a hook, a structure, a tone, an ending ask), a picture per cut, a voice, word-by-word captions in the platforms' safe zone, a slow camera move, transitions and music - cut together by Cutroom. A cinematic clip: one key picture brought to life - by Wan on the graphics card, or by a camera move where there is none - with music under it. Each comes with the post text for its platforms.",
+ "card": true,
+ "needs": [],
+ "playbook": "studio-video",
+ "settings": [
+  {
+   "key": "format",
+   "label": "Kind of video",
+   "kind": "select",
+   "default": "By the job",
+   "options": [
+    "By the job",
+    "Narrated short",
+    "Cinematic clip"
+   ],
+   "tip": "By the job: a topic, a story, an explainer or an ad with something to say becomes a narrated short (script, a picture per scene, voice, subtitles); one moment, mood or shot with no voice becomes a cinematic clip",
+   "by_job": [
+    {
+     "value": "Narrated short"
+    }
+   ],
+   "group": "Story",
+   "icon": "film",
+   "read": true,
+   "about": {
+    "Narrated short": "a video with something to say - a topic, list, story, explainer or ad - narrated over a picture per scene, with captions",
+    "Cinematic clip": "one moment, mood or shot brought to life, with no voice"
+   }
+  },
+  {
+   "key": "structure",
+   "label": "Structure",
+   "kind": "select",
+   "default": "By the job",
+   "group": "Story",
+   "icon": "list",
+   "tip": "How the narration is built. By the job: what fits the topic - a title that promises a number (three things, five tips) is a numbered list that delivers exactly that many, each named and explained",
+   "options": [
+    "By the job",
+    "Numbered list",
+    "Story",
+    "Explainer",
+    "Myth vs fact",
+    "Problem and fix"
+   ]
+  },
+  {
+   "key": "tone",
+   "label": "Tone",
+   "kind": "select",
+   "default": "By the job",
+   "group": "Story",
+   "icon": "msg",
+   "tip": "How it sounds: informative, funny, dramatic, inspiring or persuasive; by the job: what fits the topic",
+   "options": [
+    "By the job",
+    "Informative",
+    "Funny",
+    "Dramatic",
+    "Inspiring",
+    "Persuasive"
+   ]
+  },
+  {
+   "key": "hook",
+   "label": "Hook",
+   "kind": "select",
+   "default": "By the job",
+   "group": "Story",
+   "icon": "bolt",
+   "tip": "The first line, made to stop the scroll: a question, a bold claim, a surprising fact or the start of a story",
+   "options": [
+    "By the job",
+    "Question",
+    "Bold claim",
+    "Surprising fact",
+    "Story open"
+   ]
+  },
+  {
+   "key": "seconds",
+   "label": "Length (s)",
+   "kind": "number",
+   "default": 20,
+   "min": 6,
+   "max": 90,
+   "tip": "a narrated short: its narration is written to this length; a cinematic clip is 5 s of motion per shot",
+   "group": "Story",
+   "icon": "clock",
+   "step": 1
+  },
+  {
+   "key": "call_to_action",
+   "label": "Ending ask",
+   "kind": "text",
+   "default": "",
+   "group": "Story",
+   "icon": "flag",
+   "tip": "Said at the end, word for word (\"Follow for part two\") - empty: the narration ends on its own last idea"
+  },
+  {
+   "key": "language",
+   "label": "Language",
+   "kind": "text",
+   "default": "English",
+   "group": "Story",
+   "icon": "globe",
+   "tip": "The language the narration, captions and post text are written in"
+  },
+  {
+   "key": "aspect",
+   "label": "Shape",
+   "kind": "select",
+   "default": "9:16",
+   "options": [
+    "9:16",
+    "16:9",
+    "1:1"
+   ],
+   "tip": "9:16 for TikTok, Reels and Shorts; 16:9 for YouTube; 1:1 for a feed post",
+   "group": "Look",
+   "icon": "monitor"
+  },
+  {
+   "key": "look",
+   "label": "Look",
+   "kind": "select",
+   "default": "sai-cinematic",
+   "options": [
+    "sai-cinematic",
+    "photo",
+    "game-concept",
+    "concept-art",
+    "sai-anime",
+    "comic",
+    "3d-render",
+    "watercolor",
+    "pixel-art"
+   ],
+   "tip": "the art style of every picture in the video",
+   "show": "tiles",
+   "group": "Look",
+   "icon": "palette"
+  },
+  {
+   "key": "picture_motion",
+   "label": "Picture motion",
+   "kind": "select",
+   "default": "Slow zoom",
+   "group": "Look",
+   "icon": "fwd",
+   "tip": "Narrated short: a slow camera move on every picture keeps the frame alive, or the pictures held still",
+   "options": [
+    "Slow zoom",
+    "Still"
+   ]
+  },
+  {
+   "key": "fit",
+   "label": "Framing",
+   "kind": "select",
+   "default": "Fill",
+   "group": "Look",
+   "icon": "fit",
+   "tip": "Fill: each picture cropped to fill the frame; Fit: the whole picture, with bars where it does not fill it",
+   "options": [
+    "Fill",
+    "Fit"
+   ]
+  },
+  {
+   "key": "voice",
+   "label": "Voice",
+   "kind": "select",
+   "default": "en-US-JennyNeural-Female",
+   "tip": "The narrator (edge-tts voices, free)",
+   "group": "Voice",
+   "icon": "mic",
+   "options": [
+    "en-US-JennyNeural-Female",
+    "en-US-AriaNeural-Female",
+    "en-US-EmmaNeural-Female",
+    "en-US-GuyNeural-Male",
+    "en-US-AndrewNeural-Male",
+    "en-US-BrianNeural-Male",
+    "en-GB-SoniaNeural-Female",
+    "en-GB-RyanNeural-Male",
+    "en-AU-WilliamNeural-Male"
+   ]
+  },
+  {
+   "key": "voice_speed",
+   "label": "Voice speed",
+   "kind": "number",
+   "default": 1.1,
+   "group": "Voice",
+   "icon": "gauge",
+   "tip": "1.0 is the voice's own pace; shorts read best a little quicker",
+   "min": 0.8,
+   "max": 1.4,
+   "step": 0.05
+  },
+  {
+   "key": "captions",
+   "label": "Captions",
+   "kind": "toggle",
+   "default": true,
+   "tip": "Words on the picture as they are spoken - most short videos are watched with the sound off",
+   "group": "Captions",
+   "icon": "cc"
+  },
+  {
+   "key": "caption_style",
+   "label": "Caption style",
+   "kind": "select",
+   "default": "Word pop",
+   "group": "Captions",
+   "icon": "type",
+   "tip": "Word pop: each word appears with a small bounce as it is said; Word by word: the same without the bounce; Sentence: a line at a time",
+   "options": [
+    "Word pop",
+    "Word by word",
+    "Sentence"
+   ]
+  },
+  {
+   "key": "caption_place",
+   "label": "Caption place",
+   "kind": "select",
+   "default": "Lower third",
+   "group": "Captions",
+   "icon": "rect",
+   "tip": "Lower third keeps the words clear of the platforms' buttons and captions at the bottom of a vertical feed",
+   "options": [
+    "Lower third",
+    "Bottom",
+    "Middle",
+    "Top"
+   ]
+  },
+  {
+   "key": "caption_size",
+   "label": "Caption size",
+   "kind": "number",
+   "default": 90,
+   "group": "Captions",
+   "icon": "width",
+   "tip": "Text height in pixels on a 1080-wide frame",
+   "min": 40,
+   "max": 120,
+   "step": 2
+  },
+  {
+   "key": "caption_color",
+   "label": "Caption colour",
+   "kind": "select",
+   "default": "White",
+   "group": "Captions",
+   "icon": "palette",
+   "tip": "The colour of the words",
+   "options": [
+    "White",
+    "Yellow",
+    "Lime",
+    "Cyan",
+    "Pink",
+    "Orange"
+   ]
+  },
+  {
+   "key": "caption_outline",
+   "label": "Outline",
+   "kind": "number",
+   "default": 2,
+   "group": "Captions",
+   "icon": "pentool",
+   "tip": "A dark edge around each letter so it reads on any picture; 0: none",
+   "min": 0,
+   "max": 6,
+   "step": 0.5
+  },
+  {
+   "key": "caption_box",
+   "label": "Box behind words",
+   "kind": "toggle",
+   "default": false,
+   "group": "Captions",
+   "icon": "rect",
+   "tip": "A dark rounded box behind the words"
+  },
+  {
+   "key": "font",
+   "label": "Font",
+   "kind": "select",
+   "default": "Bold",
+   "group": "Captions",
+   "icon": "type",
+   "tip": "Bold and Clean: Be Vietnam Pro; Display: Kabel; Script: Charm",
+   "options": [
+    "Bold",
+    "Clean",
+    "Display",
+    "Script"
+   ]
+  },
+  {
+   "key": "cut_seconds",
+   "label": "Cut every (s)",
+   "kind": "number",
+   "default": 4,
+   "group": "Cut",
+   "icon": "cut",
+   "tip": "The longest a picture stays on screen; the script plans one picture for each",
+   "min": 2,
+   "max": 8,
+   "step": 1
+  },
+  {
+   "key": "transition",
+   "label": "Transition",
+   "kind": "select",
+   "default": "Cut",
+   "group": "Cut",
+   "icon": "swap",
+   "tip": "How one picture gives way to the next: a hard cut, a fade, a slide, a zoom, or a mix",
+   "options": [
+    "Cut",
+    "Fade",
+    "Slide",
+    "Zoom",
+    "Mixed"
+   ]
+  },
+  {
+   "key": "music",
+   "label": "Music",
+   "kind": "toggle",
+   "default": true,
+   "tip": "Music under the voice",
+   "group": "Music",
+   "icon": "music"
+  },
+  {
+   "key": "music_volume",
+   "label": "Music level",
+   "kind": "number",
+   "default": 0.15,
+   "group": "Music",
+   "icon": "sliders",
+   "tip": "How loud the music sits under the voice (0.1-0.2 keeps every word clear)",
+   "min": 0,
+   "max": 0.5,
+   "step": 0.05
+  },
+  {
+   "key": "motion",
+   "label": "How a clip moves",
+   "kind": "select",
+   "default": "By the job",
+   "options": [
+    "By the job",
+    "Wan on the graphics card",
+    "Camera move over the picture"
+   ],
+   "tip": "By the job: Wan animates the key picture on a machine with a graphics card; on a machine without one, or when Wan does not pass or runs far past its usual time, a slow camera move over the picture",
+   "by_job": [
+    {
+     "when": "gpu",
+     "value": "Wan on the graphics card"
+    },
+    {
+     "value": "Camera move over the picture"
+    }
+   ],
+   "group": "Motion clip",
+   "icon": "film"
+  },
+  {
+   "key": "frame",
+   "label": "Frame size",
+   "kind": "select",
+   "default": "By the job",
+   "options": [
+    "By the job",
+    "1080x1920",
+    "1920x1080",
+    "1080x1080"
+   ],
+   "tip": "By the job: from the shape",
+   "by_job": [
+    {
+     "when": "aspect=16:9",
+     "value": "1920x1080"
+    },
+    {
+     "when": "aspect=1:1",
+     "value": "1080x1080"
+    },
+    {
+     "value": "1080x1920"
+    }
+   ],
+   "hidden": true,
+   "group": "Motion clip",
+   "icon": "monitor"
+  },
+  {
+   "key": "clip_width",
+   "label": "Wan clip width",
+   "kind": "select",
+   "default": "By the job",
+   "options": [
+    "By the job"
+   ],
+   "tip": "By the job: from the shape, at the size Wan 2.2 draws well on an 8 GB card",
+   "by_job": [
+    {
+     "when": "aspect=16:9",
+     "value": 832
+    },
+    {
+     "when": "aspect=1:1",
+     "value": 640
+    },
+    {
+     "value": 480
+    }
+   ],
+   "hidden": true,
+   "group": "Motion clip",
+   "icon": "width"
+  },
+  {
+   "key": "clip_height",
+   "label": "Wan clip height",
+   "kind": "select",
+   "default": "By the job",
+   "options": [
+    "By the job"
+   ],
+   "tip": "By the job: from the shape",
+   "by_job": [
+    {
+     "when": "aspect=16:9",
+     "value": 480
+    },
+    {
+     "when": "aspect=1:1",
+     "value": 640
+    },
+    {
+     "value": 832
+    }
+   ],
+   "hidden": true,
+   "group": "Motion clip",
+   "icon": "width"
+  },
+  {
+   "key": "steps",
+   "label": "Video steps",
+   "kind": "number",
+   "default": 20,
+   "min": 6,
+   "max": 40,
+   "group": "Motion clip",
+   "icon": "gauge"
+  }
+ ],
+ "ready": true,
+ "subject": "what the video is about in one sentence of at most 24 words: the topic, product or story and who it is for - no camera words, no style words",
+ "recipe": [
+  {
+   "title": "Script and scenes",
+   "do": "write",
+   "when": "format=Narrated short",
+   "keep": "plan",
+   "does": "the script of the short: a hook in the first line, one idea per sentence, an ending that lands - and one picture per scene",
+   "args": {
+    "to": "script.json",
+    "must": [
+     "narration",
+     "scenes"
+    ],
+    "brief": "You are the writer and director of a short video. Write its narration and its scenes, in {language}. The narration is spoken aloud over about {seconds} seconds: about 2.3 words a second, so close to that many words. Structure: {structure} - By the job means the one that fits the topic best; whatever the structure, the video keeps the promise of its topic: a topic that names a number (three things, five tips) is a numbered list of exactly that many points, each named in plain words and explained in a sentence or two, never fewer, never merged. Tone: {tone}. The first sentence is the hook ({hook}; By the job: the strongest for this topic) - it makes a viewer stay in under two seconds, with no greeting and no 'in this video'. One idea per sentence, plain spoken words, an ending that lands - then, when it is not empty, this ending ask word for word: \"{call_to_action}\". No 'in conclusion', no hashtags, no emoji, no stage directions. The scenes are the pictures shown while it is spoken, in order: one for about every {cut_seconds} seconds (at least 3, at most 14), each showing what is being said at that moment. Each scene's prompt is for a picture model that reads only the start of a prompt and remembers nothing between pictures: at most 40 words, the subject first, then what it does, the setting, the light, the camera; vary the shots (close-up, wide, over the shoulder, detail) so no two scenes look alike; a recurring character is described again in every prompt with the same few words (build, hair, clothes, colours). No writing, logos or text in any picture.",
+    "shape": {
+     "title": "the video's title, at most 8 words",
+     "narration": "the whole narration as one paragraph",
+     "scenes": [
+      {
+       "prompt": "the picture of this scene"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "title": "A picture for every scene",
+   "do": "image",
+   "when": "format=Narrated short,plan_scenes",
+   "each": "plan_scenes",
+   "keep": "scenes",
+   "does": "each scene drawn in the video's look and shape",
+   "args": {
+    "prompt": "{item_prompt}",
+    "style": "{look}",
+    "aspect": "{aspect}",
+    "name": "scene_{n}",
+    "count": 1,
+    "exact": true,
+    "seed": "{seed}"
+   }
+  },
+  {
+   "title": "Voice, captions, music and the cut (Cutroom)",
+   "do": "use",
+   "when": "format=Narrated short,scenes",
+   "check": "file:{name}.mp4",
+   "does": "Cutroom speaks the narration, times word-by-word captions to the voice, moves the camera over each picture and cuts the scenes in order, with music under the voice",
+   "args": {
+    "name": "cutroom.short",
+    "args": {
+     "video": "{name}.mp4",
+     "topic": "{plan_title}",
+     "media": "renders",
+     "aspect": "{aspect}",
+     "voice": "{voice}",
+     "script": "{plan_narration}",
+     "options": {
+      "captions": "{captions}",
+      "caption_style": "{caption_style}",
+      "caption_place": "{caption_place}",
+      "caption_size": "{caption_size}",
+      "caption_color": "{caption_color}",
+      "caption_outline": "{caption_outline}",
+      "caption_box": "{caption_box}",
+      "font": "{font}",
+      "voice_speed": "{voice_speed}",
+      "music": "{music}",
+      "music_volume": "{music_volume}",
+      "motion": "{picture_motion}",
+      "transition": "{transition}",
+      "cut_seconds": "{cut_seconds}",
+      "fit": "{fit}",
+      "language": "{language}"
+     }
+    }
+   }
+  },
+  {
+   "title": "The shot",
+   "do": "write",
+   "when": "format=Cinematic clip",
+   "keep": "shot",
+   "does": "one shot, written like a director of photography: the key picture, how it moves, the music under it",
+   "args": {
+    "to": "shot.json",
+    "must": [
+     "picture",
+     "motion"
+    ],
+    "brief": "You are a director of photography planning ONE cinematic shot of about 5 seconds. Write the key picture (for a picture model that reads only the start of a prompt: at most 45 words, the subject first, then its action frozen at its best moment, the setting, the light with its direction and colour, the lens and angle; no writing in the picture), how the shot moves (one sentence for a video model: what the subject does, ONE camera move - slow push-in, orbit left, crane up, handheld follow - and how the light behaves; calm motion keeps the picture's design) and the music under it (genre, instruments, mood, tempo as words).",
+    "shape": {
+     "title": "the clip's title, at most 6 words",
+     "picture": "the key picture",
+     "motion": "how the shot moves",
+     "music": "music tags"
+    }
+   }
+  },
+  {
+   "title": "Key picture",
+   "do": "image",
+   "when": "format=Cinematic clip,shot_picture",
+   "keep": "key",
+   "does": "the frame the clip starts from",
+   "args": {
+    "prompt": "{shot_picture}",
+    "style": "{look}",
+    "aspect": "{aspect}",
+    "name": "{name}_key.png",
+    "count": 1,
+    "exact": true,
+    "seed": "{seed}"
+   }
+  },
+  {
+   "title": "Motion (Wan on the graphics card)",
+   "do": "comfy",
+   "when": "format=Cinematic clip,key,motion=Wan on the graphics card",
+   "way": "motion",
+   "keep": "clip",
+   "does": "Wan 2.2 animates the key picture: 5 seconds from its first frame",
+   "args": {
+    "graph": "picture_to_video",
+    "inputs": {
+     "image": "{key_first}",
+     "prompt": "{shot_motion}",
+     "frames": 81,
+     "steps": "{steps}",
+     "width": "{clip_width}",
+     "height": "{clip_height}"
+    }
+   }
+  },
+  {
+   "title": "Motion (a camera move over the picture)",
+   "do": "run",
+   "when": "format=Cinematic clip,key,motion=Camera move over the picture",
+   "way": "motion",
+   "check": "file:renders/{name}_motion.mp4",
+   "does": "a slow push-in over the key picture, cropped to the frame - never stretched",
+   "args": {
+    "command": "ffmpeg -y -loop 1 -i {key_first} -vf \"scale=2160:-2,zoompan=z='min(zoom+0.0007,1.14)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=150:s={frame}:fps=30\" -t 5 -pix_fmt yuv420p renders/{name}_motion.mp4",
+    "why": "the camera move: a slow push-in over the key picture"
+   }
+  },
+  {
+   "title": "Use the camera move",
+   "do": "copy",
+   "when": "format=Cinematic clip,motion=Camera move over the picture",
+   "args": {
+    "from": "renders/{name}_motion.mp4",
+    "to": "renders/{name}_clip.mp4"
+   }
+  },
+  {
+   "title": "Wan's clip, as a video every player opens",
+   "do": "run",
+   "when": "format=Cinematic clip,clip,motion=Wan on the graphics card",
+   "args": {
+    "command": "ffmpeg -y -i {clip_first} -c:v libx264 -pix_fmt yuv420p -movflags +faststart renders/{name}_clip.mp4",
+    "why": "Wan's clip as an H.264 .mp4"
+   },
+   "check": "file:renders/{name}_clip.mp4"
+  },
+  {
+   "title": "Music",
+   "do": "comfy",
+   "when": "format=Cinematic clip,music,gpu",
+   "optional": true,
+   "keep": "track",
+   "does": "an ACE-Step track in the shot's mood, as long as the clip",
+   "args": {
+    "graph": "music",
+    "inputs": {
+     "tags": "{shot_music}",
+     "lyrics": "[Instrumental]",
+     "seconds": 6
+    }
+   }
+  },
+  {
+   "title": "Music under the clip",
+   "do": "run",
+   "when": "format=Cinematic clip,track",
+   "check": "file:{name}.mp4",
+   "args": {
+    "command": "ffmpeg -y -i renders/{name}_clip.mp4 -i {track_first} -map 0:v -map 1:a -c:v copy -c:a aac -shortest -movflags +faststart {name}.mp4",
+    "why": "the music laid under the clip"
+   }
+  },
+  {
+   "title": "The clip as it is",
+   "do": "copy",
+   "when": "format=Cinematic clip",
+   "unless": "track",
+   "args": {
+    "from": "renders/{name}_clip.mp4",
+    "to": "{name}.mp4"
+   }
+  },
+  {
+   "title": "Post text",
+   "do": "write",
+   "when": "captions",
+   "keep": "post",
+   "optional": true,
+   "does": "the post for each platform",
+   "args": {
+    "to": "captions.md",
+    "brief": "Write the post text, in {language}, for this short video for TikTok, Instagram Reels, YouTube Shorts and X - a heading per platform, then: a hook line, one or two sentences, a call to action, 3 to 6 hashtags; each within its platform's limits and habits. The video: {subject}"
+   }
+  },
+  {
+   "title": "Done",
+   "do": "finish",
+   "args": {
+    "files": [
+     "{name}.mp4",
+     "captions.md"
+    ],
+    "summary": "{name}.mp4: the finished video. Its post text is in captions.md when it was asked for."
+   }
+  }
+ ],
+ "tools": [],
+ "ask": "What is the video about?",
+ "templates": [
+  {
+   "name": "Top list",
+   "icon": "list",
+   "tip": "a numbered list that delivers exactly what its title promises, each point named and shown",
+   "prompt": "three things every new dungeon master gets wrong",
+   "sets": {
+    "format": "Narrated short",
+    "structure": "Numbered list",
+    "tone": "Informative",
+    "hook": "Bold claim",
+    "aspect": "9:16",
+    "seconds": 35,
+    "caption_style": "Word pop"
+   }
+  },
+  {
+   "name": "Story time",
+   "icon": "book",
+   "tip": "a small story with a beginning, a turn and an ending",
+   "prompt": "the tale of the goblin who wanted to be a paladin",
+   "sets": {
+    "format": "Narrated short",
+    "structure": "Story",
+    "tone": "Dramatic",
+    "hook": "Story open",
+    "aspect": "9:16",
+    "seconds": 45,
+    "look": "watercolor",
+    "transition": "Fade",
+    "caption_style": "Sentence"
+   }
+  },
+  {
+   "name": "Explainer",
+   "icon": "bulb",
+   "tip": "one idea made clear in under a minute: what it is, why it matters, an example",
+   "prompt": "how initiative works in dnd",
+   "sets": {
+    "format": "Narrated short",
+    "structure": "Explainer",
+    "tone": "Informative",
+    "hook": "Question",
+    "aspect": "9:16",
+    "seconds": 40
+   }
+  },
+  {
+   "name": "Myth vs fact",
+   "icon": "swap",
+   "tip": "common beliefs set straight, one at a time",
+   "prompt": "dnd myths new players still believe",
+   "sets": {
+    "format": "Narrated short",
+    "structure": "Myth vs fact",
+    "tone": "Funny",
+    "hook": "Surprising fact",
+    "aspect": "9:16",
+    "seconds": 35
+   }
+  },
+  {
+   "name": "Product ad",
+   "icon": "bolt",
+   "tip": "hook, what it is, why you want it, the ask - 15 s",
+   "prompt": "an ad for a handmade leather dice bag",
+   "sets": {
+    "format": "Narrated short",
+    "structure": "Problem and fix",
+    "tone": "Persuasive",
+    "hook": "Question",
+    "aspect": "9:16",
+    "seconds": 15,
+    "look": "photo",
+    "call_to_action": "Tap the link to get yours",
+    "cut_seconds": 2
+   }
+  },
+  {
+   "name": "Lore drop",
+   "icon": "star",
+   "tip": "dark, cinematic lore with a slow voice and deep music",
+   "prompt": "the fall of the dragon kings",
+   "sets": {
+    "format": "Narrated short",
+    "structure": "Story",
+    "tone": "Dramatic",
+    "hook": "Bold claim",
+    "aspect": "9:16",
+    "seconds": 50,
+    "look": "concept-art",
+    "voice": "en-GB-RyanNeural-Male",
+    "voice_speed": 0.95,
+    "transition": "Fade",
+    "music_volume": 0.2
+   }
+  },
+  {
+   "name": "YouTube explainer",
+   "icon": "monitor",
+   "tip": "a wide 16:9 explainer for a channel",
+   "prompt": "why every dnd party needs a bard",
+   "sets": {
+    "format": "Narrated short",
+    "structure": "Explainer",
+    "tone": "Informative",
+    "aspect": "16:9",
+    "seconds": 75,
+    "caption_place": "Bottom",
+    "caption_size": 56,
+    "cut_seconds": 5
+   }
+  },
+  {
+   "name": "Cinematic shot",
+   "icon": "film",
+   "tip": "one moment brought to life, no voice, music under it",
+   "prompt": "a knight lowers her visor as rain starts to fall on the battlefield",
+   "sets": {
+    "format": "Cinematic clip",
+    "aspect": "9:16",
+    "look": "sai-cinematic"
+   }
+  },
+  {
+   "name": "Wide trailer shot",
+   "icon": "monitor",
+   "tip": "a 16:9 establishing shot for a trailer or a title screen",
+   "prompt": "a floating castle above a sea of clouds at sunrise",
+   "sets": {
+    "format": "Cinematic clip",
+    "aspect": "16:9",
+    "look": "concept-art"
+   }
+  }
+ ],
+ "groups": {
+  "Story": "book",
+  "Look": "palette",
+  "Voice": "mic",
+  "Captions": "cc",
+  "Cut": "cut",
+  "Music": "music",
+  "Motion clip": "film"
+ }
+}

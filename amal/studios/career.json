@@ -1,0 +1,706 @@
+{
+ "id": "career",
+ "name": "Career",
+ "icon": "user",
+ "order": 9,
+ "tip": "your resume, applications, job search and portfolio",
+ "about": "Your resume kept as data and typeset as a PDF in the theme you pick; jobs found on LinkedIn, Indeed, Glassdoor, Google and ZipRecruiter and ranked against your resume; for a job you name, a resume tailored to its posting and a cover letter - never inventing experience you do not have, and you press Submit yourself; a portfolio web page from your resume and the pictures and videos you give.",
+ "needs": [],
+ "shows": [],
+ "playbook": "studio-career",
+ "ready": true,
+ "budget_min": 20,
+ "ask": "What should I make - your resume, an application for a job, a job search or your portfolio?",
+ "subject": "what he wants in one sentence of at most 24 words: the document or search and the role it is for",
+ "groups": {
+  "What": "list",
+  "Resume": "doc",
+  "Search": "globe",
+  "Apply to a job": "send",
+  "Portfolio": "grid"
+ },
+ "settings": [
+  {
+   "key": "make",
+   "label": "Make",
+   "kind": "select",
+   "group": "What",
+   "icon": "list",
+   "default": "By the job",
+   "options": [
+    "By the job",
+    "Resume",
+    "Apply to a job",
+    "Find jobs",
+    "Portfolio"
+   ],
+   "tip": "Resume: your resume as a typeset PDF. Apply to a job: for one posting (paste it, or its link), a tailored resume and a cover letter. Find jobs: postings found and ranked against your resume. Portfolio: a web page of your work. By the job: what your words ask for - 'find jobs ...' is Find jobs even when it names your resume",
+   "by_job": [
+    {
+     "value": "Resume"
+    }
+   ],
+   "read": true,
+   "about": {
+    "Resume": "his resume itself, typeset as a PDF (make, update or restyle my resume)",
+    "Apply to a job": "for one job posting he gives (pasted or a link): his resume tailored to it and a cover letter",
+    "Find jobs": "job postings searched for and ranked against his resume (find jobs, openings, positions)",
+    "Portfolio": "a web page showing his work and resume"
+   }
+  },
+  {
+   "key": "theme",
+   "label": "Resume look",
+   "kind": "select",
+   "group": "Resume",
+   "icon": "doc",
+   "default": "classic",
+   "options": [
+    "classic",
+    "engineeringresumes",
+    "sb2nov",
+    "moderncv",
+    "engineeringclassic",
+    "harvard",
+    "ember"
+   ],
+   "tip": "RenderCV's themes: classic (blue headings, a clean default), engineeringresumes and sb2nov (dense, black and white, liked by technical recruiters), moderncv (a coloured side), engineeringclassic, harvard (the classic academic one), ember"
+  },
+  {
+   "key": "page",
+   "label": "Paper",
+   "kind": "select",
+   "group": "Resume",
+   "icon": "file",
+   "default": "Letter",
+   "options": [
+    "Letter",
+    "A4"
+   ],
+   "tip": "Letter for the US and Canada, A4 almost everywhere else"
+  },
+  {
+   "key": "length",
+   "label": "Length",
+   "kind": "select",
+   "group": "Resume",
+   "icon": "width",
+   "default": "One page",
+   "options": [
+    "One page",
+    "Two pages",
+    "As long as it needs"
+   ],
+   "tip": "One page: the strongest points only (recruiters' usual ask under ten years of experience). Two pages: room for a long career"
+  },
+  {
+   "key": "focus",
+   "label": "Lead with",
+   "kind": "text",
+   "group": "Resume",
+   "icon": "flag",
+   "default": "",
+   "tip": "the kind of role the resume aims at, e.g. 'character artist for games' - the order and wording follow it; empty: what his experience shows best"
+  },
+  {
+   "key": "role",
+   "label": "Search for",
+   "kind": "text",
+   "group": "Search",
+   "icon": "globe",
+   "default": "",
+   "tip": "the job title and a skill or two; empty: from your resume"
+  },
+  {
+   "key": "place",
+   "label": "Where",
+   "kind": "text",
+   "group": "Search",
+   "icon": "pin",
+   "default": "",
+   "tip": "a city and state, or a country; empty: where your resume says you live"
+  },
+  {
+   "key": "remote",
+   "label": "Remote only",
+   "kind": "toggle",
+   "group": "Search",
+   "icon": "globe",
+   "default": false
+  },
+  {
+   "key": "posted_days",
+   "label": "Posted within (days)",
+   "kind": "number",
+   "group": "Search",
+   "icon": "clock",
+   "default": 7,
+   "min": 1,
+   "max": 60
+  },
+  {
+   "key": "how_many",
+   "label": "How many to look at",
+   "kind": "number",
+   "group": "Search",
+   "icon": "list",
+   "default": 40,
+   "min": 5,
+   "max": 150
+  },
+  {
+   "key": "sites",
+   "label": "Sites",
+   "kind": "select",
+   "group": "Search",
+   "icon": "link",
+   "default": "Indeed, LinkedIn, Google",
+   "options": [
+    "Indeed, LinkedIn, Google",
+    "All five",
+    "Indeed",
+    "LinkedIn",
+    "Google",
+    "Glassdoor",
+    "ZipRecruiter"
+   ],
+   "tip": "All five adds Glassdoor and ZipRecruiter (slower, and they turn away searches more often)"
+  },
+  {
+   "key": "letter",
+   "label": "Cover letter",
+   "kind": "toggle",
+   "group": "Apply to a job",
+   "icon": "send",
+   "default": true
+  },
+  {
+   "key": "letter_words",
+   "label": "Letter length (words)",
+   "kind": "number",
+   "group": "Apply to a job",
+   "icon": "width",
+   "default": 250,
+   "min": 120,
+   "max": 450
+  },
+  {
+   "key": "letter_tone",
+   "label": "Letter tone",
+   "kind": "select",
+   "group": "Apply to a job",
+   "icon": "msg",
+   "default": "Warm and direct",
+   "options": [
+    "Warm and direct",
+    "Formal",
+    "Enthusiastic",
+    "Plain and brief"
+   ]
+  },
+  {
+   "key": "site_style",
+   "label": "Portfolio look",
+   "kind": "select",
+   "group": "Portfolio",
+   "icon": "grid",
+   "default": "Light",
+   "options": [
+    "Light",
+    "Dark"
+   ]
+  },
+  {
+   "key": "language",
+   "label": "Language",
+   "kind": "text",
+   "group": "What",
+   "icon": "type",
+   "default": "English"
+  }
+ ],
+ "templates": [
+  {
+   "name": "My resume",
+   "icon": "doc",
+   "tip": "your resume (attach it, or write about yourself) typeset as a PDF",
+   "prompt": "make my resume from the attached file",
+   "sets": {
+    "make": "Resume",
+    "theme": "classic"
+   }
+  },
+  {
+   "name": "Tech resume",
+   "icon": "chip",
+   "tip": "dense, black and white, one page - liked by technical recruiters",
+   "prompt": "make my resume from the attached file",
+   "sets": {
+    "make": "Resume",
+    "theme": "engineeringresumes",
+    "length": "One page"
+   }
+  },
+  {
+   "name": "Apply to a job",
+   "icon": "send",
+   "tip": "paste the posting: a resume tailored to it and a cover letter",
+   "prompt": "tailor my resume and write a cover letter for this posting: ",
+   "sets": {
+    "make": "Apply to a job",
+    "letter": true
+   }
+  },
+  {
+   "name": "Find jobs near me",
+   "icon": "globe",
+   "tip": "postings from the last week ranked against your resume",
+   "prompt": "find jobs that fit my resume near me",
+   "sets": {
+    "make": "Find jobs",
+    "posted_days": 7
+   }
+  },
+  {
+   "name": "Remote jobs",
+   "icon": "globe",
+   "tip": "remote postings ranked against your resume",
+   "prompt": "find remote jobs that fit my resume",
+   "sets": {
+    "make": "Find jobs",
+    "remote": true,
+    "posted_days": 14
+   }
+  },
+  {
+   "name": "Portfolio page",
+   "icon": "grid",
+   "tip": "a web page of your work: attach your pictures and videos",
+   "prompt": "make my portfolio page from my resume and these pictures",
+   "sets": {
+    "make": "Portfolio",
+    "site_style": "Dark"
+   }
+  }
+ ],
+ "recipe": [
+  {
+   "title": "Your resume as data",
+   "do": "write",
+   "keep": "cv",
+   "does": "everything your files and words say about your work, kept as JSON Resume - the one source every page is made from",
+   "args": {
+    "to": "resume.json",
+    "must": [
+     "basics"
+    ],
+    "read": [
+     "{owner_doc}"
+    ],
+    "shape": {
+     "basics": {
+      "name": "",
+      "label": "the title he goes by",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "two or three sentences in his own voice",
+      "location": {
+       "city": "",
+       "region": "",
+       "countryCode": ""
+      },
+      "profiles": [
+       {
+        "network": "LinkedIn",
+        "username": "",
+        "url": ""
+       }
+      ]
+     },
+     "work": [
+      {
+       "name": "company",
+       "position": "",
+       "location": "",
+       "startDate": "YYYY-MM, or YYYY when only the year is known",
+       "endDate": "YYYY-MM or YYYY, empty for now",
+       "summary": "",
+       "highlights": [
+        "what he did and what came of it"
+       ]
+      }
+     ],
+     "education": [
+      {
+       "institution": "",
+       "area": "",
+       "studyType": "",
+       "startDate": "YYYY",
+       "endDate": "YYYY",
+       "score": ""
+      }
+     ],
+     "skills": [
+      {
+       "name": "group",
+       "keywords": [
+        "skill"
+       ]
+      }
+     ],
+     "projects": [
+      {
+       "name": "",
+       "description": "",
+       "url": "",
+       "highlights": []
+      }
+     ],
+     "certificates": [
+      {
+       "name": "",
+       "issuer": "",
+       "date": ""
+      }
+     ],
+     "awards": [
+      {
+       "title": "",
+       "awarder": "",
+       "date": ""
+      }
+     ],
+     "languages": [
+      {
+       "language": "",
+       "fluency": ""
+      }
+     ],
+     "volunteer": [],
+     "publications": [],
+     "interests": []
+    },
+    "brief": "You keep a person's resume as JSON Resume data, in {language}. Fill it from his files and his words below: his name and contact, every job (company, title, dates as he gives them - YYYY-MM with a month, YYYY when he gives only the year, never a month he did not write - what he did), his education, skills grouped, projects, certificates, awards and languages. Every fact - a company, a date, a title, a number, a skill - comes from his files or his words; nothing is invented, rounded up or implied. Where something is not known it stays empty. Keep his own wording where it is good; make each highlight one line that starts with a strong verb and says what came of it, using only numbers he gave. Lead with what fits: {focus}. Length: {length} - for One page keep the newest and strongest highlights (at most four a job) and leave out what is old or weak; nothing is cut from the data for As long as it needs."
+   }
+  },
+  {
+   "title": "The resume, typeset",
+   "do": "use",
+   "when": "make=Resume",
+   "check": "file:resume.pdf",
+   "does": "RenderCV sets the resume as a PDF in the look you picked; a picture of each page comes with it; a page more than the length you set stops it",
+   "args": {
+    "name": "career.resume",
+    "args": {
+     "resume": "resume.json",
+     "pdf": "resume.pdf",
+     "theme": "{theme}",
+     "page": "{page}",
+     "length": "{length}"
+    }
+   }
+  },
+  {
+   "title": "What to search for",
+   "do": "write",
+   "when": "make=Find jobs",
+   "keep": "search",
+   "does": "the search words and place, from your settings or your resume",
+   "args": {
+    "to": "search.json",
+    "must": [
+     "terms"
+    ],
+    "read": [
+     "resume.json"
+    ],
+    "shape": {
+     "terms": "the job title, two to four words",
+     "place": "city, state or country"
+    },
+    "brief": "Pick the job search for this person. The words: '{role}' when that is given, else the job title his resume points to next - his newest title, or the role his words ask for - two to four words, no skills or tools (job boards match every word, and each word more finds fewer postings). The place: '{place}' when that is given, else the city and region on his resume; empty for anywhere."
+   }
+  },
+  {
+   "title": "Find the postings",
+   "do": "use",
+   "when": "make=Find jobs,search_terms",
+   "check": "file:jobs.json",
+   "does": "JobSpy searches the sites you picked for postings from the days you set",
+   "args": {
+    "name": "career.jobs",
+    "args": {
+     "terms": "{search_terms}",
+     "location": "{search_place}",
+     "out": "jobs.json",
+     "count": "{how_many}",
+     "days": "{posted_days}",
+     "remote": "{remote}",
+     "sites": "{sites}"
+    }
+   }
+  },
+  {
+   "title": "Ranked against your resume",
+   "do": "write",
+   "when": "make=Find jobs",
+   "check": "file:matches.md",
+   "does": "each posting scored 1 to 5 against your resume, the reasons and the gaps, best first",
+   "args": {
+    "to": "matches.md",
+    "read": [
+     "resume.json",
+     "jobs_brief.json"
+    ],
+    "brief": "You are a recruiter who knows this person's resume well. Score every posting in jobs_brief.json from 1 (poor fit) to 5 (strong fit) against his resume: what it asks for that he has (name it from his resume), what it asks for that he lacks, and the level (junior to lead) against his years. Write Markdown in {language}: a heading, then a table of every posting best first - score, title linked to its url, company, place, pay when given - then for the five best a short paragraph each: why it fits, the gap to answer in a cover letter, and what to stress. Leave out none; invent nothing about a posting that it does not say."
+   }
+  },
+  {
+   "title": "The posting",
+   "do": "write",
+   "when": "make=Apply to a job",
+   "keep": "posting",
+   "does": "the job's posting, from your message or its link: the role, the company and what it asks for",
+   "args": {
+    "to": "posting.json",
+    "must": [
+     "title",
+     "asks"
+    ],
+    "read": [
+     "{owner_links}"
+    ],
+    "missing": "the job posting - paste its text in your message, or its link (a page anyone can open without signing in)",
+    "shape": {
+     "title": "the job title",
+     "company": "",
+     "place": "",
+     "url": "",
+     "asks": [
+      "each thing it requires or prefers, in its own words"
+     ],
+     "duties": [
+      "what the job does"
+     ],
+     "about": "one or two sentences on the company or team, from the posting",
+     "contact": "the hiring manager's name if the posting gives one"
+    },
+    "brief": "Take the job posting out of his request and the pages below: the title, the company, the place, the link, every requirement and preference in the posting's own words, the duties, a line about the company and the hiring manager's name if given. Only what the posting says. If there is no posting in his request or the pages (only a request to apply, or a page that is not a job), leave title and asks empty."
+   }
+  },
+  {
+   "title": "Tailored to the posting",
+   "do": "write",
+   "when": "make=Apply to a job",
+   "keep": "tailored",
+   "does": "your resume reordered and reworded for this one posting - nothing added that you do not have",
+   "args": {
+    "to": "resume_tailored.json",
+    "must": [
+     "basics"
+    ],
+    "read": [
+     "resume.json",
+     "posting.json"
+    ],
+    "shape": {
+     "basics": {
+      "name": "",
+      "label": "the title he goes by",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "two or three sentences in his own voice",
+      "location": {
+       "city": "",
+       "region": "",
+       "countryCode": ""
+      },
+      "profiles": [
+       {
+        "network": "LinkedIn",
+        "username": "",
+        "url": ""
+       }
+      ]
+     },
+     "work": [
+      {
+       "name": "company",
+       "position": "",
+       "location": "",
+       "startDate": "YYYY-MM, or YYYY when only the year is known",
+       "endDate": "YYYY-MM or YYYY, empty for now",
+       "summary": "",
+       "highlights": [
+        "what he did and what came of it"
+       ]
+      }
+     ],
+     "education": [
+      {
+       "institution": "",
+       "area": "",
+       "studyType": "",
+       "startDate": "YYYY",
+       "endDate": "YYYY",
+       "score": ""
+      }
+     ],
+     "skills": [
+      {
+       "name": "group",
+       "keywords": [
+        "skill"
+       ]
+      }
+     ],
+     "projects": [
+      {
+       "name": "",
+       "description": "",
+       "url": "",
+       "highlights": []
+      }
+     ],
+     "certificates": [
+      {
+       "name": "",
+       "issuer": "",
+       "date": ""
+      }
+     ],
+     "awards": [
+      {
+       "title": "",
+       "awarder": "",
+       "date": ""
+      }
+     ],
+     "languages": [
+      {
+       "language": "",
+       "fluency": ""
+      }
+     ],
+     "volunteer": [],
+     "publications": [],
+     "interests": []
+    },
+    "brief": "Tailor this person's resume (resume.json below) to the job posting (posting.json below). Keep the same JSON Resume shape. Reorder highlights and skills so what the posting asks for comes first; reword a highlight to use the posting's own words where his experience truly matches; write basics.summary for this role; basics.label stays a title he holds or held (his current one, or a true description of what he does), never the posting's title when he has not had that job. Every fact - a company, a date, a title, a number, a skill - comes from his files or his words; nothing is invented, rounded up or implied. Where something is not known it stays empty. Never add a skill, tool, title or result that is not in resume.json - a requirement he does not meet stays unmet. Length: {length}."
+   }
+  },
+  {
+   "title": "The tailored resume, typeset",
+   "do": "use",
+   "when": "make=Apply to a job",
+   "check": "file:resume_tailored.pdf",
+   "does": "the tailored resume as a PDF in your look; a page more than the length you set stops it",
+   "args": {
+    "name": "career.resume",
+    "args": {
+     "resume": "resume_tailored.json",
+     "pdf": "resume_tailored.pdf",
+     "theme": "{theme}",
+     "page": "{page}",
+     "length": "{length}"
+    }
+   }
+  },
+  {
+   "title": "The cover letter",
+   "do": "write",
+   "when": "make=Apply to a job,letter",
+   "check": "file:cover_letter.md",
+   "does": "a letter for this posting from what your resume shows",
+   "args": {
+    "to": "cover_letter.md",
+    "read": [
+     "resume_tailored.json",
+     "posting.json"
+    ],
+    "brief": "Write this person's cover letter for the job posting (posting.json below), in {language}, about {letter_words} words, tone: {letter_tone}. Greeting (the hiring manager by name if the posting names one, else the team), then: why this role and company (from the posting), two or three things he has done that answer what it asks for most (from his resume, with his numbers), one honest line on a gap if the posting's main ask is one he lacks, a close that asks for a conversation, his name. Plain paragraphs separated by a blank line; no address block, no date, no placeholders in brackets. Every fact - a company, a date, a title, a number, a skill - comes from his files or his words; nothing is invented, rounded up or implied. Where something is not known it stays empty."
+   }
+  },
+  {
+   "title": "The letter, typeset",
+   "do": "use",
+   "when": "make=Apply to a job,letter",
+   "check": "file:cover_letter.pdf",
+   "does": "the letter as a PDF in the resume's type, your name and contact on top",
+   "args": {
+    "name": "career.letter",
+    "args": {
+     "letter": "cover_letter.md",
+     "resume": "resume_tailored.json",
+     "pdf": "cover_letter.pdf",
+     "page": "{page}"
+    }
+   }
+  },
+  {
+   "title": "The portfolio page",
+   "do": "use",
+   "when": "make=Portfolio",
+   "check": "file:portfolio/index.html",
+   "does": "a web page from your resume and the pictures and videos you gave",
+   "args": {
+    "name": "career.portfolio",
+    "args": {
+     "resume": "resume.json",
+     "media": "refs",
+     "site": "portfolio",
+     "style": "{site_style}"
+    }
+   }
+  },
+  {
+   "title": "Done",
+   "do": "finish",
+   "when": "make=Resume",
+   "args": {
+    "files": [
+     "resume.pdf",
+     "resume.json"
+    ],
+    "summary": "resume.pdf: your resume, typeset. resume.json keeps it as data: change it and ask again for any look."
+   }
+  },
+  {
+   "title": "Done",
+   "do": "finish",
+   "when": "make=Find jobs",
+   "args": {
+    "files": [
+     "matches.md",
+     "jobs.json"
+    ],
+    "summary": "matches.md: the postings ranked against your resume, best first, with links to apply."
+   }
+  },
+  {
+   "title": "Done",
+   "do": "finish",
+   "when": "make=Apply to a job",
+   "args": {
+    "files": [
+     "resume_tailored.pdf",
+     "cover_letter.pdf"
+    ],
+    "summary": "resume_tailored.pdf and cover_letter.pdf for this posting. Read both before you send them - you press Submit."
+   }
+  },
+  {
+   "title": "Done",
+   "do": "finish",
+   "when": "make=Portfolio",
+   "args": {
+    "files": [
+     "portfolio/index.html"
+    ],
+    "summary": "portfolio/index.html: your portfolio page, ready to put on any web host."
+   }
+  }
+ ]
+}

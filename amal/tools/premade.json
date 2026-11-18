@@ -1,0 +1,316 @@
+{
+  "about": "Premade assets AMAL may fetch for a job (premade.rs). Only CC0 and CC-BY (credited). Sources are asked live through their APIs; packs are downloaded once on the machine that uses them (<home>/premade/packs/<id>) and searched by file name. Add a pack here with its maker's licence and a stable download address.",
+  "sources": [
+    {
+      "id": "polyhaven",
+      "name": "Poly Haven",
+      "page": "https://polyhaven.com",
+      "licence": "CC0",
+      "has": [
+        "models",
+        "textures",
+        "hdris"
+      ],
+      "api": "https://api.polyhaven.com",
+      "key": null,
+      "note": "photoreal props, PBR materials and skies; the API asks for a 'Powered by Poly Haven' mention in tools built on it"
+    },
+    {
+      "id": "ambientcg",
+      "name": "ambientCG",
+      "page": "https://ambientcg.com",
+      "licence": "CC0",
+      "has": [
+        "textures",
+        "hdris",
+        "models"
+      ],
+      "api": "https://ambientcg.com/api/v2",
+      "key": null,
+      "note": "2,000+ PBR materials"
+    },
+    {
+      "id": "sketchfab",
+      "name": "Sketchfab (downloadable, CC0 / CC-BY)",
+      "page": "https://sketchfab.com",
+      "licence": "per model",
+      "has": [
+        "models",
+        "rigged",
+        "animated"
+      ],
+      "api": "https://api.sketchfab.com/v3",
+      "key": "SKETCHFAB_API_TOKEN",
+      "note": "search needs no key; fetching needs a free account's token. Quaternius's Ultimate Monsters and many rigged characters are here"
+    },
+    {
+      "id": "polypizza",
+      "name": "Poly Pizza",
+      "page": "https://poly.pizza",
+      "licence": "CC0 / CC-BY per model",
+      "has": [
+        "models",
+        "animated"
+      ],
+      "api": "https://api.poly.pizza/v1",
+      "key": "POLY_PIZZA_KEY",
+      "note": "10,000+ low-poly models incl. Quaternius and 100 Avatars; a free key"
+    },
+    {
+      "id": "godot",
+      "name": "Godot Asset Library",
+      "page": "https://godotengine.org/asset-library",
+      "licence": "permissive per plugin (MIT, Apache, BSD, MPL, CC0) - GPL left out",
+      "has": [
+        "plugins"
+      ],
+      "api": "https://godotengine.org/asset-library/api",
+      "key": null,
+      "note": "editor plugins and add-ons: dialogue, terrain, cameras, controllers, shaders"
+    },
+    {
+      "id": "sand3d",
+      "name": "sand3d (Sandflow)",
+      "page": "https://github.com/Sandflow-ai/sand3d",
+      "licence": "CC BY 4.0 (datasets), Apache-2.0 (library)",
+      "has": [
+        "parametric models",
+        "articulated models"
+      ],
+      "api": "https://datasets-server.huggingface.co",
+      "key": null,
+      "note": "objects as short programs over Blender: arguments are sliders, joints move; built on the machine with Python 3.11/3.13"
+    }
+  ],
+  "packs": [
+    {
+      "id": "kaykit-adventurers",
+      "name": "KayKit Character Pack: Adventurers",
+      "author": "Kay Lousberg",
+      "licence": "CC0",
+      "kinds": [
+        "rigged",
+        "animated",
+        "characters",
+        "weapons"
+      ],
+      "about": "knight barbarian mage rogue rigged animated low-poly fantasy heroes with 25+ weapons and accessories",
+      "page": "https://kaylousberg.itch.io/kaykit-adventurers",
+      "url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/archive/672074b73ba276876a19e8816ecdc5241817ab47.zip"
+    },
+    {
+      "id": "kaykit-dungeon",
+      "name": "KayKit Dungeon Remastered",
+      "author": "Kay Lousberg",
+      "licence": "CC0",
+      "kinds": [
+        "environment",
+        "props"
+      ],
+      "about": "200+ stylised dungeon pieces: walls floors doors chests barrels torches",
+      "page": "https://kaylousberg.itch.io/kaykit-dungeon-remastered",
+      "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/archive/HEAD.zip"
+    },
+    {
+      "id": "kaykit-prototype",
+      "name": "KayKit Prototype Bits",
+      "author": "Kay Lousberg",
+      "licence": "CC0",
+      "kinds": [
+        "props",
+        "rigged"
+      ],
+      "about": "blockout and prototyping pieces with a rigged character",
+      "page": "https://kaylousberg.itch.io/prototype-bits",
+      "url": "https://github.com/KayKit-Game-Assets/KayKit-Prototype-Bits-1.0/archive/HEAD.zip"
+    },
+    {
+      "id": "kaykit-city",
+      "name": "KayKit City Builder Bits",
+      "author": "Kay Lousberg",
+      "licence": "CC0",
+      "kinds": [
+        "environment",
+        "props"
+      ],
+      "about": "city buildings roads vehicles",
+      "page": "https://kaylousberg.itch.io/city-builder-bits",
+      "url": "https://github.com/KayKit-Game-Assets/KayKit-City-Builder-Bits-1.0/archive/HEAD.zip"
+    },
+    {
+      "id": "kaykit-restaurant",
+      "name": "KayKit Restaurant Bits",
+      "author": "Kay Lousberg",
+      "licence": "CC0",
+      "kinds": [
+        "props"
+      ],
+      "about": "kitchen and restaurant props food",
+      "page": "https://kaylousberg.itch.io/restaurant-bits",
+      "url": "https://github.com/KayKit-Game-Assets/KayKit-Restaurant-Bits-1.0/archive/HEAD.zip"
+    },
+    {
+      "id": "kaykit-animations",
+      "name": "KayKit Character Animations",
+      "author": "Kay Lousberg",
+      "licence": "CC0",
+      "kinds": [
+        "animations"
+      ],
+      "about": "idle walk run jump attack block shoot cheer death animations for KayKit characters",
+      "page": "https://opengameart.org/content/kaykit-character-animations",
+      "url": "https://opengameart.org/sites/default/files/kaykit_character_animations_1.2.zip"
+    },
+    {
+      "id": "quaternius-ual",
+      "name": "Quaternius Universal Animation Library",
+      "author": "Quaternius",
+      "licence": "CC0",
+      "kinds": [
+        "animations",
+        "rigged"
+      ],
+      "about": "120+ humanoid animations: locomotion in 8 directions jog sprint crawl swim climb combat melee spell death, retargetable",
+      "page": "https://quaternius.com/packs/universalanimationlibrary.html",
+      "url": "https://opengameart.org/sites/default/files/universal_animation_librarystandard.zip"
+    },
+    {
+      "id": "quaternius-ual2",
+      "name": "Quaternius Universal Animation Library 2",
+      "author": "Quaternius",
+      "licence": "CC0",
+      "kinds": [
+        "animations",
+        "rigged"
+      ],
+      "about": "130+ animations: melee and armed combos parkour farming fishing zombie locomotion",
+      "page": "https://quaternius.com/packs/universalanimationlibrary2.html",
+      "url": "https://opengameart.org/sites/default/files/universal_animation_library_2standard.zip"
+    },
+    {
+      "id": "quaternius-monsters",
+      "name": "Quaternius Animated Monsters",
+      "author": "Quaternius",
+      "licence": "CC0",
+      "kinds": [
+        "rigged",
+        "animated",
+        "creatures"
+      ],
+      "about": "low-poly monsters dragon slime skeleton bat with punch attack jump fly walk animations",
+      "page": "https://opengameart.org/content/lowpoly-animated-monsters",
+      "url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip"
+    },
+    {
+      "id": "goblin-cdmir",
+      "name": "Goblin (rigged, animated)",
+      "author": "CDmir",
+      "licence": "CC0",
+      "kinds": [
+        "rigged",
+        "animated",
+        "creatures"
+      ],
+      "about": "fantasy goblin humanoid rigged animated with diffuse and glow maps",
+      "page": "https://opengameart.org/content/goblin-1",
+      "url": "https://opengameart.org/sites/default/files/goblin-FINAL.blend"
+    },
+    {
+      "id": "polygonal-mind-props",
+      "name": "Polygonal Mind open-source environments and props (GLB)",
+      "author": "Polygonal Mind",
+      "licence": "CC0",
+      "kinds": [
+        "environment",
+        "props"
+      ],
+      "about": "low-poly environments and props converted to GLB",
+      "page": "https://github.com/ToxSam/cc0-models-Polygonal-Mind",
+      "url": "https://github.com/ToxSam/cc0-models-Polygonal-Mind/archive/HEAD.zip"
+    },
+    {
+      "id": "100avatars",
+      "name": "100 Avatars (Polygonal Mind)",
+      "author": "Polygonal Mind",
+      "licence": "CC0",
+      "kinds": [
+        "rigged",
+        "characters"
+      ],
+      "about": "200 rigged low-poly humanoid avatars, Mixamo compatible, glTF and VRM - 2.3 GB",
+      "page": "https://github.com/polygonalmind/100avatars",
+      "url": "https://github.com/polygonalmind/100avatars/archive/HEAD.zip",
+      "big": true
+    },
+    {
+      "id": "kenney-3d-platformer",
+      "name": "Kenney Starter Kit 3D Platformer",
+      "author": "Kenney",
+      "licence": "CC0",
+      "kinds": [
+        "rigged",
+        "environment",
+        "props",
+        "godot project"
+      ],
+      "about": "3D platformer starter: character controller, platforms, coins, low-poly models",
+      "page": "https://github.com/KenneyNL/Starter-Kit-3D-Platformer",
+      "url": "https://github.com/KenneyNL/Starter-Kit-3D-Platformer/archive/HEAD.zip"
+    },
+    {
+      "id": "kenney-fps",
+      "name": "Kenney Starter Kit FPS",
+      "author": "Kenney",
+      "licence": "CC0",
+      "kinds": [
+        "props",
+        "weapons",
+        "godot project"
+      ],
+      "about": "first-person shooter starter: weapons, enemies, level pieces",
+      "page": "https://github.com/KenneyNL/Starter-Kit-FPS",
+      "url": "https://github.com/KenneyNL/Starter-Kit-FPS/archive/HEAD.zip"
+    },
+    {
+      "id": "kenney-city-builder",
+      "name": "Kenney Starter Kit City Builder",
+      "author": "Kenney",
+      "licence": "CC0",
+      "kinds": [
+        "environment",
+        "props",
+        "godot project"
+      ],
+      "about": "city builder starter: roads, buildings, grid placement",
+      "page": "https://github.com/KenneyNL/Starter-Kit-City-Builder",
+      "url": "https://github.com/KenneyNL/Starter-Kit-City-Builder/archive/HEAD.zip"
+    },
+    {
+      "id": "kenney-racing",
+      "name": "Kenney Starter Kit Racing",
+      "author": "Kenney",
+      "licence": "CC0",
+      "kinds": [
+        "vehicles",
+        "environment",
+        "godot project"
+      ],
+      "about": "racing starter: cars, track pieces",
+      "page": "https://github.com/KenneyNL/Starter-Kit-Racing",
+      "url": "https://github.com/KenneyNL/Starter-Kit-Racing/archive/HEAD.zip"
+    },
+    {
+      "id": "kenney-basic-scene",
+      "name": "Kenney Starter Kit Basic Scene",
+      "author": "Kenney",
+      "licence": "CC0",
+      "kinds": [
+        "environment",
+        "godot project"
+      ],
+      "about": "basic 3D scene starter: lighting, camera, models",
+      "page": "https://github.com/KenneyNL/Starter-Kit-Basic-Scene",
+      "url": "https://github.com/KenneyNL/Starter-Kit-Basic-Scene/archive/HEAD.zip"
+    }
+  ]
+}

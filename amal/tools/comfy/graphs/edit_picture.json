@@ -1,0 +1,374 @@
+{
+ "name": "edit_picture",
+ "version": "1.0",
+ "label": "Edit a picture: FLUX.1 Kontext [dev] (same subject and art style, new pose or background)",
+ "license": "AGPL-3.0 (AMAL's own graph, written from the node sources). Model: FLUX.1 Kontext [dev], FLUX.1 [dev] Non-Commercial License - the pictures are the owner's; the weights are not for resale.",
+ "sources": {
+  "comfyui": "comfyanonymous/ComfyUI (core nodes FluxKontextImageScale, ReferenceLatent, FluxGuidance)",
+  "gguf": "city96/ComfyUI-GGUF (UnetLoaderGGUF)"
+ },
+ "about": "Keeps the subject of the owner's picture - its design, colours and art style - and changes what the prompt says (pose, background, props). The hosted NVIDIA Kontext only takes its own example pictures, so this runs in the GPU machine's ComfyUI (Q4_K_M GGUF fits an 8 GB card). Every edited picture is then cut out with BiRefNet and set on plain light grey: the editor leaves signatures, ground patches and shadows that a vision check may not see; a cut-out by shape always removes what is not attached to the subject (2026-11-01).",
+ "custom_nodes": {
+  "ComfyUI-GGUF": "https://github.com/city96/ComfyUI-GGUF"
+ },
+ "uploads": {},
+ "params": {
+  "image": {
+   "node": "4",
+   "input": "image",
+   "type": "string",
+   "default": ""
+  },
+  "prompt": {
+   "node": "7",
+   "input": "text",
+   "type": "string",
+   "default": ""
+  },
+  "seed": {
+   "node": "11",
+   "input": "seed",
+   "type": "int",
+   "default": 0,
+   "min": 0,
+   "max": 18446744073709551615
+  },
+  "steps": {
+   "node": "11",
+   "input": "steps",
+   "type": "int",
+   "default": 20,
+   "min": 1,
+   "max": 60
+  },
+  "guidance": {
+   "node": "9",
+   "input": "guidance",
+   "type": "float",
+   "default": 2.5
+  },
+  "prefix": {
+   "nodes": [
+    [
+     "13",
+     "filename_prefix"
+    ]
+   ],
+   "type": "string",
+   "default": "amal_render/edit"
+  }
+ },
+ "models": [
+  {
+   "node": "1",
+   "input": "unet_name",
+   "file": "flux1-kontext-dev-Q4_K_M.gguf",
+   "folder": "models/unet",
+   "repo": "QuantStack/FLUX.1-Kontext-dev-GGUF",
+   "revision": "main",
+   "path": "flux1-kontext-dev-Q4_K_M.gguf",
+   "size": 6930000000,
+   "license": "flux-1-dev-non-commercial"
+  },
+  {
+   "node": "2",
+   "input": "clip_name1",
+   "file": "clip_l.safetensors",
+   "folder": "models/text_encoders",
+   "repo": "comfyanonymous/flux_text_encoders",
+   "revision": "main",
+   "path": "clip_l.safetensors",
+   "size": 246144152,
+   "license": "mit"
+  },
+  {
+   "node": "2",
+   "input": "clip_name2",
+   "file": "t5xxl_fp8_e4m3fn.safetensors",
+   "folder": "models/text_encoders",
+   "repo": "comfyanonymous/flux_text_encoders",
+   "revision": "main",
+   "path": "t5xxl_fp8_e4m3fn.safetensors",
+   "size": 4893934904,
+   "license": "apache-2.0"
+  },
+  {
+   "node": "3",
+   "input": "vae_name",
+   "file": "ae.safetensors",
+   "folder": "models/vae",
+   "repo": "Comfy-Org/z_image_turbo",
+   "revision": "main",
+   "path": "split_files/vae/ae.safetensors",
+   "size": 335304388,
+   "license": "apache-2.0"
+  },
+  {
+   "node": "14",
+   "input": "bg_removal_name",
+   "file": "birefnet.safetensors",
+   "folder": "models/background_removal",
+   "url": "https://huggingface.co/Comfy-Org/BiRefNet/resolve/main/background_removal/birefnet.safetensors",
+   "repo": "Comfy-Org/BiRefNet",
+   "license": "MIT"
+  }
+ ],
+ "outputs": {
+  "image": "13",
+  "thumb": "13"
+ },
+ "prompt": {
+  "1": {
+   "class_type": "UnetLoaderGGUF",
+   "inputs": {
+    "unet_name": "flux1-kontext-dev-Q4_K_M.gguf"
+   },
+   "_meta": {
+    "title": "FLUX.1 Kontext dev (GGUF)"
+   }
+  },
+  "2": {
+   "class_type": "DualCLIPLoader",
+   "inputs": {
+    "clip_name1": "clip_l.safetensors",
+    "clip_name2": "t5xxl_fp8_e4m3fn.safetensors",
+    "type": "flux",
+    "device": "default"
+   },
+   "_meta": {
+    "title": "Text encoders"
+   }
+  },
+  "3": {
+   "class_type": "VAELoader",
+   "inputs": {
+    "vae_name": "ae.safetensors"
+   },
+   "_meta": {
+    "title": "VAE"
+   }
+  },
+  "4": {
+   "class_type": "LoadImage",
+   "inputs": {
+    "image": ""
+   },
+   "_meta": {
+    "title": "The owner's picture"
+   }
+  },
+  "5": {
+   "class_type": "FluxKontextImageScale",
+   "inputs": {
+    "image": [
+     "4",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Kontext size"
+   }
+  },
+  "6": {
+   "class_type": "VAEEncode",
+   "inputs": {
+    "pixels": [
+     "5",
+     0
+    ],
+    "vae": [
+     "3",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Encode"
+   }
+  },
+  "7": {
+   "class_type": "CLIPTextEncode",
+   "inputs": {
+    "text": "",
+    "clip": [
+     "2",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "What to change"
+   }
+  },
+  "8": {
+   "class_type": "ReferenceLatent",
+   "inputs": {
+    "conditioning": [
+     "7",
+     0
+    ],
+    "latent": [
+     "6",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Reference"
+   }
+  },
+  "9": {
+   "class_type": "FluxGuidance",
+   "inputs": {
+    "conditioning": [
+     "8",
+     0
+    ],
+    "guidance": 2.5
+   },
+   "_meta": {
+    "title": "Guidance"
+   }
+  },
+  "10": {
+   "class_type": "ConditioningZeroOut",
+   "inputs": {
+    "conditioning": [
+     "7",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Negative"
+   }
+  },
+  "11": {
+   "class_type": "KSampler",
+   "inputs": {
+    "seed": 0,
+    "steps": 20,
+    "cfg": 1.0,
+    "sampler_name": "euler",
+    "scheduler": "simple",
+    "denoise": 1.0,
+    "model": [
+     "1",
+     0
+    ],
+    "positive": [
+     "9",
+     0
+    ],
+    "negative": [
+     "10",
+     0
+    ],
+    "latent_image": [
+     "6",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Sampler"
+   }
+  },
+  "12": {
+   "class_type": "VAEDecode",
+   "inputs": {
+    "samples": [
+     "11",
+     0
+    ],
+    "vae": [
+     "3",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Decode"
+   }
+  },
+  "13": {
+   "class_type": "SaveImage",
+   "inputs": {
+    "filename_prefix": "amal_render/edit",
+    "images": [
+     "18",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Edited picture"
+   }
+  },
+  "14": {
+   "class_type": "LoadBackgroundRemovalModel",
+   "inputs": {
+    "bg_removal_name": "birefnet.safetensors"
+   },
+   "_meta": {
+    "title": "Cut-out model (BiRefNet)"
+   }
+  },
+  "15": {
+   "class_type": "RemoveBackground",
+   "inputs": {
+    "bg_removal_model": [
+     "14",
+     0
+    ],
+    "image": [
+     "12",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "The subject's outline"
+   }
+  },
+  "16": {
+   "class_type": "InvertMask",
+   "inputs": {
+    "mask": [
+     "15",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Everything else"
+   }
+  },
+  "17": {
+   "class_type": "EmptyImage",
+   "inputs": {
+    "width": 64,
+    "height": 64,
+    "batch_size": 1,
+    "color": 14211288
+   },
+   "_meta": {
+    "title": "Plain light grey"
+   }
+  },
+  "18": {
+   "class_type": "ImageCompositeMasked",
+   "inputs": {
+    "destination": [
+     "12",
+     0
+    ],
+    "source": [
+     "17",
+     0
+    ],
+    "x": 0,
+    "y": 0,
+    "resize_source": true,
+    "mask": [
+     "16",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Subject alone on plain grey"
+   }
+  }
+ }
+}

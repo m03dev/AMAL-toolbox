@@ -1,0 +1,187 @@
+{
+ "about": "Blender's mesh tools, one node each in the flow editor. Each takes a model, runs one tool in Blender (in the background, no window) and hands on an FBX. scripts/blender_mesh.py runs them; crates/amald/src/flow.rs makes the nodes from this list.",
+ "ops": [
+  {
+   "op": "watertight",
+   "title": "Make watertight",
+   "about": "Rebuilds the model as one closed surface (OpenVDB voxel remesh, the standard fix for image-to-3D triangle soup): no holes, no non-manifold edges - what retopology, reduce and rigging need",
+   "widgets": [
+    {
+     "name": "detail",
+     "kind": "number",
+     "default": 384,
+     "min": 64,
+     "max": 1024,
+     "step": 16,
+     "about": "voxels across the longest side - higher keeps finer shapes (and makes more faces)"
+    }
+   ]
+  },
+  {
+   "op": "quad_remesh",
+   "title": "Quad remesh",
+   "about": "QuadriFlow, Blender's quad retopology: clean, even quads at the face count you set - a base for UVs, rigging and sculpting (made watertight first if it is not)",
+   "widgets": [
+    {
+     "name": "faces",
+     "kind": "number",
+     "default": 8000,
+     "min": 500,
+     "max": 100000,
+     "step": 500,
+     "about": "about how many quads"
+    }
+   ]
+  },
+  {
+   "op": "decimate",
+   "title": "Decimate",
+   "about": "Collapse decimation to a triangle budget - works on any mesh, keeps the shape",
+   "widgets": [
+    {
+     "name": "triangles",
+     "kind": "number",
+     "default": 20000,
+     "min": 500,
+     "max": 1000000,
+     "step": 500,
+     "about": "triangles to keep"
+    }
+   ]
+  },
+  {
+   "op": "weld",
+   "title": "Merge by distance",
+   "about": "Vertices closer than the distance become one (seams a file format split)",
+   "widgets": [
+    {
+     "name": "distance",
+     "kind": "number",
+     "default": 0.0001,
+     "min": 0,
+     "max": 0.1,
+     "step": 0.0001,
+     "about": "metres"
+    }
+   ]
+  },
+  {
+   "op": "symmetrize",
+   "title": "Symmetrize",
+   "about": "One side mirrored onto the other across the model's middle (X = 0), the seam merged; made one closed surface again where the halves overlap",
+   "widgets": [
+    {
+     "name": "keep",
+     "kind": "combo",
+     "default": "+x",
+     "about": "the side that is kept",
+     "options": [
+      "+x",
+      "-x"
+     ]
+    }
+   ]
+  },
+  {
+   "op": "fill_holes",
+   "title": "Fill holes",
+   "about": "Every hole capped with faces",
+   "widgets": [
+    {
+     "name": "sides",
+     "kind": "number",
+     "default": 0,
+     "min": 0,
+     "max": 1000,
+     "step": 1,
+     "about": "largest hole to fill, in edges (0 = any)"
+    }
+   ]
+  },
+  {
+   "op": "smooth",
+   "title": "Smooth (keep volume)",
+   "about": "Laplacian smoothing that keeps the volume: noise and lumps go, the shape stays",
+   "widgets": [
+    {
+     "name": "rounds",
+     "kind": "number",
+     "default": 3,
+     "min": 1,
+     "max": 50,
+     "step": 1,
+     "about": "how many rounds"
+    },
+    {
+     "name": "strength",
+     "kind": "number",
+     "default": 0.5,
+     "min": 0.01,
+     "max": 5,
+     "step": 0.01,
+     "about": "how strong each round is"
+    }
+   ]
+  },
+  {
+   "op": "triangulate",
+   "title": "Triangulate",
+   "about": "Every face split into triangles (the best-looking diagonal)",
+   "widgets": []
+  },
+  {
+   "op": "recalc_normals",
+   "title": "Recalculate normals",
+   "about": "Every face turned to face outwards",
+   "widgets": []
+  },
+  {
+   "op": "remove_small",
+   "title": "Remove small pieces",
+   "about": "Loose pieces smaller than a share of the biggest one go",
+   "widgets": [
+    {
+     "name": "keep",
+     "kind": "number",
+     "default": 0.02,
+     "min": 0,
+     "max": 1,
+     "step": 0.01,
+     "about": "a piece smaller than this share of the biggest goes"
+    }
+   ]
+  },
+  {
+   "op": "unwrap",
+   "title": "UV unwrap",
+   "about": "Smart UV Project and pack: fresh UVs for baking",
+   "widgets": [
+    {
+     "name": "angle",
+     "kind": "number",
+     "default": 66,
+     "min": 1,
+     "max": 89,
+     "step": 1,
+     "about": "faces at a sharper angle than this get their own island (degrees)"
+    }
+   ]
+  },
+  {
+   "op": "shade_smooth",
+   "title": "Shade smooth",
+   "about": "Smooth shading, edges sharper than the angle stay hard",
+   "widgets": [
+    {
+     "name": "angle",
+     "kind": "number",
+     "default": 40,
+     "min": 0,
+     "max": 180,
+     "step": 1,
+     "about": "degrees"
+    }
+   ]
+  }
+ ]
+}

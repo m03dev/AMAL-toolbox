@@ -1,0 +1,28 @@
+{
+ "shows": ["session"],
+ "id": "code",
+ "name": "Code",
+ "icon": "code",
+ "order": 6,
+ "tip": "game-dev and tools: change a repo, checked by its tests",
+ "about": "Point AMAL at a repo and a task: it clones it here, makes the change, runs the tests until they pass and shows you the diff. Free models write code far better than they design 3D.",
+ "needs": [],
+ "playbook": "studio-code",
+ "settings": [
+  {
+   "key": "test",
+   "label": "Test command",
+   "kind": "text",
+   "default": "",
+   "tip": "empty = AMAL finds it (cargo test, npm test, pytest ...)"
+  },
+  {
+   "key": "push",
+   "label": "Push when green",
+   "kind": "toggle",
+   "default": false,
+   "tip": "push the commit when the tests pass (never force)"
+  }
+ ],
+ "ready": true
+}

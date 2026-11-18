@@ -1,0 +1,217 @@
+{
+  "about": "Art direction for the Images studio (from the Python app's (0.16) art_direction.py). 'game-concept' is the recipe the owner called fantastic (2026-10-25): AMAL's prompt + FLUX.2 klein 4B on NVIDIA's free API. The ref-* styles are 3D model references in different art styles (realistic, stylized, toon, hand-painted, chibi, low-poly, voxel, clay) - framed the same way (reference_shot), so the owner can pick a look (2026-11-01). A goal that names one of these (said_as: \"low-poly\") gets that style only, four takes of it.",
+  "styles": {
+    "game-concept": {
+      "words": "game concept art, cinematic dramatic lighting, painterly fantasy style, detailed textures, glowing accents, rich warm color, atmospheric depth, 16:9 ultra wide",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors"
+    },
+    "sprite-source": {
+      "words": "single subject, full body, centered, isolated on a plain flat white background, no scenery, no ground shadow, clean readable silhouette, game asset reference, painterly fantasy style, dramatic lighting, detailed",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, multiple subjects, cut off"
+    },
+    "model-reference": {
+      "words": "3D modeling reference concept, single subject, full body in frame with margin, three-quarter front view, every part shown once and clearly apart, limbs clear of the body, eye-level camera, 85mm lens look, minimal perspective distortion, even soft studio key light from front-left with fill, no cast shadow, plain flat light grey background, crisp readable silhouette, accurate proportions, clearly separated materials (skin, cloth, leather, metal) with true albedo colours, clean edges, no motion blur, no depth of field, game asset concept, painterly finish",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body"
+    },
+    "concept-art": {
+      "words": "professional concept art, matte painting, cinematic composition, dramatic volumetric lighting, rich atmospheric depth, highly detailed, art station quality",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors"
+    },
+    "oil-painting": {
+      "words": "oil painting on canvas, visible confident brushstrokes, painterly, classical composition, warm chiaroscuro lighting, rich layered color, museum quality fine art",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, photo"
+    },
+    "watercolor": {
+      "words": "watercolor painting, soft wet-on-wet washes, paper texture, delicate edges, luminous light, loose expressive linework",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, photo, 3d render"
+    },
+    "comic": {
+      "words": "comic book art, bold clean inks, dynamic panel composition, cel shading, crisp line weight, vibrant flat colors, professional graphic novel quality",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, photo, blurry lines"
+    },
+    "manga-ink": {"words": "black and white manga illustration, hand-drawn ink linework, screentone shading, monochrome, no colour, expressive faces, speed lines where there is motion", "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, photo, 3d render, colour, photograph, photorealistic, 3d render"},
+    "manga-colour": {"words": "full colour manga illustration, hand-drawn clean ink linework, flat cel shading, anime colouring, expressive faces, speed lines where there is motion", "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, photo, 3d render, photograph, photorealistic, 3d render"},
+    "manga": {
+      "words": "manga illustration, clean precise linework, screentone shading, expressive characters, dynamic angle",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, photo, 3d render"
+    },
+    "book-cover": {
+      "words": "professional book cover illustration, strong central focal point, clear space for the title at the top, striking color palette, dramatic lighting, print quality",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors"
+    },
+    "photo": {
+      "words": "professional photograph, 85mm lens, shallow depth of field, natural soft light, true-to-life color, sharp focus, high dynamic range",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, painting, illustration, cartoon"
+    },
+    "product": {
+      "words": "studio product photography, seamless background, softbox lighting, crisp reflections, sharp focus, commercial catalog quality",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, clutter"
+    },
+    "3d-render": {
+      "words": "high-end 3D render, physically based materials, global illumination, soft shadows, octane quality, clean studio backdrop",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, flat, sketch"
+    },
+    "pixel-art": {
+      "words": "pixel art, crisp pixels, limited palette, clean silhouettes, retro game sprite quality",
+      "avoid": "blurry, anti-aliased, smooth gradients, photo, jpeg artifacts"
+    },
+    "character-sheet": {
+      "words": "character design sheet, front side and back views, neutral pose, clean flat background, consistent proportions, professional game art",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, busy background"
+    },
+    "texture": {
+      "words": "seamless tileable texture, flat even lighting, no shadows, top-down, high detail surface",
+      "avoid": "perspective, shadows, objects, text, watermark"
+    },
+    "ref-realistic": {
+      "words": "Realistic 3D game art with physically based materials, fine surface detail and natural true-to-life colours",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body",
+      "form": "Realistic version, true-to-life anatomy and proportions",
+      "object_form": "Realistic version of the object, true-to-life proportions and materials",
+      "said_as": [
+        "realistic",
+        "photoreal",
+        "photo-real"
+      ],
+      "short": "realistic 3D game art"
+    },
+    "ref-stylized": {
+      "words": "Stylized 3D game art with bold simple shapes, smooth clean materials and saturated, controlled colours",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body",
+      "form": "Stylized game-art version: exaggerated shapes, oversized head, hands, feet and claws, tapered thin joints, bold simple shape",
+      "object_form": "Stylized game-art version of the object: bold simplified shapes and gently exaggerated proportions, every part kept and clearly readable",
+      "said_as": [
+        "stylized",
+        "stylised"
+      ],
+      "short": "stylized 3D game art, chunky exaggerated shapes"
+    },
+    "ref-toon": {
+      "words": "Cel-shaded toon 3D art with flat colour bands, hard light-to-shadow steps, clean dark outlines and a bright palette",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body",
+      "form": "Cartoon version: big round head, huge expressive eyes, short rounded limbs, simple bouncy shape, thick black outlines, flat colours",
+      "object_form": "Cartoon version of the object: rounded bouncy shapes, thick black outlines, flat colours",
+      "said_as": [
+        "toon",
+        "cartoon",
+        "cel-shaded",
+        "cel shaded"
+      ],
+      "short": "toon 3D cartoon, big head, bold simple colours"
+    },
+    "ref-hand-painted": {
+      "words": "Hand-painted 3D game art with brushed highlights, soft painted shadows and warm rich colours",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body",
+      "form": "Hand-painted fantasy version: chunky heroic proportions, big hands and feet, painted texture with visible brush strokes",
+      "object_form": "Hand-painted fantasy version of the object: its own proportions, gently heroic, painted texture with visible brush strokes",
+      "said_as": [
+        "hand-painted",
+        "hand painted",
+        "handpainted"
+      ],
+      "short": "hand-painted 3D game art, brushed textures"
+    },
+    "ref-chibi": {
+      "words": "A glossy vinyl designer-toy look with soft rounded shapes and smooth plastic surfaces",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body",
+      "form": "Chibi super-deformed version: the head as big as the whole body, tiny round body, short stubby legs, huge eyes, cute toy proportions",
+      "object_form": "Chibi toy version of the object: rounded, softened and a little squat, toy-like, every part kept",
+      "said_as": [
+        "chibi"
+      ],
+      "short": "chibi vinyl toy, head as big as its body"
+    },
+    "ref-low-poly": {
+      "words": "Low-poly 3D game art with visible flat faceted polygons, flat shading and a limited clean palette",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body",
+      "form": "Low-poly version: a few dozen flat-shaded facets, angular geometric shape, no smooth curves",
+      "object_form": "Low-poly version of the object: a few dozen flat-shaded facets, angular geometric shape, no smooth curves",
+      "said_as": [
+        "low-poly",
+        "low poly",
+        "lowpoly"
+      ],
+      "short": "low-poly 3D model, flat faceted polygons"
+    },
+    "ref-voxel": {
+      "words": "Voxel 3D art built from small cubes, one flat colour per cube",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body",
+      "form": "Voxel version: built only from cubes, blocky stepped shape",
+      "object_form": "Voxel version of the object: built only from cubes, blocky stepped shape",
+      "said_as": [
+        "voxel",
+        "minecraft-style"
+      ],
+      "short": "voxel 3D model built from small cubes"
+    },
+    "ref-clay": {
+      "words": "A claymation look: soft handmade clay with subtle fingerprints, matte surfaces and warm friendly colours",
+      "avoid": "blurry, low resolution, jpeg artifacts, watermark, signature, text artifacts, extra fingers, deformed hands, bad anatomy, duplicated limbs, cropped, out of frame, oversaturated, muddy colors, background scenery, ground plane, multiple subjects, dramatic shadows, fisheye, extreme angle, cut off limbs, text, extra or missing body parts, parts crossing or fused into the body",
+      "form": "Clay figure version: soft lumpy handmade shapes, short thick limbs, rounded shape",
+      "object_form": "Clay version of the object: soft lumpy handmade shapes, rounded shape",
+      "said_as": [
+        "clay",
+        "claymation"
+      ],
+      "short": "claymation clay figure"
+    }
+  },
+  "for_objects": {
+    "about": "A subject that is an object (a chest, a sword, a house) is drawn as a prop: the style's object_form is used and this is said with it, so it never grows a face or legs (2026-11-05: three of four chest references came back as creatures). Never list body parts here: \"no face, no arms, no legs\" next to \"treasure chest\" was refused by FLUX's safety filter on every try (2026-11-05); the technical-artist check asks about faces and limbs instead.",
+    "add": "an object, not a creature or a character"
+  },
+  "reference_shot": {
+    "about": "How every ref-* picture is framed, in plain sentences after the style (FLUX.2 reads prose, subject and style first; a long tag list was cut and diluted the style, 2026-11-05). Never the word silhouette: FLUX drew four swords as black silhouettes from it.. One shot for all styles so the 3D model maker gets the same view. Rendered as a 3D model, never a flat drawing: TRELLIS.2 learned from rendered 3D objects, and a flat outlined cartoon fox gave it a black texture (2026-11-05).",
+    "creature": "Shown alone and whole with space around it, standing in a relaxed A-pose with arms and legs clear of the body, every part shown once, in a three-quarter front view at eye level",
+    "object": "Shown alone and whole with space around it, every part shown once and nothing cut off, in a three-quarter front view at eye level",
+    "all": "Rendered as a 3D model with real depth and soft shading on every surface, not a flat 2D drawing or line art. Even soft studio light, no cast shadow, a plain flat light grey background, clean readable shapes, every surface lit and in full colour, everything in focus",
+    "turn": [
+      {
+        "view": "back",
+        "turned": false,
+        "edit": "Turn the {subject} around: show it from directly behind, a straight back view. The exact same character with the same body, proportions, colours, clothing and pose, at the same size and place in the picture - now we see the back of its head and its back, and no face. Keep the plain background and the even light.",
+        "check": "Is it seen from behind - the back of its head and body towards us, its face not visible?"
+      },
+      {
+        "view": "left",
+        "turned": true,
+        "mirror": "right",
+        "edit": "Turn the {subject} a quarter turn: show it from the side in pure profile, facing the right edge of the picture. The exact same character with the same body, proportions, colours and clothing, standing upright at the same size, arms hanging a little away from the body - we see one side of its head and one arm and leg in front. Keep the plain background and the even light.",
+        "check": "Is it seen from the side in profile - one side of the head, not the front of the face and not the back?", "faces": "Which edge of the picture does its nose (the front of its face and its toes) point at?", "facing": {"right": "left", "left": "right"}
+      },
+      {
+        "view": "right",
+        "turned": true,
+        "mirror": "left",
+        "unless": "left",
+        "edit": "Turn the {subject} a quarter turn: show it from the side in pure profile, facing the left edge of the picture. The exact same character with the same body, proportions, colours and clothing, standing upright at the same size, arms hanging a little away from the body - we see one side of its head and one arm and leg in front. Keep the plain background and the even light.",
+        "check": "Is it seen from the side in profile - one side of the head, not the front of the face and not the back?", "faces": "Which edge of the picture does its nose (the front of its face and its toes) point at?", "facing": {"right": "left", "left": "right"}
+      }
+    ],
+    "turn_about": "The views drawn from a front picture by the edit model for a 3D model built from several views (the `views` tool): the edit's words ({subject} is the job's subject), the question a vision model must answer yes to, `turned`: the view's outline must differ from the front's (a side view), `mirror`: the view its mirror image gives, `unless`: a view that makes this one unneeded (the other profile is tried only when the first did not pass). In the maker's `left` view the subject faces the right edge of the picture (Comfy-Org's Pixal3D multi-view template).",
+    "compact": {
+      "about": "NVIDIA's hosted FLUX.2 klein reads only about the first 300 characters of a prompt (measured 2026-11-10: the same picture, byte for byte, whatever came after character 317; a change after 280 changed it). Everything said later - the pose, the view, the background, the light, the no-text clause - was never read: references came back three-quarter, crouching, on floors with shadows, and every style looked the same. So a reference is one sentence inside `reads` characters: the view and kind first, the style's `short`, the subject (cut to the room left), the pose and the background. `front` is the straight front view a rig and a model built from several views need; {pose} is one of `poses` (the 3D line's Pose). The long words (form, words, all) follow for models that read further.",
+      "reads": 300,
+      "creature": "Three-quarter front view 3D character reference, {style}, of {subject}, standing in a relaxed A-pose, arms and legs clear of the body, full body, plain grey background",
+      "object": "Three-quarter front view 3D model reference, {style}, of {subject}, shown whole and alone, plain grey background",
+      "front": {
+        "creature": "Straight-on front view 3D character reference in {pose}, {style}, of {subject}, empty hands, symmetrical, full body, plain grey background",
+        "beast": "Straight-on front view 3D creature reference, {style}, of {subject}, standing in its own natural neutral stance, every limb, wing and tail clear of the body, symmetrical, whole body, plain grey background",
+        "object": "Straight-on front view 3D model reference, {style}, of {subject}, standing level, shown whole and alone, plain grey background"
+      },
+      "pose_checks": {
+   "t": "Is it in the asked pose - both arms stretched straight out to the sides, level with the shoulders, like the letter T - not hanging down, bent or angled downward?",
+   "a": "Is it in the asked pose - both arms held out away from the body and angled down, like the letter A - not hanging against the body, bent or raised?"
+  },
+  "poses": {
+        "a": "an A-pose",
+        "t": "a T-pose, both arms stretched straight out sideways level with the shoulders"
+      }
+    }
+  },
+  "prompt_expert": {
+    "about": "The Prompt Expert (brought back from the Python app (0.16) prompt_expert.py; owner 2026-10-27: \"every prompt should go through a prompt expert ... the current prompts suck\", 2026-11-09: \"we need better prompt engineers after people prompt\"). Every prompt a job writes for a picture is rewritten once by the strongest model as an art director would, before anything is drawn. `system` are its rules; `for_reference` is added when the picture is a reference a 3D model is built from; the style's own finishing words are added afterwards and never repeated. An `image` call with exact: true keeps its prompt word for word.",
+    "system": "You are the Prompt Expert of a small game studio: an art director who rewrites the prompts other agents write for an image model (FLUX class). Make the picture the owner will love.\nRules:\n- Plain, vivid, specific English, at most 45 words - the hosted picture model reads only about the first 300 characters, so every word counts and the most important comes first. Subject first: what it is, its build, materials, colours, pose and expression; then composition and camera (framing, angle), light (direction, quality, time of day), palette and mood.\n- One clear subject unless the brief needs more. Concrete nouns and adjectives; never vague praise (beautiful, masterpiece, 8k, trending), keyword soup, weights or parentheses.\n- No words in the picture, and never name what to avoid as a positive (write \"an empty sky\", not \"no text\").\n- Keep everything the original asked for (subject, style, view, pose, background, every named thing). Fix what is vague or missing with concrete choices that fit the job.\n- The style's finishing words are added afterwards automatically: do not write a style list.\nAnswer with JSON only: {\"prompt\": \"...\", \"why\": \"one short line: what you changed\"}",
+    "for_reference": "This picture is the reference a 3D model is built from: describe only what the subject IS, in at most 18 words - its build, its main parts, materials and colours, what it wears. Leave out pose, action, mood, camera, background, light and style (the 3D line frames every reference the same way, and the picture model reads only the start of a prompt)."
+  }
+}

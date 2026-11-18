@@ -1,0 +1,533 @@
+{
+ "shows": ["comfy", "views", "rig", "use"],
+ "means": ["3d model", "3-d model", "3d character", "three model", " rig ", " rigged", "rig it", "retopolog", "low poly", "low-poly", " mesh"],
+ "budget_min": 45,
+ "id": "model3d",
+ "name": "3D",
+ "icon": "cube",
+ "order": 3,
+ "tip": "3D models from words or a picture: built from front, side and back views or from one picture, cleaned up in Blender",
+ "asks": ["3d model", "3d models", "3 d model", "3 d models", "three d model", "3d character", "3d mesh"],
+ "about": "A picture - yours, or one AMAL draws - becomes a textured 3D model on the GPU machine, by the way that fits the job: a character or creature is built from its front, back and side views (Pixal3D multi-view), so the back and sides are seen instead of guessed; a prop is built from one picture (Pixal3D, or TRELLIS.2). A way that does not pass its check gives way to the next. Blender then makes it an editable asset: a clean low mesh at your triangle budget, fresh UVs, and colour, normal and AO maps baked from the generated model, exported as .glb and shown from four sides. Asked for a rig, the model is rigged and each animation (idle, walk, jump, flap ...) is made as its own .fbx - the format Unreal and Unity import. No model ever designs the shape by hand.",
+ "card": true,
+ "needs": [
+  "comfyui",
+  "blender"
+ ],
+ "playbook": "studio-3d",
+ "settings": [
+  {
+   "key": "maker",
+   "label": "How the model is made",
+   "kind": "select",
+   "default": "By the job",
+   "options": [
+    "By the job",
+    "Three views (Pixal3D)",
+    "One picture (TRELLIS.2)",
+    "One picture (Pixal3D)"
+   ],
+   "tip": "By the job: built from one picture with Pixal3D - the quick way, a draft first (TRELLIS.2 is not chosen by itself: he set it aside on 2026-11-14, and on 2026-11-16 it gave two models a black colour map). Three views draws the back and sides first (about ten minutes more on an 8 GB card) for when the back must be exact. A way that does not pass its check gives way to the next",
+   "by_job": [
+    {
+     "value": "One picture (Pixal3D)"
+    }
+   ]
+  },
+  {
+   "key": "view",
+   "label": "Reference view",
+   "kind": "select",
+   "default": "By the job",
+   "options": [
+    "By the job",
+    "Front view",
+    "Three-quarter view"
+   ],
+   "tip": "how AMAL frames the reference pictures it draws: straight from the front in a rigging pose (for a rig, and for a model built from several views) or three-quarter (more depth for a prop from one picture)",
+   "by_job": [
+    {
+     "when": "maker=Three views (Pixal3D)",
+     "value": "Front view"
+    },
+    {
+     "when": "rigged",
+     "value": "Front view"
+    },
+    {
+     "value": "Three-quarter view"
+    }
+   ]
+  },
+  {
+   "key": "pose",
+   "label": "Model pose",
+   "kind": "select",
+   "default": "By the job",
+   "options": [
+    "By the job",
+    "T-pose",
+    "A-pose",
+    "As drawn"
+   ],
+   "tip": "the pose reference pictures are drawn in. By the job: a body with two arms and two legs is drawn in a T-pose, straight from the front, so the model comes out symmetric and its limbs clear of the body; any other creature (four legs, wings, a tail) stands in its own neutral stance; a prop keeps the pose it is drawn in",
+   "by_job": [
+    {
+     "when": "body=biped",
+     "value": "T-pose"
+    },
+    {
+     "when": "body",
+     "value": "As drawn"
+    },
+    {
+     "when": "rigged",
+     "value": "T-pose"
+    },
+    {
+     "when": "kind=creature",
+     "value": "T-pose"
+    },
+    {
+     "value": "As drawn"
+    }
+   ]
+  },
+  {
+   "key": "versions",
+   "label": "How many to pick from",
+   "kind": "select",
+   "default": "4",
+   "tip": "how many reference pictures AMAL makes for you to choose one - each in a different style, or each a different take of the style you named",
+   "options": [
+    "2",
+    "4",
+    "6",
+    "8"
+   ],
+   "show": "tiles",
+   "ask": "How many pictures do you want to pick from?",
+   "ask_unless": "owner_picture,owner_model"
+  },
+  {
+   "key": "topology",
+   "label": "Topology",
+   "kind": "select",
+   "default": "Quads",
+   "options": [
+    "Quads",
+    "Triangles"
+   ],
+   "show": "tiles",
+   "tip": "Quads: the model is rebuilt as an all-quad mesh with even edge flow (Blender's QuadriFlow), half the triangle budget in quads - what a rig and clean animation need. Triangles: reduced as it was generated"
+  },
+  {
+   "key": "rig_route",
+   "label": "Rig route",
+   "kind": "select",
+   "default": "Auto",
+   "options": ["Auto", "AdvancedSkeleton", "Blender", "SkinTokens"],
+   "tip": "who rigs the model. Auto: AdvancedSkeleton in Maya where it is installed, then SkinTokens (Kaggle), then Blender on AMAL's skeleton plan. The others run that one way only - how each way is measured on the same models (docs/GAPS.md §12)"
+  },
+  {
+   "key": "tris",
+   "label": "Triangle budget",
+   "kind": "number",
+   "default": 20000,
+   "min": 500,
+   "max": 500000,
+   "step": 500,
+   "tip": "the finished model is reduced to this (game-ready)"
+  },
+  {
+   "key": "height",
+   "label": "Height (m)",
+   "kind": "number",
+   "default": 0,
+   "min": 0,
+   "max": 100,
+   "step": 0.1,
+   "tip": "0 = keep the generator's size"
+  },
+  {
+   "key": "texture",
+   "label": "Texture size",
+   "kind": "select",
+   "default": "2048",
+   "options": [
+    "1024",
+    "2048",
+    "4096"
+   ]
+  },
+  {
+   "key": "faces",
+   "label": "Generator faces",
+   "kind": "number",
+   "default": 200000,
+   "min": 20000,
+   "max": 1000000,
+   "step": 10000,
+   "tip": "detail the generator keeps before AMAL's cleanup"
+  },
+  {
+   "key": "detail",
+   "label": "Remesh detail",
+   "kind": "select",
+   "default": "768",
+   "options": [
+    "512",
+    "768",
+    "1024"
+   ]
+  },
+  {
+   "key": "texture_guidance",
+   "label": "Texture guidance",
+   "kind": "number",
+   "default": 1,
+   "min": 1,
+   "max": 3,
+   "step": 0.5,
+   "tip": "the generator's texture guidance - 1 is the template's own value; higher pushes the colour darker and the surface towards metal (at 3 a painted blue dragon came out near-black and 99% metal)"
+  },
+  {
+   "key": "texture_steps",
+   "label": "Texture steps",
+   "kind": "number",
+   "default": 12,
+   "min": 8,
+   "max": 40,
+   "step": 1,
+   "tip": "12 is the generator's own default for every stage (a draft); more = finer texture, slower - 20 steps took 12 minutes on the 3070 Ti"
+  }
+ ],
+ "ready": true,
+ "recipe": [
+  {
+   "title": "Reference pictures from your picture",
+   "do": "image",
+   "when": "owner_picture",
+   "args": {
+    "style": "model-reference",
+    "from": "{owner_picture}",
+    "count": "{versions}",
+    "name": "{name}_ref",
+    "for_rig": "{rigged}",
+    "pose": "{pose}"
+   },
+   "keep": "refs",
+   "unless": "use_as_is,owner_model"
+  },
+  {
+   "title": "Reference pictures (the style you named, or one of each style)",
+   "do": "image",
+   "unless": "owner_picture,owner_model",
+   "args": {
+    "style": "model-reference",
+    "prompt": "{subject}",
+    "name": "{name}_ref",
+    "kind": "{kind}",
+    "view": "{view}",
+    "pose": "{pose}",
+    "exact": true,
+    "count": "{versions}"
+   },
+   "keep": "refs",
+   "does": "reference pictures in the art style you named (or a different style each), framed for how the model is made: straight from the front in a rigging pose, or three-quarter"
+  },
+  {
+   "title": "You pick the picture",
+   "do": "pick",
+   "args": {
+    "from": "{refs}",
+    "question": "Which picture becomes the 3D model?"
+   },
+   "keep": "pick",
+   "when": "refs"
+  },
+  {
+   "title": "Use the pick",
+   "do": "copy",
+   "args": {
+    "from": "{pick}",
+    "to": "renders/ref.png"
+   },
+   "when": "pick"
+  },
+  {
+   "title": "Use your picture as it is",
+   "do": "copy",
+   "when": "use_as_is,owner_picture",
+   "args": {
+    "from": "{owner_picture}",
+    "to": "renders/ref.png"
+   },
+   "unless": "owner_model",
+   "does": "your picture goes to the model maker unchanged (its background is removed there)"
+  },
+  {
+   "title": "Back and side views from the front picture",
+   "do": "views",
+   "when": "maker=Three views (Pixal3D)",
+   "unless": "owner_model",
+   "args": {
+    "from": "renders/ref.png",
+    "name": "{name}",
+    "subject": "{subject}"
+   },
+   "keep": "views",
+   "way": "maker",
+   "does": "the edit model turns the subject: its back and its side are drawn from the front picture, each checked (a view that is the front again, or not that view, is drawn once more and then left out)"
+  },
+  {
+   "title": "3D model from its views (Pixal3D multi-view)",
+   "do": "comfy",
+   "when": "views,maker=Three views (Pixal3D)",
+   "unless": "owner_model",
+   "way": "maker",
+   "args": {
+    "graph": "views_to_model",
+    "inputs": {
+     "front": "renders/{name}_front.png",
+     "left": "renders/{name}_left.png",
+     "back": "renders/{name}_back.png",
+     "right": "renders/{name}_right.png",
+     "faces": "{faces}",
+     "texture": "{texture}",
+     "detail": "{detail}",
+     "texture_guidance": "{texture_guidance}",
+     "texture_steps": "{texture_steps}"
+    }
+   },
+   "keep": "generated",
+   "ext": ".glb",
+   "needs": "Pixal3D multi-view",
+   "does": "Pixal3D builds one textured 3D model from the front, back and side views together"
+  },
+  {
+   "title": "3D model (TRELLIS.2)",
+   "do": "comfy",
+   "args": {
+    "graph": "picture_to_model",
+    "inputs": {
+     "image": "renders/ref.png",
+     "mode": true,
+     "faces": "{faces}",
+     "texture": "{texture}",
+     "detail": "{detail}",
+     "texture_guidance": "{texture_guidance}",
+     "texture_steps": "{texture_steps}"
+    }
+   },
+   "keep": "generated",
+   "ext": ".glb",
+   "needs": "TRELLIS.2",
+   "unless": "owner_model",
+   "does": "TRELLIS.2 makes a textured 3D model from the picture, keeping its design",
+   "when": "maker=One picture (TRELLIS.2)",
+   "way": "maker"
+  },
+  {
+   "title": "3D model (Pixal3D)",
+   "do": "comfy",
+   "args": {
+    "graph": "picture_to_model",
+    "inputs": {
+     "image": "renders/ref.png",
+     "mode": false,
+     "faces": "{faces}",
+     "texture": "{texture}",
+     "detail": "{detail}",
+     "texture_guidance": "{texture_guidance}",
+     "texture_steps": "{texture_steps}"
+    }
+   },
+   "keep": "generated",
+   "ext": ".glb",
+   "needs": "Pixal3D",
+   "unless": "owner_model",
+   "does": "Pixal3D makes a textured 3D model from the picture, keeping its design",
+   "when": "maker=One picture (Pixal3D)",
+   "way": "maker"
+  },
+  {"title": "Colours and face from the picture", "do": "use", "optional": true, "unless": "owner_model", "args": {"name": "pixel_match", "args": {"model": "{generated}", "picture": "renders/ref.png", "out": "renders/{name}_painted.glb"}}, "keep": "generated", "ext": ".glb", "does": "the picture's own pixels are put on the model where the picture sees it (pixel_match in the toolbox): the face, the colours and the details come from the picture, not from the generator's redrawing - a generated model came out with a black or washed colour map more than once. A model whose outline does not lie on the picture keeps its own paint"},
+  {
+   "title": "Game-ready clean-up and baked textures",
+   "do": "run",
+   "args": {
+    "command": "blender -b --python-exit-code 1 --python scripts/glb_finish.py -- {generated} {name} {tris} {height} {texture} {topology}",
+    "why": "the studio's clean-up: low mesh, fresh UVs, maps baked from the generated model, four views"
+   },
+   "check": "asset:renders/{name}.glb",
+   "does": "Blender: a clean low mesh at the triangle budget - rebuilt as quads when Topology says so, fresh UVs, colour/normal/AO maps baked, .glb and four views; the driver then checks the .glb imports and is game-ready (normals, UVs, textures, size)"
+  },
+  {
+   "title": "Check it looks right from four sides",
+   "do": "look",
+   "args": {
+    "path": "renders/{name}.png",
+    "brief": "what the picture renders/ref.png shows, as a clean game-ready model - judged against that picture, not against these words, which only name it: {subject}. Judge the model's shape, its parts (every one there once, none missing or doubled), its proportions and its colours. The picture is a drawing and the model is solid: how the picture is drawn (flat colours, outlines, no shading) is never a fault of the model"
+   },
+   "min_score": 7,
+   "does": "a vision check of the four views against the picture",
+   "way": "maker",
+   "unless": "owner_model"
+  },
+  {
+   "title": "Check your model came through the clean-up whole",
+   "do": "look",
+   "when": "owner_model",
+   "args": {
+    "path": "renders/{name}.png",
+    "brief": "his own model after AMAL's clean-up - judge only the clean-up, never the design (it is his): one whole surface, no holes, torn or melted parts, nothing floating loose, the textures sitting on the model unsmeared"
+   },
+   "does": "your own model is judged only on the clean-up: whole, nothing torn or melted, textures in place - never on its design"
+  },
+  {
+   "title": "Rig and animate",
+   "do": "rig",
+   "when": "rigged",
+   "args": {
+    "mesh": "renders/{name}.glb",
+    "name": "{name}",
+    "route": "{rig_route}",
+    "clips": "{clips}",
+    "review": "{review}",
+    "body": "{body}"
+   },
+   "stop_on_fail": true,
+   "does": "makes the model symmetric (a posed body is re-posed first), AdvancedSkeleton in Maya builds the skeleton from its own template and binds geodesic voxel skin weights (SkinTokens on Kaggle only where Maya is not installed), the rig must pass AMAL's deformation check, then every clip asked for (idle, walk, fly, jump ...) is made as its own .fbx file"
+  },
+  {
+   "title": "Done",
+   "do": "finish",
+   "args": {
+    "files": [
+     "renders/{name}_views.png",
+     "renders/{name}.png"
+    ],
+    "summary": "{name}: the game-ready model with baked textures (renders/{name}.glb), shown from four sides. Each file below is there; a rig and its animations are listed only when they were made."
+   }
+  }
+ ],
+ "tools": [
+  {
+   "name": "TRELLIS.2",
+   "comfy": true,
+   "comfy_nodes": [
+    "Trellis2ShapeStage",
+    "Trellis2TextureStage"
+   ],
+   "fix": "Bring the native TRELLIS.2 nodes back into this machine's ComfyUI (update ComfyUI; the graph tools/comfy/graphs/picture_to_model.json lists the models it downloads)."
+  },
+  {
+   "name": "Pixal3D multi-view",
+   "comfy": true,
+   "comfy_nodes": [
+    "Pixal3DMultiViewConditioning",
+    "Trellis2ShapeStage",
+    "Trellis2TextureStage"
+   ],
+   "fix": "Bring the native Pixal3D / TRELLIS.2 nodes back into this machine's ComfyUI (update ComfyUI; the graph tools/comfy/graphs/views_to_model.json lists the models it downloads)."
+  },
+  {
+   "name": "Pixal3D",
+   "comfy": true,
+   "comfy_nodes": [
+    "Pixal3DConditioning",
+    "Trellis2ShapeStage",
+    "Trellis2TextureStage"
+   ],
+   "fix": "Bring the native Pixal3D / TRELLIS.2 nodes back into this machine's ComfyUI (update ComfyUI; the graph tools/comfy/graphs/picture_to_model.json lists the models it downloads)."
+  }
+ ],
+ "subject": "the subject written by a prompt engineer for the picture model that draws this job's 3D reference, in at most 18 words (the model reads only the start of a prompt): what it IS, never what it does - its build, its main parts, materials and colours, what it wears. Keep the details he gave; add only the few concrete ones an expert would. Leave out pose, stance, action, mood, expression, camera, background, light and art style (the line sets those - 'a playful stance' gave a crouching model that could not be rigged). For a model to be rigged: weapons sheathed or slung, nothing in its hands unless he asked, no cloak or cloth hanging over the arms or legs",
+ "templates": [
+  {
+   "name": "Mobile prop",
+   "icon": "phone",
+   "gives": "5k triangles, 1024 textures - light enough for phones",
+   "tip": "a small prop or a model seen from far away",
+   "sets": {
+    "tris": 5000,
+    "texture": "1024"
+   },
+   "rig": false
+  },
+  {
+   "name": "Game prop",
+   "icon": "gamepad",
+   "gives": "20k triangles, 2048 textures - the usual for PC and console",
+   "tip": "a prop the player sees up close",
+   "sets": {
+    "tris": 20000,
+    "texture": "2048"
+   },
+   "rig": false
+  },
+  {
+   "name": "Rigged character",
+   "icon": "rig",
+   "gives": "T-pose, built from three views, skeleton and skin, idle and walk as their own .fbx",
+   "tip": "a character or creature ready for the engine: each animation its own file",
+   "sets": {
+    "tris": 30000,
+    "texture": "2048",
+    "pose": "T-pose",
+    "maker": "Three views (Pixal3D)"
+   },
+   "rig": true,
+   "clips": [
+    "idle",
+    "walk"
+   ]
+  },
+  {
+   "name": "Hero character",
+   "icon": "star",
+   "gives": "60k triangles, 4096 textures, rigged, idle, walk and jump",
+   "tip": "the player character or a boss, seen close",
+   "sets": {
+    "tris": 60000,
+    "texture": "4096",
+    "pose": "T-pose",
+    "maker": "Three views (Pixal3D)"
+   },
+   "rig": true,
+   "clips": [
+    "idle",
+    "walk",
+    "jump"
+   ]
+  },
+  {
+   "name": "Flying creature",
+   "icon": "bolt",
+   "gives": "rigged from three views with idle and fly clips",
+   "tip": "a dragon, bat or bird: wings spread in the reference",
+   "sets": {
+    "tris": 30000,
+    "texture": "2048",
+    "pose": "T-pose",
+    "maker": "Three views (Pixal3D)"
+   },
+   "rig": true,
+   "clips": [
+    "idle",
+    "fly"
+   ]
+  },
+  {
+   "name": "Cinematic model",
+   "icon": "film",
+   "gives": "150k triangles, 4096 textures - for close-ups and renders",
+   "tip": "not for real-time: a still or a cutscene model",
+   "sets": {
+    "tris": 150000,
+    "texture": "4096"
+   },
+   "rig": false
+  }
+ ]
+}

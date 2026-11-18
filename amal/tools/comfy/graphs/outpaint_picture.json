@@ -1,0 +1,389 @@
+{
+ "name": "outpaint_picture",
+ "version": "1.0",
+ "label": "Extend a picture: FLUX.1 Kontext [dev] paints past its edges",
+ "license": "AGPL-3.0 (AMAL's own graph, written from the node sources). Model: FLUX.1 Kontext [dev], FLUX.1 [dev] Non-Commercial License - the pictures are the owner's; the weights are not for resale.",
+ "sources": {
+  "comfyui": "comfyanonymous/ComfyUI (core nodes FluxKontextImageScale, ReferenceLatent, FluxGuidance)",
+  "gguf": "city96/ComfyUI-GGUF (UnetLoaderGGUF)"
+ },
+ "about": "Makes a picture bigger on any side (left, top, right, bottom in pixels) and paints the new part to match, as the prompt says; the original part stays his own pixels. Same Kontext model as edit_picture, no new download.",
+ "custom_nodes": {
+  "ComfyUI-GGUF": "https://github.com/city96/ComfyUI-GGUF"
+ },
+ "uploads": {},
+ "params": {
+  "image": {
+   "node": "4",
+   "input": "image",
+   "type": "string",
+   "default": ""
+  },
+  "prompt": {
+   "node": "7",
+   "input": "text",
+   "type": "string",
+   "default": ""
+  },
+  "seed": {
+   "node": "11",
+   "input": "seed",
+   "type": "int",
+   "default": 0,
+   "min": 0,
+   "max": 18446744073709551615
+  },
+  "steps": {
+   "node": "11",
+   "input": "steps",
+   "type": "int",
+   "default": 20,
+   "min": 1,
+   "max": 60
+  },
+  "guidance": {
+   "node": "9",
+   "input": "guidance",
+   "type": "float",
+   "default": 2.5
+  },
+  "feather": {
+   "node": "24",
+   "input": "expand",
+   "type": "int",
+   "default": 8,
+   "min": 0,
+   "max": 64
+  },
+  "prefix": {
+   "nodes": [
+    [
+     "13",
+     "filename_prefix"
+    ]
+   ],
+   "type": "string",
+   "default": "amal_render/outpaint"
+  },
+  "left": {
+   "node": "32",
+   "input": "left",
+   "type": "int",
+   "default": 0,
+   "min": 0,
+   "max": 1024
+  },
+  "top": {
+   "node": "32",
+   "input": "top",
+   "type": "int",
+   "default": 0,
+   "min": 0,
+   "max": 1024
+  },
+  "right": {
+   "node": "32",
+   "input": "right",
+   "type": "int",
+   "default": 256,
+   "min": 0,
+   "max": 1024
+  },
+  "bottom": {
+   "node": "32",
+   "input": "bottom",
+   "type": "int",
+   "default": 0,
+   "min": 0,
+   "max": 1024
+  }
+ },
+ "models": [
+  {
+   "node": "1",
+   "input": "unet_name",
+   "file": "flux1-kontext-dev-Q4_K_M.gguf",
+   "folder": "models/unet",
+   "repo": "QuantStack/FLUX.1-Kontext-dev-GGUF",
+   "revision": "main",
+   "path": "flux1-kontext-dev-Q4_K_M.gguf",
+   "size": 6930000000,
+   "license": "flux-1-dev-non-commercial"
+  },
+  {
+   "node": "2",
+   "input": "clip_name1",
+   "file": "clip_l.safetensors",
+   "folder": "models/text_encoders",
+   "repo": "comfyanonymous/flux_text_encoders",
+   "revision": "main",
+   "path": "clip_l.safetensors",
+   "size": 246144152,
+   "license": "mit"
+  },
+  {
+   "node": "2",
+   "input": "clip_name2",
+   "file": "t5xxl_fp8_e4m3fn.safetensors",
+   "folder": "models/text_encoders",
+   "repo": "comfyanonymous/flux_text_encoders",
+   "revision": "main",
+   "path": "t5xxl_fp8_e4m3fn.safetensors",
+   "size": 4893934904,
+   "license": "apache-2.0"
+  },
+  {
+   "node": "3",
+   "input": "vae_name",
+   "file": "ae.safetensors",
+   "folder": "models/vae",
+   "repo": "Comfy-Org/z_image_turbo",
+   "revision": "main",
+   "path": "split_files/vae/ae.safetensors",
+   "size": 335304388,
+   "license": "apache-2.0"
+  }
+ ],
+ "outputs": {
+  "image": "13",
+  "thumb": "13"
+ },
+ "prompt": {
+  "1": {
+   "class_type": "UnetLoaderGGUF",
+   "inputs": {
+    "unet_name": "flux1-kontext-dev-Q4_K_M.gguf"
+   },
+   "_meta": {
+    "title": "FLUX.1 Kontext dev (GGUF)"
+   }
+  },
+  "2": {
+   "class_type": "DualCLIPLoader",
+   "inputs": {
+    "clip_name1": "clip_l.safetensors",
+    "clip_name2": "t5xxl_fp8_e4m3fn.safetensors",
+    "type": "flux",
+    "device": "default"
+   },
+   "_meta": {
+    "title": "Text encoders"
+   }
+  },
+  "3": {
+   "class_type": "VAELoader",
+   "inputs": {
+    "vae_name": "ae.safetensors"
+   },
+   "_meta": {
+    "title": "VAE"
+   }
+  },
+  "4": {
+   "class_type": "LoadImage",
+   "inputs": {
+    "image": ""
+   }
+  },
+  "32": {
+   "class_type": "ImagePadForOutpaint",
+   "inputs": {
+    "image": [
+     "4",
+     0
+    ],
+    "left": 0,
+    "top": 0,
+    "right": 256,
+    "bottom": 0,
+    "feathering": 24
+   }
+  },
+  "20": {
+   "class_type": "FluxKontextImageScale",
+   "inputs": {
+    "image": [
+     "32",
+     0
+    ]
+   }
+  },
+  "21": {
+   "class_type": "MaskToImage",
+   "inputs": {
+    "mask": [
+     "32",
+     1
+    ]
+   }
+  },
+  "22": {
+   "class_type": "FluxKontextImageScale",
+   "inputs": {
+    "image": [
+     "21",
+     0
+    ]
+   }
+  },
+  "23": {
+   "class_type": "ImageToMask",
+   "inputs": {
+    "image": [
+     "22",
+     0
+    ],
+    "channel": "red"
+   }
+  },
+  "24": {
+   "class_type": "GrowMask",
+   "inputs": {
+    "mask": [
+     "23",
+     0
+    ],
+    "expand": 8,
+    "tapered_corners": true
+   }
+  },
+  "6": {
+   "class_type": "VAEEncode",
+   "inputs": {
+    "pixels": [
+     "20",
+     0
+    ],
+    "vae": [
+     "3",
+     0
+    ]
+   }
+  },
+  "25": {
+   "class_type": "SetLatentNoiseMask",
+   "inputs": {
+    "samples": [
+     "6",
+     0
+    ],
+    "mask": [
+     "24",
+     0
+    ]
+   }
+  },
+  "7": {
+   "class_type": "CLIPTextEncode",
+   "inputs": {
+    "text": "",
+    "clip": [
+     "2",
+     0
+    ]
+   }
+  },
+  "8": {
+   "class_type": "ReferenceLatent",
+   "inputs": {
+    "conditioning": [
+     "7",
+     0
+    ],
+    "latent": [
+     "6",
+     0
+    ]
+   }
+  },
+  "9": {
+   "class_type": "FluxGuidance",
+   "inputs": {
+    "conditioning": [
+     "8",
+     0
+    ],
+    "guidance": 2.5
+   }
+  },
+  "10": {
+   "class_type": "ConditioningZeroOut",
+   "inputs": {
+    "conditioning": [
+     "7",
+     0
+    ]
+   }
+  },
+  "11": {
+   "class_type": "KSampler",
+   "inputs": {
+    "seed": 0,
+    "steps": 20,
+    "cfg": 1.0,
+    "sampler_name": "euler",
+    "scheduler": "simple",
+    "denoise": 1.0,
+    "model": [
+     "1",
+     0
+    ],
+    "positive": [
+     "9",
+     0
+    ],
+    "negative": [
+     "10",
+     0
+    ],
+    "latent_image": [
+     "25",
+     0
+    ]
+   }
+  },
+  "12": {
+   "class_type": "VAEDecode",
+   "inputs": {
+    "samples": [
+     "11",
+     0
+    ],
+    "vae": [
+     "3",
+     0
+    ]
+   }
+  },
+  "26": {
+   "class_type": "ImageCompositeMasked",
+   "inputs": {
+    "destination": [
+     "20",
+     0
+    ],
+    "source": [
+     "12",
+     0
+    ],
+    "x": 0,
+    "y": 0,
+    "resize_source": true,
+    "mask": [
+     "24",
+     0
+    ]
+   }
+  },
+  "13": {
+   "class_type": "SaveImage",
+   "inputs": {
+    "filename_prefix": "amal_render/fill",
+    "images": [
+     "26",
+     0
+    ]
+   }
+  }
+ }
+}

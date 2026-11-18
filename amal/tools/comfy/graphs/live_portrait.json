@@ -1,0 +1,274 @@
+{
+ "name": "live_portrait",
+ "label": "Live portrait: a still face moves, talks and makes expressions, driven by a video (LivePortrait)",
+ "license": "LivePortrait: MIT (KwaiVGI); ComfyUI-LivePortraitKJ: MIT (kijai); face detector BlazeFace (Apache-2.0) via face_alignment (BSD-3); graph AGPL-3.0 (AMAL's own, from the packs' node sources); the face landmarks run as ONNX on the CPU (a pickled PyTorch landmark file does not load under PyTorch 2.6's safe loading)",
+ "sources": {
+  "pack": "kijai/ComfyUI-LivePortraitKJ@4d9dc62 (nodes.py: DownloadAndLoadLivePortraitModels, LivePortraitLoadFaceAlignmentCropper, LivePortraitCropper, LivePortraitProcess, LivePortraitComposite)",
+  "comfyui": "comfyanonymous/ComfyUI@63e5bf594339f676b4b15e072529873e3448409e (comfy_extras/nodes_video.py LoadVideo, Video Slice, GetVideoComponents, SaveWEBM; nodes.py LoadImage)",
+  "driving": "KwaiVGI/LivePortrait@9b294b3 assets/examples/driving (MIT)"
+ },
+ "about": "One picture of a face (a person, a character, a painting; subject: animal for a pet) and a driving video of a face: the picture makes the same head turns, blinks, mouth and expressions, at the picture's own size and look. driving_video is a file in the job (anyone filmed facing the camera) or one of the presets: talking, laughing, wink_smile, expressive, glance_smile. motion_mode: relative (default), single_frame, off. Silent video (WebM). Fast: a few seconds of work for 8 seconds of video on an 8 GB card.",
+ "packs": [
+  {
+   "dir": "ComfyUI-LivePortraitKJ",
+   "url": "https://github.com/kijai/ComfyUI-LivePortraitKJ",
+   "commit": "4d9dc6205b793ffd0fb319816136d9b8c0dbfdff",
+   "pip": [
+    {
+     "import": "cv2",
+     "package": "opencv-python-headless"
+    },
+    {
+     "import": "pykalman",
+     "package": "pykalman"
+    },
+    {
+     "import": "numba",
+     "package": "numba"
+    },
+    {
+     "import": "skimage",
+     "package": "scikit-image"
+    },
+    {
+     "import": "yaml",
+     "package": "pyyaml"
+    },
+    {
+     "import": "onnxruntime",
+     "package": "onnxruntime"
+    }
+   ],
+   "patches": [
+    {
+     "file": "face_alignment/api.py",
+     "find": "face_detector_module = importlib.import_module('.face_alignment.detection.' + face_detector, package=package_directory_name)",
+     "replace": "face_detector_module = importlib.import_module('.detection.' + face_detector, package=__package__)"
+    }
+   ]
+  }
+ ],
+ "nodes": {
+  "image": "3",
+  "save": "10"
+ },
+ "api": {
+  "1": {
+   "class_type": "DownloadAndLoadLivePortraitModels",
+   "inputs": {
+    "precision": "auto",
+    "mode": "human"
+   }
+  },
+  "2": {
+   "class_type": "LivePortraitLoadFaceAlignmentCropper",
+   "inputs": {
+    "face_detector": "blazeface_back_camera",
+    "landmarkrunner_device": "CPU",
+    "face_detector_device": "cuda",
+    "face_detector_dtype": "fp16",
+    "keep_model_loaded": false
+   }
+  },
+  "3": {
+   "class_type": "LoadImage",
+   "inputs": {
+    "image": ""
+   }
+  },
+  "4": {
+   "class_type": "LoadVideo",
+   "inputs": {
+    "file": ""
+   }
+  },
+  "5": {
+   "class_type": "Video Slice",
+   "inputs": {
+    "video": [
+     "4",
+     0
+    ],
+    "start_time": 0.0,
+    "duration": 8.0,
+    "strict_duration": false
+   }
+  },
+  "6": {
+   "class_type": "GetVideoComponents",
+   "inputs": {
+    "video": [
+     "5",
+     0
+    ]
+   }
+  },
+  "7": {
+   "class_type": "LivePortraitCropper",
+   "inputs": {
+    "pipeline": [
+     "1",
+     0
+    ],
+    "cropper": [
+     "2",
+     0
+    ],
+    "source_image": [
+     "3",
+     0
+    ],
+    "dsize": 512,
+    "scale": 2.3,
+    "vx_ratio": 0.0,
+    "vy_ratio": -0.125,
+    "face_index": 0,
+    "face_index_order": "large-small",
+    "rotate": true
+   }
+  },
+  "8": {
+   "class_type": "LivePortraitProcess",
+   "inputs": {
+    "pipeline": [
+     "1",
+     0
+    ],
+    "crop_info": [
+     "7",
+     1
+    ],
+    "source_image": [
+     "3",
+     0
+    ],
+    "driving_images": [
+     "6",
+     0
+    ],
+    "lip_zero": false,
+    "lip_zero_threshold": 0.03,
+    "stitching": true,
+    "delta_multiplier": 1.0,
+    "mismatch_method": "constant",
+    "relative_motion_mode": "relative",
+    "driving_smooth_observation_variance": 3e-06,
+    "expression_friendly": false,
+    "expression_friendly_multiplier": 1.0
+   }
+  },
+  "9": {
+   "class_type": "LivePortraitComposite",
+   "inputs": {
+    "source_image": [
+     "3",
+     0
+    ],
+    "cropped_image": [
+     "8",
+     0
+    ],
+    "liveportrait_out": [
+     "8",
+     1
+    ]
+   }
+  },
+  "10": {
+   "class_type": "SaveWEBM",
+   "inputs": {
+    "images": [
+     "9",
+     0
+    ],
+    "filename_prefix": "amal_video/live_portrait",
+    "codec": "vp9",
+    "fps": [
+     "6",
+     2
+    ],
+    "crf": 16.0
+   }
+  }
+ },
+ "params": {
+  "image": [
+   [
+    "3",
+    "image"
+   ]
+  ],
+  "seconds": {
+   "node": "5",
+   "input": "duration",
+   "type": "float",
+   "default": 8.0,
+   "min": 0.0,
+   "max": 60.0
+  },
+  "start": {
+   "node": "5",
+   "input": "start_time",
+   "type": "float",
+   "default": 0.0,
+   "min": 0.0,
+   "max": 3600.0
+  },
+  "subject": {
+   "node": "1",
+   "input": "mode",
+   "type": "string",
+   "default": "human"
+  },
+  "strength": {
+   "node": "8",
+   "input": "delta_multiplier",
+   "type": "float",
+   "default": 1.0,
+   "min": 0.0,
+   "max": 3.0
+  },
+  "keep_mouth_closed": {
+   "node": "8",
+   "input": "lip_zero",
+   "type": "bool",
+   "default": false
+  },
+  "prefix": {
+   "node": "10",
+   "input": "filename_prefix",
+   "type": "string",
+   "default": "amal_video/live_portrait"
+  },
+  "driving_video": {
+   "node": "4",
+   "input": "file",
+   "type": "string",
+   "upload": "video",
+   "default": "talking",
+   "presets": {
+    "talking": {
+     "url": "https://raw.githubusercontent.com/KwaiVGI/LivePortrait/9b294b3d0536135442ea73cb01e6cb3ca7029dd3/assets/examples/driving/d10.mp4"
+    },
+    "laughing": {
+     "url": "https://raw.githubusercontent.com/KwaiVGI/LivePortrait/9b294b3d0536135442ea73cb01e6cb3ca7029dd3/assets/examples/driving/d12.mp4"
+    },
+    "wink_smile": {
+     "url": "https://raw.githubusercontent.com/KwaiVGI/LivePortrait/9b294b3d0536135442ea73cb01e6cb3ca7029dd3/assets/examples/driving/d14.mp4"
+    },
+    "expressive": {
+     "url": "https://raw.githubusercontent.com/KwaiVGI/LivePortrait/9b294b3d0536135442ea73cb01e6cb3ca7029dd3/assets/examples/driving/d3.mp4"
+    },
+    "glance_smile": {
+     "url": "https://raw.githubusercontent.com/KwaiVGI/LivePortrait/9b294b3d0536135442ea73cb01e6cb3ca7029dd3/assets/examples/driving/d0.mp4"
+    }
+   }
+  },
+  "motion_mode": {
+   "node": "8",
+   "input": "relative_motion_mode",
+   "type": "string",
+   "default": "relative"
+  }
+ }
+}

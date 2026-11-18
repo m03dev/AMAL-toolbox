@@ -1,0 +1,15 @@
+{
+ "about": "Node packs every AMAL ComfyUI has, beside the ones a graph names for itself: the ones most ComfyUI users install first (ComfyUI-Manager's own docs and the 2026 guides: Manager, then the video, interpolation and utility packs). Each is pinned to a commit and only the Python libraries that do not import yet are added, held to what ComfyUI already has (comfy.rs ensure_packs) - a pack never changes the numpy or torch the other nodes run on. Manager is there for the owner: when he opens ComfyUI himself, it finds and installs whatever a workflow he loads is missing.",
+ "packs": [
+  {"dir": "ComfyUI-Manager", "url": "https://github.com/Comfy-Org/ComfyUI-Manager", "commit": "c501d0d50a769dd4a4e33e9bd551c480a5d592ec", "license": "GPL-3.0",
+   "pip": [{"import": "git", "package": "GitPython"}, {"import": "github", "package": "PyGithub"}, {"import": "toml", "package": "toml"},
+           {"import": "typer", "package": "typer"}, {"import": "rich", "package": "rich"}, {"import": "chardet", "package": "chardet"}, {"import": "nh3", "package": "nh3"}]},
+  {"dir": "ComfyUI-VideoHelperSuite", "url": "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite", "commit": "4d907bee61e92c2e65af3bd6383a4e4d356126d1", "license": "GPL-3.0",
+   "pip": [{"import": "cv2", "package": "opencv-python-headless"}, {"import": "imageio_ffmpeg", "package": "imageio-ffmpeg"}]},
+  {"dir": "ComfyUI-Frame-Interpolation", "url": "https://github.com/Fannovel16/ComfyUI-Frame-Interpolation", "commit": "26545cc2dd95bc3d27f056016300673bdeee78f5", "license": "MIT",
+   "pip": [{"import": "einops", "package": "einops"}, {"import": "kornia", "package": "kornia"}, {"import": "cv2", "package": "opencv-python-headless"}, {"import": "scipy", "package": "scipy"}]},
+  {"dir": "ComfyUI-KJNodes", "url": "https://github.com/kijai/ComfyUI-KJNodes", "commit": "ab72eda7ffad6280422d71ab7d54d3fb87c0ba18", "license": "GPL-3.0",
+   "pip": [{"import": "color_matcher", "package": "color-matcher"}, {"import": "matplotlib", "package": "matplotlib"}, {"import": "mss", "package": "mss"}, {"import": "cv2", "package": "opencv-python-headless"}]},
+  {"dir": "rgthree-comfy", "url": "https://github.com/rgthree/rgthree-comfy", "commit": "bc48c6aaeca87bedbc14245d89f9bc6be37a630e", "license": "MIT", "pip": []}
+ ]
+}

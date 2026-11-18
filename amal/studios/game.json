@@ -1,0 +1,183 @@
+{
+ "shows": [
+  "godot_project",
+  "godot_check",
+  "godot_play",
+  "godot_swap",
+  "godot_export"
+ ],
+ "id": "game",
+ "name": "Game",
+ "icon": "gamepad",
+ "order": 4,
+ "tip": "Games: a Godot project that plays, tested and built (a one-page browser game when you say browser)",
+ "asks": ["make a game", "make me a game", "build a game", "build me a game", "create a game", "2d game", "3d game", "godot game", "platformer", "shooter", "racing game", "kart racing", "tower defense", "endless runner", "roguelike", "puzzle game", "fighting game", "survival game", "horror game", "stealth game", "city builder", "snake game", "top down rpg", "soulslike", "souls like"],
+ "about": "A game: a Godot 4 project in a folder of its own (a game in the browser only when he says browser): the project from a template, add-ons from their official releases, the characters and props premade (already rigged and animated) or made by the 3D line - asked once at the start, every feature played and checked before the next, then a build that runs by itself.",
+ "card": true,
+ "needs": [],
+ "playbook": "game-prototype",
+ "projects": true,
+ "ask": "What game? (the genre, the players, what you do in it)",
+ "settings": [
+  {
+   "key": "made_in",
+   "label": "Made in",
+   "kind": "select",
+   "default": "Godot",
+   "options": [
+    "Browser",
+    "Godot"
+   ],
+   "tip": "Godot (the default): a Godot 4 project in a folder of its own, from a working template, played and checked, with a build that runs by itself. Browser: one page that plays at once in any browser - keys, mouse, touch and pen - made only when his words say browser (owner 2026-11-13: \"stop making browser games\")",
+   "show": "tiles",
+   "by_try": {
+    "engine": "Godot"
+   }
+  },
+  {
+   "key": "view",
+   "label": "View",
+   "kind": "select",
+   "default": "3D",
+   "options": [
+    "3D",
+    "2D"
+   ],
+   "tip": "the kind of world; his words in the request win (\"a 2D platformer\"), and a game known as 2D is 2D (a Flappy Bird was made from an empty 3D project, 2026-11-13)",
+   "show": "tiles",
+   "read": true,
+   "about": {
+    "3D": "a game in a 3D world: a 3D platformer, a third or first person game, anything he calls 3D",
+    "2D": "a flat game seen from the side or from above: a flappy-bird game, a side-scrolling platformer, a top-down shooter, a puzzle or card game, pixel art, anything he calls 2D"
+   }
+  },
+  {
+   "key": "players",
+   "label": "Players",
+   "kind": "select",
+   "default": "Single player",
+   "options": [
+    "Single player",
+    "Local co-op",
+    "Online co-op (Steam)",
+    "Online co-op (LAN)"
+   ],
+   "tip": "Local co-op: two players on one machine, a keyboard and a pad. Steam: GodotSteam lobbies and peer-to-peer, tested with Valve's test app 480. LAN: Godot's own networking",
+   "show": "tiles"
+  },
+  {
+   "key": "start",
+   "label": "Start from",
+   "kind": "select",
+   "default": "Empty",
+   "options": [
+    "Empty"
+   ],
+   "tip": "an empty project, or a template you pick: Browse searches Godot's templates and demos, starter kits and open-source projects on GitHub",
+   "browse": "template"
+  },
+  {
+   "key": "characters",
+   "label": "Characters",
+   "kind": "select",
+   "default": "Premade assets",
+   "options": [
+    "Premade assets",
+    "Placeholders",
+    "Made by the 3D line"
+   ],
+   "tip": "Premade assets (the default - owner 2026-11-14: \"use something premade, we have tons of assets\"): characters and props already rigged and animated, from the CC0 packs and free libraries AMAL can reach, in the game within minutes. Placeholders: simple shapes only. Made by the 3D line: only when you choose it - each character modelled and rigged by AMAL's own rig, which still has problems",
+   "show": "tiles",
+   "about": {
+    "Premade assets": "ready-made characters and props, already rigged and animated: premade, existing, free or downloaded assets, an asset pack",
+    "Made by the 3D line": "characters and props made new for this game: from scratch, generated, custom, his own design",
+    "Placeholders": "no art: grey boxes, simple shapes, a blockout only"
+   },
+   "read": true
+  },
+  {
+   "key": "build",
+   "label": "Build a program",
+   "kind": "toggle",
+   "default": true,
+   "tip": "export a program that runs by itself (in the Library's Apps) when the game plays"
+  }
+ ],
+ "templates": [
+  {
+   "name": "Premade prototype",
+   "icon": "cube",
+   "tip": "plays in minutes: rigged, animated premade characters",
+   "prompt": "a playable prototype with premade assets: a knight who walks, runs and attacks against two skeletons in a small dungeon room",
+   "sets": {
+    "characters": "Premade assets",
+    "view": "3D",
+    "made_in": "Godot"
+   }
+  },
+  {
+   "name": "Local co-op",
+   "icon": "user",
+   "tip": "two players on one screen",
+   "prompt": "a small local co-op game: two players push crates onto switches to open the exit",
+   "sets": {
+    "players": "Local co-op",
+    "view": "3D",
+    "made_in": "Godot"
+   }
+  },
+  {
+   "name": "Steam co-op",
+   "icon": "globe",
+   "tip": "online with GodotSteam",
+   "prompt": "a bare-bones online co-op game with Steam networking through the GodotSteam add-on",
+   "sets": {
+    "players": "Online co-op (Steam)",
+    "made_in": "Godot"
+   }
+  },
+  {
+   "name": "D&D prototype",
+   "icon": "target",
+   "tip": "rigged characters fighting",
+   "prompt": "a playable goblin ambush: a fighter against three goblins, each with idle, run, attack, hit and death",
+   "sets": {
+    "characters": "Made by the 3D line",
+    "view": "3D",
+    "made_in": "Godot"
+   }
+  },
+  {
+   "name": "2D platformer",
+   "icon": "play",
+   "tip": "run and jump",
+   "prompt": "a 2D platformer with three short levels, coins and a goal flag",
+   "sets": {
+    "view": "2D",
+    "start": "Empty",
+    "made_in": "Godot"
+   }
+  }
+ ],
+ "ready": true,
+ "first": {
+  "title": "A project that runs, from a template",
+  "do": "godot_project",
+  "args": {
+   "template": "nearest",
+   "start": "{start}",
+   "else": "empty_{view_lower}",
+   "folder": "{workspace}",
+   "open": false,
+   "view": "{view}"
+  },
+  "then": "THE PROJECT IS UP - the result above says what AMAL made it from and holds its map (PROJECT_MAP: its scenes, scripts and input actions). A WORKING TEMPLATE (any start but an empty project) IS ALREADY A GAME THAT PLAYS - do not read through its files and do not plan it again: (a) `godot_check` it once; (b) when his words ask for something it does not already have, do only that, one small change at a time, each checked with godot_check, reading only the file a change touches; a premade character in place of the game's own is two calls - `premade` (search by his words, then get) and `godot_swap` with the file it fetched - never hand edits to scene files; AMAL itself proves each change when you `finish`: it plays the game through every one of its input actions, sets the pictures beside the ones from before the change, and sends you back if what he asked does not show - so do not `godot_play` or `look` to prove a change yourself, just make it, godot_check it and finish; (c) when his words ask nothing beyond what it already is (\"make a platformer\" and it is a platformer), `finish` now and tell him in three lines what the game is, how it is played (the map's input actions) and what he can ask for next - its look, premade characters in place of its own, another level, a rule. AN EMPTY PROJECT: build, working copy first: (1) a BLOCKOUT of what he asked - the smallest version that plays, with grey boxes, plain shapes and placeholder text for everything (no art, no add-ons, no research beyond what this step needs) - then godot_check and godot_play it and show him the running game with tell_owner; (2) only then add detail, one small playable step at a time, each checked the same way. Plan at most five tasks, the first of them the blockout that plays. Never write project.godot or a .tscn scene by hand as text (their resource lines break and Godot cannot read them): build the blockout's nodes in GDScript - created in the main scene's script when it starts (CharacterBody3D.new(), MeshInstance3D with a CapsuleMesh or BoxMesh, CollisionShape3D, Camera3D, add_child) - or, for a scene to keep, a builder script run once with `godot --headless --path \"<project>\" --script res://tools/build_<scene>.gd` that makes the nodes, sets each one's owner, and saves with PackedScene.pack() and ResourceSaver.save(). Paths always in quotes. Characters and props come the way THE LINE'S SETTINGS (Characters) and ASSETS say: asked once, premade put in as soon as the blockout plays - they are already rigged and animated, so the work is the look (materials, lights, scale, the right clip on the right action), not rigging. Add nothing he did not ask for."
+ },
+ "at_once": {
+  "when": {
+   "made_in": "Browser"
+  },
+  "line": "code"
+ },
+ "plan_max": 5
+}

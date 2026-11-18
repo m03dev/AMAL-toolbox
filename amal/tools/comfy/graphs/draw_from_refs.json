@@ -1,0 +1,320 @@
+{
+ "name": "draw_from_refs",
+ "version": "1.0",
+ "label": "Draw a new picture from reference pictures: FLUX.1 Kontext [dev] (the same characters in a new scene, at any size)",
+ "license": "AGPL-3.0 (AMAL's own graph, written from the node sources). Model: FLUX.1 Kontext [dev], FLUX.1 [dev] Non-Commercial License - the pictures are the owner's; the weights are not for resale.",
+ "sources": {
+  "comfyui": "comfyanonymous/ComfyUI (core nodes FluxKontextImageScale, ReferenceLatent, FluxGuidance, EmptySD3LatentImage)",
+  "gguf": "city96/ComfyUI-GGUF (UnetLoaderGGUF)"
+ },
+ "about": "Draws what the prompt describes - a manga panel, a new scene - with the characters exactly as in the reference picture (character sheets, joined side by side into one): the same faces, hair, clothes and colours from panel to panel. The same tested nodes as edit_picture (Kontext Q4_K_M GGUF fits an 8 GB card), but the picture is drawn on an empty canvas at the size asked for and the background is kept (no cut-out). The free route for consistent characters: Gemini's image model has no free drawing on the owner's key (429), NVIDIA's hosted Kontext takes only its example pictures (2026-11-10).",
+ "custom_nodes": {
+  "ComfyUI-GGUF": "https://github.com/city96/ComfyUI-GGUF"
+ },
+ "uploads": {},
+ "params": {
+  "image": {
+   "node": "4",
+   "input": "image",
+   "type": "string",
+   "default": ""
+  },
+  "prompt": {
+   "node": "7",
+   "input": "text",
+   "type": "string",
+   "default": ""
+  },
+  "seed": {
+   "node": "11",
+   "input": "seed",
+   "type": "int",
+   "default": 0,
+   "min": 0,
+   "max": 18446744073709551615
+  },
+  "steps": {
+   "node": "11",
+   "input": "steps",
+   "type": "int",
+   "default": 20,
+   "min": 1,
+   "max": 60
+  },
+  "guidance": {
+   "node": "9",
+   "input": "guidance",
+   "type": "float",
+   "default": 2.5
+  },
+  "width": {
+   "node": "14",
+   "input": "width",
+   "type": "int",
+   "default": 1024,
+   "min": 512,
+   "max": 1536
+  },
+  "height": {
+   "node": "14",
+   "input": "height",
+   "type": "int",
+   "default": 1024,
+   "min": 512,
+   "max": 1536
+  },
+  "prefix": {
+   "nodes": [
+    [
+     "13",
+     "filename_prefix"
+    ]
+   ],
+   "type": "string",
+   "default": "amal_render/panel"
+  }
+ },
+ "models": [
+  {
+   "node": "1",
+   "input": "unet_name",
+   "file": "flux1-kontext-dev-Q4_K_M.gguf",
+   "folder": "models/unet",
+   "repo": "QuantStack/FLUX.1-Kontext-dev-GGUF",
+   "revision": "main",
+   "path": "flux1-kontext-dev-Q4_K_M.gguf",
+   "size": 6930000000,
+   "license": "flux-1-dev-non-commercial"
+  },
+  {
+   "node": "2",
+   "input": "clip_name1",
+   "file": "clip_l.safetensors",
+   "folder": "models/text_encoders",
+   "repo": "comfyanonymous/flux_text_encoders",
+   "revision": "main",
+   "path": "clip_l.safetensors",
+   "size": 246144152,
+   "license": "mit"
+  },
+  {
+   "node": "2",
+   "input": "clip_name2",
+   "file": "t5xxl_fp8_e4m3fn.safetensors",
+   "folder": "models/text_encoders",
+   "repo": "comfyanonymous/flux_text_encoders",
+   "revision": "main",
+   "path": "t5xxl_fp8_e4m3fn.safetensors",
+   "size": 4893934904,
+   "license": "apache-2.0"
+  },
+  {
+   "node": "3",
+   "input": "vae_name",
+   "file": "ae.safetensors",
+   "folder": "models/vae",
+   "repo": "Comfy-Org/z_image_turbo",
+   "revision": "main",
+   "path": "split_files/vae/ae.safetensors",
+   "size": 335304388,
+   "license": "apache-2.0"
+  }
+ ],
+ "outputs": {
+  "image": "13",
+  "thumb": "13"
+ },
+ "prompt": {
+  "1": {
+   "class_type": "UnetLoaderGGUF",
+   "inputs": {
+    "unet_name": "flux1-kontext-dev-Q4_K_M.gguf"
+   },
+   "_meta": {
+    "title": "FLUX.1 Kontext dev (GGUF)"
+   }
+  },
+  "2": {
+   "class_type": "DualCLIPLoader",
+   "inputs": {
+    "clip_name1": "clip_l.safetensors",
+    "clip_name2": "t5xxl_fp8_e4m3fn.safetensors",
+    "type": "flux",
+    "device": "default"
+   },
+   "_meta": {
+    "title": "Text encoders"
+   }
+  },
+  "3": {
+   "class_type": "VAELoader",
+   "inputs": {
+    "vae_name": "ae.safetensors"
+   },
+   "_meta": {
+    "title": "VAE"
+   }
+  },
+  "4": {
+   "class_type": "LoadImage",
+   "inputs": {
+    "image": ""
+   },
+   "_meta": {
+    "title": "The reference picture (character sheets)"
+   }
+  },
+  "5": {
+   "class_type": "FluxKontextImageScale",
+   "inputs": {
+    "image": [
+     "4",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Kontext size"
+   }
+  },
+  "6": {
+   "class_type": "VAEEncode",
+   "inputs": {
+    "pixels": [
+     "5",
+     0
+    ],
+    "vae": [
+     "3",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Encode"
+   }
+  },
+  "7": {
+   "class_type": "CLIPTextEncode",
+   "inputs": {
+    "text": "",
+    "clip": [
+     "2",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "What to draw"
+   }
+  },
+  "8": {
+   "class_type": "ReferenceLatent",
+   "inputs": {
+    "conditioning": [
+     "7",
+     0
+    ],
+    "latent": [
+     "6",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Reference"
+   }
+  },
+  "9": {
+   "class_type": "FluxGuidance",
+   "inputs": {
+    "conditioning": [
+     "8",
+     0
+    ],
+    "guidance": 2.5
+   },
+   "_meta": {
+    "title": "Guidance"
+   }
+  },
+  "10": {
+   "class_type": "ConditioningZeroOut",
+   "inputs": {
+    "conditioning": [
+     "7",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Negative"
+   }
+  },
+  "11": {
+   "class_type": "KSampler",
+   "inputs": {
+    "seed": 0,
+    "steps": 20,
+    "cfg": 1.0,
+    "sampler_name": "euler",
+    "scheduler": "simple",
+    "denoise": 1.0,
+    "model": [
+     "1",
+     0
+    ],
+    "positive": [
+     "9",
+     0
+    ],
+    "negative": [
+     "10",
+     0
+    ],
+    "latent_image": [
+     "14",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Sampler"
+   }
+  },
+  "12": {
+   "class_type": "VAEDecode",
+   "inputs": {
+    "samples": [
+     "11",
+     0
+    ],
+    "vae": [
+     "3",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "Decode"
+   }
+  },
+  "13": {
+   "class_type": "SaveImage",
+   "inputs": {
+    "filename_prefix": "amal_render/panel",
+    "images": [
+     "12",
+     0
+    ]
+   },
+   "_meta": {
+    "title": "The picture"
+   }
+  },
+  "14": {
+   "class_type": "EmptySD3LatentImage",
+   "inputs": {
+    "width": 1024,
+    "height": 1024,
+    "batch_size": 1
+   },
+   "_meta": {
+    "title": "The panel's canvas"
+   }
+  }
+ }
+}

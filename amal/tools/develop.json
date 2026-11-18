@@ -1,0 +1,201 @@
+{
+ "about": "AMAL's own source, in parts. Each part has the specialist who works on it, the files it is made of and the checks a change must pass (Settings > Develop AMAL). A request made there starts a job in this checkout as that specialist.",
+ "areas": [
+  {
+   "id": "bugs",
+   "name": "Bug reports",
+   "icon": "bug",
+   "flow": "report",
+   "what": "What you reported with the bug button: researched, explained and asked before anything is changed",
+   "specialist": "debugger",
+   "paths": [
+    "AGENTS.md",
+    "README.md"
+   ],
+   "checks": [
+    "cargo test -q"
+   ],
+   "ideas": []
+  },
+  {
+   "id": "window",
+   "name": "Window",
+   "icon": "appwin",
+   "what": "What you see and touch: the chat, panels and tabs, the Library, Settings, the look",
+   "specialist": "frontend-specialist",
+   "paths": [
+    "app/ui/index.html",
+    "crates/amald/src/ui.rs",
+    "crates/amald/src/ui_chat.rs",
+    "crates/amald/src/ui_settings.rs",
+    "crates/amald/src/ui_boxes.rs",
+    "crates/amald/src/ui_vault.rs",
+    "tests/ui"
+   ],
+   "checks": [
+    "cargo build -q -p amald",
+    "bash tests/ui/smoke.sh",
+    "bash tests/ui/window.sh",
+    "bash tests/ui/panels.sh"
+   ],
+   "ideas": [
+    "Make the job list more compact",
+    "Show a thumbnail on each finished job",
+    "Add a keyboard shortcut for the Library"
+   ]
+  },
+  {
+   "id": "lines",
+   "name": "Production lines",
+   "icon": "flow",
+   "what": "Images, Video, Mangaka, 3D: each line's steps, settings, start-from cards and looks",
+   "specialist": "pipeline-designer",
+   "paths": [
+    "studios",
+    "playbooks",
+    "tools/image/styles.json",
+    "crates/amal-core/src/agent/recipe.rs",
+    "crates/amal-core/src/studio.rs",
+    "crates/amal-core/src/imagegen.rs",
+    "crates/amal-core/src/manga.rs"
+   ],
+   "checks": [
+    "cargo test -q -p amal-core"
+   ],
+   "ideas": [
+    "Add a start-from card to the Video line",
+    "Give Mangaka a four-panel strip layout",
+    "Add a new look to the Images line"
+   ]
+  },
+  {
+   "id": "driver",
+   "name": "Driver",
+   "icon": "server",
+   "what": "The engine behind every job: planning, tool calls, checks, memory, restarts",
+   "specialist": "backend-senior",
+   "paths": [
+    "crates/amal-core/src/agent.rs",
+    "crates/amal-core/src/agent",
+    "crates/amal-core/src/journal.rs",
+    "crates/amal-core/src/tools.rs",
+    "crates/amal-core/src/memory.rs",
+    "crates/amald/src/main.rs",
+    "crates/amal-core/tests"
+   ],
+   "checks": [
+    "cargo test -q"
+   ],
+   "ideas": [
+    "Make a stuck job say what it waits for",
+    "Shorten what a job writes when it finishes"
+   ]
+  },
+  {
+   "id": "tools",
+   "name": "Tools and graphs",
+   "icon": "wand",
+   "what": "ComfyUI graphs, Blender and Maya scripts, the picture and page tools",
+   "specialist": "backend-senior",
+   "paths": [
+    "tools/comfy",
+    "tools/blender",
+    "tools/maya",
+    "crates/amal-core/src/comfy.rs",
+    "crates/amal-core/src/typeset.rs",
+    "crates/amal-core/src/toolbox.rs"
+   ],
+   "checks": [
+    "cargo test -q -p amal-core"
+   ],
+   "ideas": [
+    "Add an upscale step after a Wan clip",
+    "List the ComfyUI graphs with what each needs"
+   ]
+  },
+  {
+   "id": "rig",
+   "name": "Rigging and animation",
+   "icon": "rig",
+   "what": "Skeleton, skin weights, the deformation check, each clip as its own file",
+   "specialist": "rigging-td",
+   "paths": [
+    "crates/amal-core/src/rig.rs",
+    "crates/amal-core/src/skeleton.rs",
+    "tools/maya",
+    "tools/blender",
+    "playbooks/studio-3d"
+   ],
+   "checks": [
+    "cargo test -q -p amal-core"
+   ],
+   "ideas": [
+    "Explain in the job why a rig failed its check",
+    "Try UniRig when the skin weights tear"
+   ]
+  },
+  {
+   "id": "mcp",
+   "name": "MCP and connections",
+   "icon": "link",
+   "what": "AMAL as an MCP server for other apps, and the MCP servers AMAL uses",
+   "specialist": "integrations-engineer",
+   "paths": [
+    "crates/amald/src/mcp_server.rs",
+    "crates/amald/tests/mcp.rs",
+    "crates/amal-core/src/mcp.rs",
+    "crates/amal-app/src/main.rs"
+   ],
+   "checks": [
+    "cargo test -q -p amald --test mcp"
+   ],
+   "ideas": [
+    "Add a tool that returns a job's result files",
+    "Let an MCP client pick a line's settings"
+   ]
+  },
+  {
+   "id": "machines",
+   "name": "Machines and models",
+   "icon": "monitor",
+   "what": "The Mac and PC link, where work is placed, updates, free and local models",
+   "specialist": "backend-senior",
+   "paths": [
+    "crates/amald/src/link.rs",
+    "crates/amald/src/share.rs",
+    "crates/amald/src/health.rs",
+    "crates/amald/src/watchdog.rs",
+    "crates/amal-core/src/pool.rs",
+    "crates/amal-core/src/llm.rs",
+    "crates/amal-app/src"
+   ],
+   "checks": [
+    "cargo test -q"
+   ],
+   "ideas": [
+    "Show each machine's free memory in Devices",
+    "Say why a job went to the other machine"
+   ]
+  },
+  {
+   "id": "docs",
+   "name": "Rules and docs",
+   "icon": "doc",
+   "what": "AGENTS.md (the rules), the README (where it stands), AMAL's own task list",
+   "specialist": "documentation-writer",
+   "paths": [
+    "AGENTS.md",
+    "README.md",
+    "AMAL_TASKS.md",
+    "docs"
+   ],
+   "checks": [
+    "cargo test -q -p amal-core --test languages"
+   ],
+   "ideas": [
+    "Shorten the README to what is proven",
+    "List what is left before a tester gets it"
+   ]
+  }
+ ]
+}

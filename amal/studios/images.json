@@ -1,0 +1,176 @@
+{
+ "shows": ["comfy"],
+ "id": "images",
+ "name": "Images",
+ "icon": "brush",
+ "order": 1,
+ "tip": "concept art, characters, posters, textures",
+ "about": "Concept art, character sheets, posters and textures, drawn by FLUX on NVIDIA's free API - the route behind AMAL's best pictures. AMAL writes the art-director prompt, makes several, judges them and keeps the best.",
+ "card": true,
+ "needs": [],
+ "playbook": "studio-images",
+ "settings": [
+  {
+   "key": "style",
+   "label": "Default style",
+   "kind": "select",
+   "default": "game-concept",
+   "options": [
+    "game-concept",
+    "concept-art",
+    "sprite-source",
+    "model-reference",
+    "character-sheet",
+    "oil-painting",
+    "watercolor",
+    "comic",
+    "manga",
+    "book-cover",
+    "photo",
+    "product",
+    "3d-render",
+    "pixel-art",
+    "texture"
+   ],
+   "tip": "the look added to every prompt"
+  },
+  {
+   "key": "size",
+   "label": "Size",
+   "kind": "select",
+   "default": "1024x1024",
+   "options": [
+    "1024x1024",
+    "1024x576",
+    "576x1024",
+    "832x1024",
+    "1024x768"
+   ]
+  },
+  {
+   "key": "count",
+   "label": "Versions per picture",
+   "kind": "number",
+   "default": 3,
+   "min": 1,
+   "max": 8,
+   "tip": "AMAL makes this many and keeps the best"
+  },
+  {
+   "key": "retakes",
+   "label": "Retakes",
+   "kind": "number",
+   "default": 2,
+   "min": 0,
+   "max": 6,
+   "tip": "new rounds when none is good enough"
+  },
+  {
+   "key": "comfy_url",
+   "label": "ComfyUI address",
+   "kind": "text",
+   "default": "http://127.0.0.1:8188",
+   "tip": "the GPU machine's ComfyUI, for video, music and 3D"
+  }
+ ],
+ "ready": true,
+ "templates": [
+  {
+   "name": "Pixel sprite",
+   "icon": "grid",
+   "gives": "one character or item in crisp pixel art, square, three takes",
+   "tip": "pixel art with a limited palette and a clean outline - for a 2D game's characters, items and enemies",
+   "prompt": "a skeleton archer, idle pose",
+   "sets": {
+    "style": "pixel-art",
+    "size": "1024x1024",
+    "count": 3
+   }
+  },
+  {
+   "name": "Sprite to cut out",
+   "icon": "pic",
+   "gives": "one subject alone on plain white, full body, ready to cut out",
+   "tip": "a painted game asset with no scenery and no ground shadow - for sprites, cards and inventory art",
+   "prompt": "a health potion in a round glass bottle",
+   "sets": {
+    "style": "sprite-source",
+    "size": "1024x1024",
+    "count": 3
+   }
+  },
+  {
+   "name": "Character sheet",
+   "icon": "user",
+   "gives": "front, side and back of one character, same proportions",
+   "tip": "a design sheet in a neutral pose on a flat background - what an artist or modeller works from",
+   "prompt": "a dwarf blacksmith with a braided beard and a leather apron",
+   "sets": {
+    "style": "character-sheet",
+    "size": "1024x768",
+    "count": 3
+   }
+  },
+  {
+   "name": "3D reference",
+   "icon": "cube",
+   "gives": "one subject drawn to be modelled: every part shown once, limbs clear",
+   "tip": "a modelling reference with little perspective - the picture the 3D line builds from",
+   "prompt": "a wooden treasure chest with iron bands",
+   "sets": {
+    "style": "model-reference",
+    "size": "1024x1024",
+    "count": 4
+   }
+  },
+  {
+   "name": "Environment concept",
+   "icon": "image",
+   "gives": "a wide painted scene with mood and depth, 16:9",
+   "tip": "cinematic concept art for a level, a biome or a key location",
+   "prompt": "a ruined watchtower on a cliff above a foggy pine forest",
+   "sets": {
+    "style": "concept-art",
+    "size": "1024x576",
+    "count": 3
+   }
+  },
+  {
+   "name": "Tiling texture",
+   "icon": "layers",
+   "gives": "a square surface that repeats without a seam, flat light",
+   "tip": "top-down, no shadows, no objects - for terrain, walls and materials",
+   "prompt": "mossy cobblestone",
+   "sets": {
+    "style": "texture",
+    "size": "1024x1024",
+    "count": 2
+   }
+  },
+  {
+   "name": "Key art",
+   "icon": "star",
+   "gives": "a tall cover picture with room for the title at the top",
+   "tip": "a store capsule, poster or cover - one strong focal point",
+   "prompt": "a lone knight facing a dragon at the mouth of a cave",
+   "sets": {
+    "style": "book-cover",
+    "size": "832x1024",
+    "count": 3
+   }
+  },
+  {
+   "name": "Game concept",
+   "icon": "brush",
+   "gives": "painterly fantasy concept art, dramatic light, three takes",
+   "tip": "the house look for ideas, pitches and mood pictures",
+   "prompt": "a goblin market inside a hollow tree",
+   "sets": {
+    "style": "game-concept",
+    "size": "1024x576",
+    "count": 3
+   }
+  }
+ ],
+ "ask": "Describe the picture…"
+}

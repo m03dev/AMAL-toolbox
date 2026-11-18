@@ -1,0 +1,59 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://main.gd" id="1"]
+[ext_resource type="Script" path="res://bird.gd" id="2"]
+
+[sub_resource type="CircleShape2D" id="1"]
+radius = 15.0
+
+[sub_resource type="LabelSettings" id="2"]
+font_size = 48
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Pipes" type="Node2D" parent="."]
+
+[node name="Bird" type="Area2D" parent="."]
+position = Vector2(140, 330)
+script = ExtResource("2")
+
+[node name="Shape" type="CollisionShape2D" parent="Bird"]
+shape = SubResource("1")
+
+[node name="Ground" type="ColorRect" parent="."]
+offset_top = 640.0
+offset_right = 480.0
+offset_bottom = 720.0
+color = Color(0.86, 0.72, 0.47, 1)
+
+[node name="Grass" type="ColorRect" parent="Ground"]
+offset_right = 480.0
+offset_bottom = 14.0
+color = Color(0.45, 0.78, 0.29, 1)
+
+[node name="PipeTimer" type="Timer" parent="."]
+wait_time = 1.5
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Score" type="Label" parent="HUD"]
+offset_top = 40.0
+offset_right = 480.0
+offset_bottom = 110.0
+text = "0"
+label_settings = SubResource("2")
+horizontal_alignment = 1
+
+[node name="Message" type="Label" parent="HUD"]
+offset_top = 220.0
+offset_right = 480.0
+offset_bottom = 420.0
+text = "Tap, click or press Space
+to flap"
+label_settings = SubResource("2")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
