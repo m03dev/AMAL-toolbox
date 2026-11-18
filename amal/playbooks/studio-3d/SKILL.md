@@ -69,6 +69,16 @@ Never design the shape with parts or offsets: a proven generator or a picture mo
    "not symmetrical": it turns the model to its own mirror plane first and mirrors only a model that is nearly
    symmetrical already - mirroring a lopsided one makes a different creature (two tails). A broken step = TROUBLESHOOT on the
    rig code it names (crates/amal-core/src/skeleton.rs, tools/maya/advanced_skeleton.py, tools/blender/rig_plan.py, creature_anim.py).
+   **With Maya's tools in this job (`mcp__maya__…`, Settings › Connections › Maya through MCP) and Maya open on this
+   machine,** the rig can be made in that open Maya instead of a new Maya started for the build: no cold start (the
+   start that waited 15 minutes on a sign-in window), and every step can be looked at. Same script, same steps, same
+   checks: `health.check` first; then its script tool runs, in Maya's Python, `import sys; sys.path.insert(0,
+   "<toolbox>/job_scripts"); import advanced_skeleton as A; result = A.rig_here("<model>", "<name>", "<job folder>",
+   body="biped|quadruped|winged", amald="<amald>", advanced_skeleton="<its folder>")` - the toolbox's own flow
+   (prepare, model check, skeleton placed, built, bound, exported) with nothing of his open scene thrown away (unsaved
+   changes stop it with that said). A viewport capture after it, looked at. The FBX lands at
+   renders/<name>_as.fbx; the `rig` tool's deformation check still decides PASS. A failure stops with Maya's own
+   error (rule 4). Without Maya's tools, or with Maya closed, it is the `rig` tool as above.
 6. Checks: `asset:renders/<name>.glb` (the driver reads it: it imports, has normals, UVs and its textures, a
    size between 1 cm and 100 m, clean skin weights and named animations - its report gives the triangle count),
    `look:renders/<name>.png`; rigged: `file:renders/<name>_rig_report.json` with quality PASS. Attach the views and say the triangle count.

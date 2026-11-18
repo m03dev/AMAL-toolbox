@@ -651,10 +651,11 @@ def save(path):
 PROXY_FACES = 20000
 
 
-def build_mel(fit_scene, out_scene, fbx, mel_path, mesh=None, place=False):
+def build_mel(fit_scene, out_scene, fbx, mel_path, mesh=None, place=False, here=False):
     """Write a .mel for gui_run(): open the fitted scene, build the AdvancedSkeleton rig (it needs Maya's interface),
     bind the mesh to the deformation joints with geodesic voxel weights (max 4 influences), export the skinned rig as
-    FBX for game engines, save, quit. Maya's messages come back from gui_run()."""
+    FBX for game engines, save, quit. Maya's messages come back from gui_run(). `here`: for the Maya it is sourced in
+    (an open Maya driven through MCP or the live link) - the build runs at once and that Maya is never quit."""
     f = lambda p: os.path.abspath(p).replace("\\", "/")
     mesh = mesh or _MESH or "body"
     # AdvancedSkeleton's own AutoPlace (its Fit > AutoPlace button), with the model as its Skin geometry: it fits a
@@ -785,9 +786,9 @@ global proc amalAsBuild()
 {{
 // whatever fails, Maya's error is in the log and Maya still quits (a session left open would hang the job)
 if (catch(`amalAsWork`)) print "AMAL_AS_FAILED (see the Error lines above)\\n";
-quit -force;
+{"" if here else "quit -force;"}
 }}
-evalDeferred -lowestPriority "amalAsBuild";
+{"amalAsBuild;" if here else 'evalDeferred -lowestPriority "amalAsBuild";'}
 '''
     with open(mel_path, "w", encoding="utf-8") as fh:
         fh.write(mel)
@@ -836,11 +837,26 @@ def gui_run(mel_file, timeout=900):
     return "exit %s\n%s" % (p.returncode, text[-6000:])
 
 
-def build(fit_scene, out_scene, fbx, mesh=None, timeout=900, place=False):
+def run_here(mel_file):
+    """Source a MEL file in this Maya (an open one, with its interface) and return what Maya printed meanwhile."""
+    import maya.mel as mel
+    import tempfile, time
+    log = os.path.join(tempfile.gettempdir(), "amal_maya_here_%d.log" % int(time.time() * 1000))
+    cmds.cmdFileOutput(o=log)
+    try:
+        mel.eval('source "%s";' % os.path.abspath(mel_file).replace("\\", "/"))
+    finally:
+        cmds.cmdFileOutput(ca=True)
+    return open(log, encoding="utf-8", errors="replace").read() if os.path.isfile(log) else ""
+
+
+def build(fit_scene, out_scene, fbx, mesh=None, timeout=900, place=False, here=False):
     """One call for the whole build: write the MEL, run it in full Maya, check it. Raises with Maya's own messages when
-    the rig, skin or export did not happen, so the cause is in front of whoever reads the error."""
+    the rig, skin or export did not happen, so the cause is in front of whoever reads the error. `here`: in this Maya
+    (open, with its interface) instead of a new one started for the build."""
     mel_path = os.path.splitext(os.path.abspath(out_scene))[0] + "_build.mel"
-    text = gui_run(build_mel(fit_scene, out_scene, fbx, mel_path, mesh, place), timeout)
+    made = build_mel(fit_scene, out_scene, fbx, mel_path, mesh, place, here)
+    text = run_here(made) if here else gui_run(made, timeout)
     # Maya's own start-up complaints (USD menu, Bifrost's missing folder) come before the build and are not its cause
     noise = ("mayaUsdMenu", "Bifrost")
     steps = [l for l in text.splitlines() if ("AMAL_AS_" in l or "Error" in l) and not any(n in l for n in noise)]
@@ -848,6 +864,112 @@ def build(fit_scene, out_scene, fbx, mesh=None, timeout=900, place=False):
     if "AMAL_AS_BUILT" not in text or not os.path.isfile(fbx):
         raise RuntimeError("the AdvancedSkeleton build did not finish - the cause is in Maya's Error lines:\n" + "\n".join(steps[-20:]))
     return os.path.abspath(fbx)
+
+
+def rig(src, name, here=False):
+    """The whole rig in the current folder (the job's workspace: scenes/, renders/): prepare, check, place the
+    skeleton, build, bind, export. Raises with the cause; Maya's own lines are in its log."""
+    m = prepare(src, name="body")
+    model_check(m)
+    body = os.environ.get("AMAL_RIG_BODY", "").strip().lower()
+    tpl = TEMPLATES.get(body)
+    p, place = {"joints": [], "chains": [], "warnings": []}, False
+    hands = None
+    if body == "biped":
+        # AdvancedSkeleton's AutoPlace finds a biped by scanning across four separate fingers (its fourFingerHit:
+        # "Unable to detect ... form" otherwise, or an xform error inside its finger search). A generated game
+        # character rarely has them - mitten hands, gauntlets - and every such run was a full Maya pass that could
+        # only fail (the knight and the goblin, 2026-11-12/13). The plan counts the digits on each hand first.
+        try:
+            p = _plan_facing(m, name)
+            hands = _digits_per_hand(p)
+        except Exception as e:
+            print(f"AMAL_AS_STEP no skeleton plan to count the fingers ({str(e).splitlines()[-1][:200]})")
+    if body == "biped" and (hands is None or hands >= 4):
+        # AdvancedSkeleton fits a biped by itself: its template, then its AutoPlace in the build
+        import_template(tpl)
+        place = True
+        print(f"AMAL_AS_STEP biped: AdvancedSkeleton's {tpl} + its AutoPlace")
+    else:
+        if body == "biped":
+            print(f"AMAL_AS_STEP biped with {hands} separate finger(s) a hand: AdvancedSkeleton's AutoPlace needs four, "
+                  f"so its {tpl} is fitted from AMAL's skeleton plan")
+        try:
+            p = p if p["joints"] else _plan_facing(m, name)
+        except Exception as e:
+            if not tpl:
+                raise
+            # no plan: AdvancedSkeleton's own template, scaled to the model by its AutoPlace, is built as it is
+            print(f"AMAL_AS_STEP no skeleton plan ({str(e).splitlines()[-1][:200]}); AdvancedSkeleton's {tpl}, scaled by its AutoPlace")
+            import_template(tpl)
+            place = True
+        if not place:
+            try:
+                tpl = fit_template(p, m)
+            except Exception as e:   # no template fits, or fitting failed: AMAL's own FitSkeleton from the plan
+                print(f"AMAL_AS_STEP template fit not used ({type(e).__name__}: {e}); building the FitSkeleton from the plan")
+                tpl = None
+                fit_plan(p, m)
+    save(f"scenes/{name}_fit.ma")
+    try:
+        fbx = build(f"scenes/{name}_fit.ma", f"scenes/{name}_as.ma", f"renders/{name}_as.fbx", m, place=place, here=here)
+    except RuntimeError as e:
+        # AdvancedSkeleton's AutoPlace reads average human proportions; a body it cannot read (a squat goblin in a
+        # T-pose, 2026-11-12) is still a biped: its FitSkeleton is placed from AMAL's own reading of the model's
+        # limbs instead - the same template, fitted to the plan - and built the same way
+        if not (place and body == "biped" and "AutoPlace could not read" in str(e)):
+            raise
+        print("AMAL_AS_STEP AutoPlace could not read this body - the biped FitSkeleton is fitted from AMAL's own skeleton plan")
+        cmds.file(new=True, force=True)
+        m = prepare(src, name="body")
+        p = plan(m, f"scenes/{name}_plan_mesh.obj")
+        if p.get("front", 1) < 0:
+            # the plan reads the front from the limbs: where it says the model faces away, the model is turned round
+            for one in _all(m):
+                cmds.rotate(0, 180, 0, one, r=True, ws=True, pivot=(0, 0, 0))
+                cmds.makeIdentity(one, apply=True, r=True)
+            print("AMAL_AS_STEP the skeleton plan reads the model as facing away - turned round")
+            p = plan(m, f"scenes/{name}_plan_mesh.obj")
+        place = False
+        try:
+            tpl = fit_template(p, m)
+        except Exception as e2:
+            print(f"AMAL_AS_STEP template fit not used ({type(e2).__name__}: {e2}); building the FitSkeleton from the plan")
+            tpl = None
+            fit_plan(p, m)
+        save(f"scenes/{name}_fit.ma")
+        fbx = build(f"scenes/{name}_fit.ma", f"scenes/{name}_as.ma", f"renders/{name}_as.fbx", m, place=False, here=here)
+    info = {"fbx": fbx, "joints": len(p["joints"]),
+            "chains": [c["kind"] + " " + c["side"] for c in p["chains"]],
+            "warnings": p.get("warnings", []), "template": tpl, "placed_by": "AdvancedSkeleton AutoPlace" if place else "AMAL plan"}
+    print("AMAL_INFO " + json.dumps(info))
+    return info
+
+
+def rig_here(src, name, ws, body="", amald="", advanced_skeleton="", proxy=""):
+    """The same rig in the Maya that is open now (driven through MCP or the live link), where every step can be looked
+    at. His open scene is never thrown away: one with unsaved changes stops the rig with that said. The rig is made in a
+    new scene and saved under the job's folder; the folder Maya was working in is put back after. The settings the
+    `rig` tool hands a mayapy run as its environment come as arguments here (an open Maya was started without them):
+    body (biped / quadruped / winged), amald (the driver's program, for skeleton plans), advanced_skeleton (its
+    folder), proxy (the light copy the weights are made on)."""
+    global AS
+    for k, v in (("AMAL_RIG_BODY", body), ("AMAL_AMALD", amald), ("AMAL_ADVANCED_SKELETON", advanced_skeleton), ("AMAL_AS_PROXY", proxy)):
+        if v:
+            os.environ[k] = v
+    if advanced_skeleton:
+        AS = advanced_skeleton.replace("\\", "/")
+    if cmds.file(q=True, modified=True):
+        raise RuntimeError("the scene open in Maya has unsaved changes - save or close it, then rig again (it is not thrown away)")
+    before = os.getcwd()
+    os.makedirs(os.path.join(ws, "scenes"), exist_ok=True)
+    os.makedirs(os.path.join(ws, "renders"), exist_ok=True)
+    os.chdir(ws)
+    try:
+        cmds.file(new=True, force=True)
+        return rig(src, name, here=True)
+    finally:
+        os.chdir(before)
 
 
 if __name__ == "__main__":
@@ -861,79 +983,7 @@ if __name__ == "__main__":
     os.makedirs(os.path.dirname(log), exist_ok=True)
     cmds.cmdFileOutput(o=log)
     try:
-        m = prepare(src, name="body")
-        model_check(m)
-        body = os.environ.get("AMAL_RIG_BODY", "").strip().lower()
-        tpl = TEMPLATES.get(body)
-        p, place = {"joints": [], "chains": [], "warnings": []}, False
-        hands = None
-        if body == "biped":
-            # AdvancedSkeleton's AutoPlace finds a biped by scanning across four separate fingers (its fourFingerHit:
-            # "Unable to detect ... form" otherwise, or an xform error inside its finger search). A generated game
-            # character rarely has them - mitten hands, gauntlets - and every such run was a full Maya pass that could
-            # only fail (the knight and the goblin, 2026-11-12/13). The plan counts the digits on each hand first.
-            try:
-                p = _plan_facing(m, name)
-                hands = _digits_per_hand(p)
-            except Exception as e:
-                print(f"AMAL_AS_STEP no skeleton plan to count the fingers ({str(e).splitlines()[-1][:200]})")
-        if body == "biped" and (hands is None or hands >= 4):
-            # AdvancedSkeleton fits a biped by itself: its template, then its AutoPlace in the build
-            import_template(tpl)
-            place = True
-            print(f"AMAL_AS_STEP biped: AdvancedSkeleton's {tpl} + its AutoPlace")
-        else:
-            if body == "biped":
-                print(f"AMAL_AS_STEP biped with {hands} separate finger(s) a hand: AdvancedSkeleton's AutoPlace needs four, "
-                      f"so its {tpl} is fitted from AMAL's skeleton plan")
-            try:
-                p = p if p["joints"] else _plan_facing(m, name)
-            except Exception as e:
-                if not tpl:
-                    raise
-                # no plan: AdvancedSkeleton's own template, scaled to the model by its AutoPlace, is built as it is
-                print(f"AMAL_AS_STEP no skeleton plan ({str(e).splitlines()[-1][:200]}); AdvancedSkeleton's {tpl}, scaled by its AutoPlace")
-                import_template(tpl)
-                place = True
-            if not place:
-                try:
-                    tpl = fit_template(p, m)
-                except Exception as e:   # no template fits, or fitting failed: AMAL's own FitSkeleton from the plan
-                    print(f"AMAL_AS_STEP template fit not used ({type(e).__name__}: {e}); building the FitSkeleton from the plan")
-                    tpl = None
-                    fit_plan(p, m)
-        save(f"scenes/{name}_fit.ma")
-        try:
-            fbx = build(f"scenes/{name}_fit.ma", f"scenes/{name}_as.ma", f"renders/{name}_as.fbx", m, place=place)
-        except RuntimeError as e:
-            # AdvancedSkeleton's AutoPlace reads average human proportions; a body it cannot read (a squat goblin in a
-            # T-pose, 2026-11-12) is still a biped: its FitSkeleton is placed from AMAL's own reading of the model's
-            # limbs instead - the same template, fitted to the plan - and built the same way
-            if not (place and body == "biped" and "AutoPlace could not read" in str(e)):
-                raise
-            print("AMAL_AS_STEP AutoPlace could not read this body - the biped FitSkeleton is fitted from AMAL's own skeleton plan")
-            cmds.file(new=True, force=True)
-            m = prepare(src, name="body")
-            p = plan(m, f"scenes/{name}_plan_mesh.obj")
-            if p.get("front", 1) < 0:
-                # the plan reads the front from the limbs: where it says the model faces away, the model is turned round
-                for one in _all(m):
-                    cmds.rotate(0, 180, 0, one, r=True, ws=True, pivot=(0, 0, 0))
-                    cmds.makeIdentity(one, apply=True, r=True)
-                print("AMAL_AS_STEP the skeleton plan reads the model as facing away - turned round")
-                p = plan(m, f"scenes/{name}_plan_mesh.obj")
-            place = False
-            try:
-                tpl = fit_template(p, m)
-            except Exception as e2:
-                print(f"AMAL_AS_STEP template fit not used ({type(e2).__name__}: {e2}); building the FitSkeleton from the plan")
-                tpl = None
-                fit_plan(p, m)
-            save(f"scenes/{name}_fit.ma")
-            fbx = build(f"scenes/{name}_fit.ma", f"scenes/{name}_as.ma", f"renders/{name}_as.fbx", m, place=False)
-        print("AMAL_INFO " + json.dumps({"fbx": fbx, "joints": len(p["joints"]),
-                                         "chains": [c["kind"] + " " + c["side"] for c in p["chains"]],
-                                         "warnings": p.get("warnings", []), "template": tpl, "placed_by": "AdvancedSkeleton AutoPlace" if place else "AMAL plan"}))
+        rig(src, name)
     except Exception as e:  # Maya's own lines are the evidence: print them with the error
         cmds.cmdFileOutput(c=True) if hasattr(cmds, "cmdFileOutput") else None
         said = open(log, encoding="utf-8", errors="replace").read()[-3000:] if os.path.isfile(log) else ""

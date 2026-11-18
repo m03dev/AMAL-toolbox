@@ -8,6 +8,9 @@ One JSON object per line in, one JSON line out:
   {"op": "exec", "code": "..."}  runs Python here (maya.cmds as cmds); printed output, the value of `result`, the error
   {"op": "exec", "mel": "..."}   runs MEL
   {"op": "shot", "path": "..."}  a picture of the viewport now (a one-frame playblast)
+
+It also opens Maya's own command port on 127.0.0.1:7001 (Python), the port a Maya MCP server drives Maya through
+(AMAL's Settings › Connections › Maya through MCP) - on this computer only, never on the network.
 """
 import io
 import json
@@ -21,7 +24,22 @@ import maya.mel as mel
 import maya.utils
 
 PORT = 7732
+MCP_PORT = 7001
 _thread = None
+
+
+def open_command_port(port=MCP_PORT):
+    """Maya's commandPort for an MCP server, bound to this computer only; already open is fine."""
+    name = "127.0.0.1:%d" % port
+    try:
+        if cmds.commandPort(name, q=True):
+            return True
+        cmds.commandPort(name=name, sourceType="python", echoOutput=True, noreturn=False, bufferSize=16384)
+        print("AMAL: Maya's command port is open on %s for MCP" % name)
+        return True
+    except Exception as e:  # another program holds the port, or Maya refused it
+        print("AMAL: could not open Maya's command port %s (%s)" % (name, e))
+        return False
 
 
 def _ping(_req):
@@ -119,6 +137,7 @@ def start():
     global _thread
     if _thread is not None or cmds.about(batch=True):
         return
+    open_command_port()
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
