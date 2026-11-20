@@ -13,6 +13,8 @@ character, shapes and art style stay. `fresh: true` only for a picture that has 
 MANY = SEPARATE PICTURES. "Eight concepts", "a few variations", "five versions" is that many separate pictures, each
 with its own change: one `image` call per idea, its prompt naming that idea. Never one grid or sheet of them unless he
 asks for a sheet. Plan one task per picture (or one task checked by every file), never a single combined file.
+Each of them is ONE take (count 1) and no retakes: when they are all made, show him all of them in one ask_owner and
+redo only the ones he points at. Versions and Retakes below are for a request for one picture.
 
 1. If the subject is something you don't know (a game, a creature, a brand look), `web` it first: what it looks like,
    its colours, its shapes. Use what you find in the prompt.
