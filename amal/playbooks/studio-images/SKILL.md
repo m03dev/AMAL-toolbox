@@ -7,6 +7,13 @@ description: Concept art, character sheets, posters and textures with FLUX on NV
 The recipe the owner called fantastic (the Python app (0.16), the red baby dragon): AMAL writes the prompt like an art director,
 FLUX.2 klein draws it with the game-concept style.
 
+HIS PICTURE IS THE DESIGN. When he attached a picture (refs/), every picture is made FROM it: `image` takes his picture
+by itself, and the prompt says only what changes (another pose, outfit, colours, a view, a plain background) - his
+character, shapes and art style stay. `fresh: true` only for a picture that has nothing to do with his.
+MANY = SEPARATE PICTURES. "Eight concepts", "a few variations", "five versions" is that many separate pictures, each
+with its own change: one `image` call per idea, its prompt naming that idea. Never one grid or sheet of them unless he
+asks for a sheet. Plan one task per picture (or one task checked by every file), never a single combined file.
+
 1. If the subject is something you don't know (a game, a creature, a brand look), `web` it first: what it looks like,
    its colours, its shapes. Use what you find in the prompt.
 2. Prompt: at most 45 words (the hosted picture model reads only about the first 300 characters - what comes later is not drawn), subject FIRST (who/what, pose, expression, outfit or materials), then the
